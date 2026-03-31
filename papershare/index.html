@@ -80,10 +80,28 @@
             margin-top: 8px;
         }
         
+        .nav {
+            background: white;
+            padding: 12px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .nav a:hover { text-decoration: underline; }
         footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
     </style>
 </head>
 <body data-page-type="list">
+    <div class="nav">
+        <a href="/papershare-github/papershare/">📚 论文分享</a>
+        <a href="/papershare-github/daily-paper/">📰 每日论文</a>
+    </div>
     <header>
         <h1>论文分享</h1>
         <p>LLM评测 · 诊断 · 优化</p>
