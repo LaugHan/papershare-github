@@ -102,616 +102,503 @@
     </header>
         <div class="container">
         <a href="/" class="back-home">← 返回首页</a>
-        
-        <!-- Uncertainty & Agent Collaboration -->
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-31
-            
-            <div class="paper-card">
-                <h2>Ask or Assume? 不确定性感知的代码Agent追问框架 🔥🔥🔥</h2>
-                <div class="meta">arXiv:2603.26233 | cs.CL | 2026-03-30</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：LLM Agent在开放式领域（如软件工程）经常遇到指令不明确的情况，如何决定"追问"还是"假设"？<br><br>
-                    <strong>方案</strong>：不确定性感知的多Agent框架，显式解耦不确定性检测与代码执行。<br><br>
-                    <strong>双Agent架构</strong>：<br>
-                    • <strong>Main Agent</strong> - 导航仓库、编辑文件、执行代码<br>
-                    • <strong>Intent Agent</strong> - 持续分析状态历史，检测用户意图或上下文是否缺失<br><br>
-                    <strong>关键发现</strong>：<br>
-                    • OpenHands + Claude Sonnet 4.5 达到 69.40% 任务解决率<br>
-                    • 显著优于标准单Agent的 61.20%<br>
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-03-31</div>
+                <div class="paper-card">
+<h2>Ask or Assume? 不确定性感知的代码Agent追问框架 🔥🔥🔥</h2>
+<div class="meta">arXiv:2603.26233 | cs.CL | 2026-03-30</div>
+<div class="abstract">
+<strong>核心问题</strong>：LLM Agent在开放式领域（如软件工程）经常遇到指令不明确的情况，如何决定"追问"还是"假设"？<br/><br/>
+<strong>方案</strong>：不确定性感知的多Agent框架，显式解耦不确定性检测与代码执行。<br/><br/>
+<strong>双Agent架构</strong>：<br/>
+                    • <strong>Main Agent</strong> - 导航仓库、编辑文件、执行代码<br/>
+                    • <strong>Intent Agent</strong> - 持续分析状态历史，检测用户意图或上下文是否缺失<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • OpenHands + Claude Sonnet 4.5 达到 69.40% 任务解决率<br/>
+                    • 显著优于标准单Agent的 61.20%<br/>
                     • 多Agent系统展现出良好校准的不确定性——简单任务保守追问，复杂问题主动寻求信息
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：与MARCH的多Agent验证框架形成呼应——都是通过<strong>外部化</strong>来打破单模型的自我确认偏见。Intent Agent的角色相当于"MARCH中的Proposer+Checker"，主动发现问题而非被动回答。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.26233" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥🔥🔥 必读</span>
-                <span class="tag">不确定性</span>
-                <span class="tag">多Agent</span>
-                <span class="tag">代码Agent</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>Doctorina MedBench: 医疗AI Agent端到端评估 🔥🔥</h2>
-                <div class="meta">arXiv:2603.25821 | cs.CL | 2026-03-28</div>
-                <div class="abstract">
-                    <strong>问题</strong>：现有评估无法综合评估医疗AI Agent的诊断准确性、问诊对话质量、ICD编码、鉴别诊断等。<br><br>
-                    <strong>多维度评估指标</strong>：<br>
-                    • <strong>QuestionAccuracy</strong> - 必问问题的比例<br>
-                    • <strong>DiagnosisAccuracy</strong> - 最终诊断正确性（二值）<br>
-                    • <strong>ICD10Accuracy</strong> - ICD-10编码正确性<br>
-                    • <strong>DifferentialAccuracy</strong> - 鉴别诊断覆盖率<br>
-                    • <strong>TreatmentAccuracy</strong> - 治疗方案匹配度<br>
-                    • <strong>CriticalPassed</strong> - 关键医疗条件通过率<br><br>
-                    <strong>核心洞见</strong>：高质量诊断 + 步数增加 = 系统退化（即便结果正确）
+<div class="link"><a href="https://arxiv.org/abs/2603.26233" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥🔥 必读</span>
+<span class="tag">不确定性</span>
+<span class="tag">多Agent</span>
+<span class="tag">代码Agent</span>
+</div>
+                <div class="paper-card">
+<h2>Doctorina MedBench: 医疗AI Agent端到端评估 🔥🔥</h2>
+<div class="meta">arXiv:2603.25821 | cs.CL | 2026-03-28</div>
+<div class="abstract">
+<strong>问题</strong>：现有评估无法综合评估医疗AI Agent的诊断准确性、问诊对话质量、ICD编码、鉴别诊断等。<br/><br/>
+<strong>多维度评估指标</strong>：<br/>
+                    • <strong>QuestionAccuracy</strong> - 必问问题的比例<br/>
+                    • <strong>DiagnosisAccuracy</strong> - 最终诊断正确性（二值）<br/>
+                    • <strong>ICD10Accuracy</strong> - ICD-10编码正确性<br/>
+                    • <strong>DifferentialAccuracy</strong> - 鉴别诊断覆盖率<br/>
+                    • <strong>TreatmentAccuracy</strong> - 治疗方案匹配度<br/>
+                    • <strong>CriticalPassed</strong> - 关键医疗条件通过率<br/><br/>
+<strong>核心洞见</strong>：高质量诊断 + 步数增加 = 系统退化（即便结果正确）
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：评估的关键在于<strong>过程指标</strong>而非仅结果。步数增加可能是系统退化的信号，与Intent-to-Evidence论文强调的"结构保持能力"一致。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25821" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥🔥 评估</span>
-                <span class="tag">医疗AI</span>
-                <span class="tag">多维度指标</span>
+<div class="link"><a href="https://arxiv.org/abs/2603.25821" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 评估</span>
+<span class="tag">医疗AI</span>
+<span class="tag">多维度指标</span>
+</div>
             </div>
-            
-            <div class="paper-card">
-                <h2>ToolSandbox: 有状态对话式交互Agent评估基准</h2>
-                <div class="meta">cs.CL | 2026-03</div>
-                <div class="abstract">
-                    <strong>问题</strong>：现有Agent评估缺乏状态跟踪和真实对话评估。<br>
-                    <strong>方案</strong>：ToolSandbox - 支持隐式对话状态跟踪的有状态交互评估框架，包含LLM模拟用户。
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-03-30</div>
+                <div class="paper-card">
+<h2>MARCH: Multi-Agent Self-Check for LLM Hallucination 🔥🔥🔥</h2>
+<div class="meta">arXiv:2603.24579 | cs.CL | 2026-03-24</div>
+<div class="abstract">
+<strong>核心思想</strong>：将幻觉检测重构为多Agent协作任务，而非单模型自检。<br/><br/>
+<strong>三Agent架构</strong>：<br/>
+                    1. <strong>Solver Agent</strong> - 基于检索文档生成响应<br/>
+                    2. <strong>Proposer Agent</strong> - 将响应分解为原子claim的QA格式 {qᵢ, aᵢ}<br/>
+                    3. <strong>Checker Agent</strong> - 仅基于检索文档回答所有问题，生成 {âᵢ}<br/><br/>
+<strong>优化目标</strong>：通过RLVR最大化事实一致性：R({(aᵢ, âᵢ)})<br/>
+<strong>效果</strong>：8B参数模型配备MARCH即可匹敌大型闭源模型
                 </div>
-                <div class="insight">
-                    💡 <strong>核心洞见</strong>：交互式Agent需要"有状态"的评估环境，而非静态benchmark。
-                </div>
-                <span class="tag">Agent评估</span>
-                <span class="tag">交互式</span>
-            </div>
-        </div>
-        
-        <!-- Hallucination & Agent Evaluation -->
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-30
-            
-            <div class="paper-card">
-                <h2>MARCH: Multi-Agent Self-Check for LLM Hallucination 🔥🔥🔥</h2>
-                <div class="meta">arXiv:2603.24579 | cs.CL | 2026-03-24</div>
-                <div class="abstract">
-                    <strong>核心思想</strong>：将幻觉检测重构为多Agent协作任务，而非单模型自检。<br><br>
-                    <strong>三Agent架构</strong>：<br>
-                    1. <strong>Solver Agent</strong> - 基于检索文档生成响应<br>
-                    2. <strong>Proposer Agent</strong> - 将响应分解为原子claim的QA格式 {qᵢ, aᵢ}<br>
-                    3. <strong>Checker Agent</strong> - 仅基于检索文档回答所有问题，生成 {âᵢ}<br><br>
-                    <strong>优化目标</strong>：通过RLVR最大化事实一致性：R({(aᵢ, âᵢ)})<br>
-                    <strong>效果</strong>：8B参数模型配备MARCH即可匹敌大型闭源模型
-                </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：将"自我验证"外部化为多Agent协作，避免单模型的自我确认偏见。这与PICon的多轮追问框架有异曲同工之妙。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24579" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥🔥🔥 必读</span>
-                <span class="tag">幻觉检测</span>
-                <span class="tag">多Agent</span>
-                <span class="tag">RLVR</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>From Intent to Evidence: Deep Research Agent 结构化评估 🔥🔥</h2>
-                <div class="meta">arXiv:2603.25342 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
-                    <strong>问题</strong>：现有Agent评估无法量化Agent对知识结构的保持能力（context truncation、hallucination）。<br><br>
-                    <strong>四维范畴论评估框架</strong>：<br><br>
-                    <strong>Type I: 连通性（Simple Chains）</strong><br>
-                    • Task 1: 文本指纹识别 - 跨域跳转（学术→GitHub）<br>
-                    • Task 2: 垂直知识过滤 - 跨时间窗口定量约束<br>
-                    • Task 3: 数值指纹逆实体解析 - 长尾采样防捷径<br><br>
-                    <strong>Type II: 一致性（V-Structures/Pullbacks）</strong><br>
-                    • Task 4: 分布式定量综合 - 隐式方程求解<br>
-                    • Task 5: 硬负干扰下的实体解析 - 测试先验vs事实的张力<br>
-                    • Task 6: 隐式边界条件检测 - 元认知规则触发<br>
+<div class="link"><a href="https://arxiv.org/abs/2603.24579" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥🔥 必读</span>
+<span class="tag">幻觉检测</span>
+<span class="tag">多Agent</span>
+<span class="tag">RLVR</span>
+</div>
+                <div class="paper-card">
+<h2>From Intent to Evidence: Deep Research Agent 结构化评估 🔥🔥</h2>
+<div class="meta">arXiv:2603.25342 | cs.CL | 2026-03-25</div>
+<div class="abstract">
+<strong>问题</strong>：现有Agent评估无法量化Agent对知识结构的保持能力（context truncation、hallucination）。<br/><br/>
+<strong>四维范畴论评估框架</strong>：<br/><br/>
+<strong>Type I: 连通性（Simple Chains）</strong><br/>
+                    • Task 1: 文本指纹识别 - 跨域跳转（学术→GitHub）<br/>
+                    • Task 2: 垂直知识过滤 - 跨时间窗口定量约束<br/>
+                    • Task 3: 数值指纹逆实体解析 - 长尾采样防捷径<br/><br/>
+<strong>Type II: 一致性（V-Structures/Pullbacks）</strong><br/>
+                    • Task 4: 分布式定量综合 - 隐式方程求解<br/>
+                    • Task 5: 硬负干扰下的实体解析 - 测试先验vs事实的张力<br/>
+                    • Task 6: 隐式边界条件检测 - 元认知规则触发<br/>
                     • Task 7: 跨域异常交集 - fuzzy database join
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：Agent评估的关键不是"答对没"，而是<strong>结构保持能力</strong>——能否在长程推理中保持知识的拓扑完整性。Anti-Shortcut Engineering防止模型靠记忆答题。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25342" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥🔥 Agent评测</span>
-                <span class="tag">结构化评估</span>
-                <span class="tag">范畴论</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>MedOpenClaw: 医疗影像Agent推理评估 🔥</h2>
-                <div class="meta">arXiv:2603.24649 | cs.CV | 2026-03-25</div>
-                <div class="abstract">
-                    <strong>问题</strong>：现有静态图像benchmark无法评估动态多步临床工作流。<br>
-                    <strong>方案</strong>：MEDOPENCLAW系统 + MEDFLOW-BENCH评估框架<br>
-                    <strong>评估范围</strong>：研究级医学影像分析的完整交互循环
+<div class="link"><a href="https://arxiv.org/abs/2603.25342" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 Agent评测</span>
+<span class="tag">结构化评估</span>
+<span class="tag">范畴论</span>
+</div>
+                <div class="paper-card">
+<h2>MedOpenClaw: 医疗影像Agent推理评估 🔥</h2>
+<div class="meta">arXiv:2603.24649 | cs.CV | 2026-03-25</div>
+<div class="abstract">
+<strong>问题</strong>：现有静态图像benchmark无法评估动态多步临床工作流。<br/>
+<strong>方案</strong>：MEDOPENCLAW系统 + MEDFLOW-BENCH评估框架<br/>
+<strong>评估范围</strong>：研究级医学影像分析的完整交互循环
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：领域专用Agent需要领域专用评估框架，通用benchmark存在覆盖盲区。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24649" target="_blank">论文链接 →</a></div>
-                <span class="tag">医疗AI</span>
-                <span class="tag">Agent评估</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>MoFA: LLM驱动的约束感知特征选择</h2>
-                <div class="meta">arXiv:2603.24979 | cs.CL | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>问题</strong>：传统特征选择方法需要充足标注数据，无法利用特征的语义/metadata信息。<br>
-                    <strong>方案</strong>：Model Feature Agent (MoFA) - 序列推理+定量信息结合的特征选择框架
+<div class="link"><a href="https://arxiv.org/abs/2603.24649" target="_blank">论文链接 →</a></div>
+<span class="tag">医疗AI</span>
+<span class="tag">Agent评估</span>
+</div>
+                <div class="paper-card">
+<h2>MoFA: LLM驱动的约束感知特征选择</h2>
+<div class="meta">arXiv:2603.24979 | cs.CL | 2026-03-26</div>
+<div class="abstract">
+<strong>问题</strong>：传统特征选择方法需要充足标注数据，无法利用特征的语义/metadata信息。<br/>
+<strong>方案</strong>：Model Feature Agent (MoFA) - 序列推理+定量信息结合的特征选择框架
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：LLM可以在特征选择中利用语义信息，但需要将定量约束与语义理解结合。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24979" target="_blank">论文链接 →</a></div>
-                <span class="tag">特征选择</span>
-                <span class="tag">LLM应用</span>
+<div class="link"><a href="https://arxiv.org/abs/2603.24979" target="_blank">论文链接 →</a></div>
+<span class="tag">特征选择</span>
+<span class="tag">LLM应用</span>
+</div>
             </div>
-        </div>
-        
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-29
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-29
-            
-            <div class="paper-card">
-                <h2>Self-Improvement of LLMs: 系统性综述</h2>
-                <div class="meta">arXiv:2603.25681 | cs.CL | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>问题</strong>：随着LLM接近人类水平，仅靠人类监督越来越昂贵且有限。<br>
-                    <strong>框架</strong>：提出<strong>闭环生命周期</strong>框架，包含四个紧密耦合的过程：<br>
-                    • <strong>数据获取</strong> - 模型自主收集/生成数据<br>
-                    • <strong>数据选择</strong> - 选择有信息量的信号<br>
-                    • <strong>模型优化</strong> - 更新参数<br>
-                    • <strong>推理改进</strong> - 精炼输出<br>
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-03-29</div>
+                <div class="paper-card">
+<h2>Self-Improvement of LLMs: 系统性综述</h2>
+<div class="meta">arXiv:2603.25681 | cs.CL | 2026-03-26</div>
+<div class="abstract">
+<strong>问题</strong>：随着LLM接近人类水平，仅靠人类监督越来越昂贵且有限。<br/>
+<strong>框架</strong>：提出<strong>闭环生命周期</strong>框架，包含四个紧密耦合的过程：<br/>
+                    • <strong>数据获取</strong> - 模型自主收集/生成数据<br/>
+                    • <strong>数据选择</strong> - 选择有信息量的信号<br/>
+                    • <strong>模型优化</strong> - 更新参数<br/>
+                    • <strong>推理改进</strong> - 精炼输出<br/>
                     + <strong>自主评估层</strong> - 持续监控进展并引导改进循环
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：提供LLM自改进的统一框架，可用于理解蒸馏、自训练、强化学习等自改进技术的本质联系。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25681" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥 综述</span>
-                <span class="tag">Self-Improvement</span>
-                <span class="tag">训练优化</span>
-                <span class="tag">闭环系统</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>On-Policy Distillation: 失败模式与修复</h2>
-                <div class="meta">arXiv:2603.25562 | cs.LG | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>问题</strong>：On-Policy Distillation (OPD) 在长视野设置中不稳定。<br>
-                    <strong>分析</strong>：Token级OPD相对于序列级reverse-KL有偏差，但方差界更紧。<br>
-                    <strong>三个失败模式</strong>：<br>
-                    1. 不平衡的单token信号<br>
-                    2. 教师对student生成前缀的不可靠引导<br>
-                    3. Tokenizer或特殊token不匹配导致的扭曲<br>
-                    <strong>修复方案</strong>：Teacher top-K local support matching (截断reverse-KL + top-p rollout采样 + 特殊token掩码)
+<div class="link"><a href="https://arxiv.org/abs/2603.25681" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥 综述</span>
+<span class="tag">Self-Improvement</span>
+<span class="tag">训练优化</span>
+<span class="tag">闭环系统</span>
+</div>
+                <div class="paper-card">
+<h2>On-Policy Distillation: 失败模式与修复</h2>
+<div class="meta">arXiv:2603.25562 | cs.LG | 2026-03-26</div>
+<div class="abstract">
+<strong>问题</strong>：On-Policy Distillation (OPD) 在长视野设置中不稳定。<br/>
+<strong>分析</strong>：Token级OPD相对于序列级reverse-KL有偏差，但方差界更紧。<br/>
+<strong>三个失败模式</strong>：<br/>
+                    1. 不平衡的单token信号<br/>
+                    2. 教师对student生成前缀的不可靠引导<br/>
+                    3. Tokenizer或特殊token不匹配导致的扭曲<br/>
+<strong>修复方案</strong>：Teacher top-K local support matching (截断reverse-KL + top-p rollout采样 + 特殊token掩码)
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：蒸馏时分布偏移（rollout drift）是关键瓶颈，与Memetic Drift有相似之处。解决方案可借鉴Selection主导区的思想。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25562" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥🔥 蒸馏</span>
-                <span class="tag">On-Policy</span>
-                <span class="tag">Failure Modes</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>Pruning via Representation Hierarchies: 剪枝何时有效</h2>
-                <div class="meta">arXiv:2603.24652 | cs.CL | 2026-03-25 | <a href="https://github.com/CASE-Lab-UMD/Pruning-on-Representations" target="_blank">代码</a></div>
-                <div class="abstract">
-                    <strong>问题</strong>：剪枝对非生成任务有效，但对生成任务常常失败。为什么？<br>
-                    <strong>分析框架</strong>：将语言模型分解为三个表示空间：<br>
-                    • <strong>Embedding空间</strong> (隐藏表示) - 对剪枝扰动鲁棒<br>
-                    • <strong>Logit空间</strong> (softmax前输出) - 对剪枝扰动鲁棒<br>
-                    • <strong>Probability空间</strong> (softmax后分布) - <strong>会放大偏差</strong><br>
-                    <strong>关键发现</strong>：logits到probabilities的非线性变换会放大偏差，跨时间步累积导致生成质量下降。
+<div class="link"><a href="https://arxiv.org/abs/2603.25562" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 蒸馏</span>
+<span class="tag">On-Policy</span>
+<span class="tag">Failure Modes</span>
+</div>
+                <div class="paper-card">
+<h2>Pruning via Representation Hierarchies: 剪枝何时有效</h2>
+<div class="meta">arXiv:2603.24652 | cs.CL | 2026-03-25 | <a href="https://github.com/CASE-Lab-UMD/Pruning-on-Representations" target="_blank">代码</a></div>
+<div class="abstract">
+<strong>问题</strong>：剪枝对非生成任务有效，但对生成任务常常失败。为什么？<br/>
+<strong>分析框架</strong>：将语言模型分解为三个表示空间：<br/>
+                    • <strong>Embedding空间</strong> (隐藏表示) - 对剪枝扰动鲁棒<br/>
+                    • <strong>Logit空间</strong> (softmax前输出) - 对剪枝扰动鲁棒<br/>
+                    • <strong>Probability空间</strong> (softmax后分布) - <strong>会放大偏差</strong><br/>
+<strong>关键发现</strong>：logits到probabilities的非线性变换会放大偏差，跨时间步累积导致生成质量下降。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：对<strong>诊断推理</strong>有启示——模型内部的中间表示可能比最终输出更可靠。Confidence calibration时应关注embedding/logit而非仅看概率。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24652" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">🔥 诊断</span>
-                <span class="tag eval">表示分析</span>
-                <span class="tag eval">模型压缩</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>Depression Detection: 面试官偏见问题</h2>
-                <div class="meta">arXiv:2603.24651 | cs.CL | LREC 2026</div>
-                <div class="abstract">
-                    <strong>问题</strong>：半结构化面试中的抑郁检测模型利用面试官prompt而非被试语言。<br>
-                    <strong>发现</strong>：模型只看到面试官turn就能高准确率区分抑郁/对照组，无需使用被试语言。<br>
-                    <strong>启示</strong>：需要分析决策证据的分布（时间×说话人），确保模型学习的是被试语言而非脚本 artifacts。
+<div class="link"><a href="https://arxiv.org/abs/2603.24652" target="_blank">论文链接 →</a></div>
+<span class="tag eval">🔥 诊断</span>
+<span class="tag eval">表示分析</span>
+<span class="tag eval">模型压缩</span>
+</div>
+                <div class="paper-card">
+<h2>Depression Detection: 面试官偏见问题</h2>
+<div class="meta">arXiv:2603.24651 | cs.CL | LREC 2026</div>
+<div class="abstract">
+<strong>问题</strong>：半结构化面试中的抑郁检测模型利用面试官prompt而非被试语言。<br/>
+<strong>发现</strong>：模型只看到面试官turn就能高准确率区分抑郁/对照组，无需使用被试语言。<br/>
+<strong>启示</strong>：需要分析决策证据的分布（时间×说话人），确保模型学习的是被试语言而非脚本 artifacts。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：对<strong>Benchmark设计</strong>的启示——需要控制混淆因素，否则模型可能学到的是"捷径"而非真正能力。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24651" target="_blank">论文链接 →</a></div>
-                <span class="tag">评估偏差</span>
-                <span class="tag">Benchmark设计</span>
+<div class="link"><a href="https://arxiv.org/abs/2603.24651" target="_blank">论文链接 →</a></div>
+<span class="tag">评估偏差</span>
+<span class="tag">Benchmark设计</span>
+</div>
             </div>
-        </div>
-        
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-28
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-28
-            
-            <div class="paper-card">
-                <h2>PICon: Persona Agent 三维度一致性评估框架</h2>
-                <div class="meta">arXiv:2603.25620 | cs.CL | 2026-03-26 | <a href="https://kaist-edlab.github.io/picon/" target="_blank">Demo</a></div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：LLM persona agents 被广泛应用于替代人类参与者，但缺乏系统性验证方法。<br>
-                    <strong>方法</strong>：借鉴审讯原则，通过<strong>逻辑链多轮追问</strong>探测矛盾。评估三个维度：<br>
-                    • <strong>内部一致性</strong>（无自我矛盾）<br>
-                    • <strong>外部一致性</strong>（与现实世界事实对齐）<br>
-                    • <strong>重测一致性</strong>（重复下的稳定性）<br>
-                    <strong>发现</strong>：即使被报道为"高度一致"的系统，在所有维度上都未达人类基线
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-03-28</div>
+                <div class="paper-card">
+<h2>PICon: Persona Agent 三维度一致性评估框架</h2>
+<div class="meta">arXiv:2603.25620 | cs.CL | 2026-03-26 | <a href="https://kaist-edlab.github.io/picon/" target="_blank">Demo</a></div>
+<div class="abstract">
+<strong>核心问题</strong>：LLM persona agents 被广泛应用于替代人类参与者，但缺乏系统性验证方法。<br/>
+<strong>方法</strong>：借鉴审讯原则，通过<strong>逻辑链多轮追问</strong>探测矛盾。评估三个维度：<br/>
+                    • <strong>内部一致性</strong>（无自我矛盾）<br/>
+                    • <strong>外部一致性</strong>（与现实世界事实对齐）<br/>
+                    • <strong>重测一致性</strong>（重复下的稳定性）<br/>
+<strong>发现</strong>：即使被报道为"高度一致"的系统，在所有维度上都未达人类基线
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：提供了一致性检测的方法论框架，可直接应用于<strong>推理过程中的自我矛盾检测</strong>。当内部一致性低时，说明模型置信度不可靠。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25620" target="_blank">论文链接 →</a> | <a href="/papershare/papers/picon/">📄 详解</a></div>
-                <span class="tag hot">🔥🔥🔥 深度分析</span>
-                <span class="tag">Persona Agent</span>
-                <span class="tag">一致性评估</span>
-                <span class="tag">多轮追问</span>
-                <span class="tag">矛盾检测</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>Collective Intelligence: Multi-Agent Memetic Drift 机制</h2>
-                <div class="meta">arXiv:2603.24676 | cs.AI | 2026-03-25</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：Multi-Agent LLM 系统的集体决策，究竟是真正的推理、系统性偏见还是随机性？<br>
-                    <strong>方法</strong>：提出<strong>QSG (Quantized Simplex Gossip)</strong> 模型，揭示共识形成机制：<br>
-                    • 智能体维持内部信念状态，从采样输出中学习<br>
-                    • 一个智能体的任意选择成为下一个的"证据"<br>
-                    • 定义<strong>模因漂移 (Memetic Drift)</strong>：采样驱动的随机共识<br>
-                    <strong>关键发现</strong>：存在 Drift 主导区（共识=彩票）到 Selection 主导区（弱偏见被放大）的交叉
+<div class="link"><a href="https://arxiv.org/abs/2603.25620" target="_blank">论文链接 →</a> | <a href="/papershare/papers/picon/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 深度分析</span>
+<span class="tag">Persona Agent</span>
+<span class="tag">一致性评估</span>
+<span class="tag">多轮追问</span>
+<span class="tag">矛盾检测</span>
+</div>
+                <div class="paper-card">
+<h2>Collective Intelligence: Multi-Agent Memetic Drift 机制</h2>
+<div class="meta">arXiv:2603.24676 | cs.AI | 2026-03-25</div>
+<div class="abstract">
+<strong>核心问题</strong>：Multi-Agent LLM 系统的集体决策，究竟是真正的推理、系统性偏见还是随机性？<br/>
+<strong>方法</strong>：提出<strong>QSG (Quantized Simplex Gossip)</strong> 模型，揭示共识形成机制：<br/>
+                    • 智能体维持内部信念状态，从采样输出中学习<br/>
+                    • 一个智能体的任意选择成为下一个的"证据"<br/>
+                    • 定义<strong>模因漂移 (Memetic Drift)</strong>：采样驱动的随机共识<br/>
+<strong>关键发现</strong>：存在 Drift 主导区（共识=彩票）到 Selection 主导区（弱偏见被放大）的交叉
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：为 <strong>Self-Consistency</strong> 等多路径投票方法提供了理论解释——当系统处于 Drift 主导区时，投票结果不可靠。通过控制 N（群体规模）、Q（量化位数）、η（适应率）可进入 Selection 主导区。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24676" target="_blank">论文链接 →</a> | <a href="/papershare/papers/collective-intelligence-memetic-drift/">📄 详解</a></div>
-                <span class="tag hot">🔥🔥🔥 深度分析</span>
-                <span class="tag">Multi-Agent</span>
-                <span class="tag">Memetic Drift</span>
-                <span class="tag">Scaling Laws</span>
-                <span class="tag">一致性机制</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>ARC-AGI-3: Agentic Intelligence 评测新基准</h2>
-                <div class="meta">arXiv:2603.24621 | cs.AI | 2026-03-24</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：如何评估 Agent 的自适应智能？<br>
-                    <strong>方法</strong>：交互式基准，通过<strong>抽象、基于回合的环境</strong>评估 Agent：探索、推断目标、构建环境动态内部模型、规划行动序列。<br>
-                    <strong>关键数据</strong>：人类可达100%，但前沿AI系统（截至2026年3月）得分&lt;1%
+<div class="link"><a href="https://arxiv.org/abs/2603.24676" target="_blank">论文链接 →</a> | <a href="/papershare/papers/collective-intelligence-memetic-drift/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 深度分析</span>
+<span class="tag">Multi-Agent</span>
+<span class="tag">Memetic Drift</span>
+<span class="tag">Scaling Laws</span>
+<span class="tag">一致性机制</span>
+</div>
+                <div class="paper-card">
+<h2>ARC-AGI-3: Agentic Intelligence 评测新基准</h2>
+<div class="meta">arXiv:2603.24621 | cs.AI | 2026-03-24</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何评估 Agent 的自适应智能？<br/>
+<strong>方法</strong>：交互式基准，通过<strong>抽象、基于回合的环境</strong>评估 Agent：探索、推断目标、构建环境动态内部模型、规划行动序列。<br/>
+<strong>关键数据</strong>：人类可达100%，但前沿AI系统（截至2026年3月）得分&lt;1%
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：极低的AI得分说明当前 Agent 的<strong>流体适应能力</strong>仍是瓶颈。可作为 Agent 能力评估的"北极星"基准。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24621" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">🔥 Benchmark</span>
-                <span class="tag eval">Agent评估</span>
-                <span class="tag eval">ARC-AGI</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>NLAHs: 自然语言 Agent Harness 框架</h2>
-                <div class="meta">arXiv:2603.25723 | cs.CL | 2026-03-27</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：Agent harness（评估框架）设计通常埋在控制器代码中，难以转移、比较和研究。<br>
-                    <strong>方法</strong>：提出<strong>Natural-Language Agent Harnesses (NLAHs)</strong>——用自然语言表达 harness 行为 + <strong>Intelligent Harness Runtime (IHR)</strong> 执行引擎。<br>
-                    <strong>价值</strong>：将 harness 设计从代码中解耦，作为可移植的可执行制品
+<div class="link"><a href="https://arxiv.org/abs/2603.24621" target="_blank">论文链接 →</a></div>
+<span class="tag eval">🔥 Benchmark</span>
+<span class="tag eval">Agent评估</span>
+<span class="tag eval">ARC-AGI</span>
+</div>
+                <div class="paper-card">
+<h2>NLAHs: 自然语言 Agent Harness 框架</h2>
+<div class="meta">arXiv:2603.25723 | cs.CL | 2026-03-27</div>
+<div class="abstract">
+<strong>核心问题</strong>：Agent harness（评估框架）设计通常埋在控制器代码中，难以转移、比较和研究。<br/>
+<strong>方法</strong>：提出<strong>Natural-Language Agent Harnesses (NLAHs)</strong>——用自然语言表达 harness 行为 + <strong>Intelligent Harness Runtime (IHR)</strong> 执行引擎。<br/>
+<strong>价值</strong>：将 harness 设计从代码中解耦，作为可移植的可执行制品
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：Agent 评测标准化的新思路——用自然语言定义评测协议，提高可复现性和可比性。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25723" target="_blank">论文链接 →</a></div>
-                <span class="tag">Agent评测</span>
-                <span class="tag">标准化</span>
-                <span class="tag">Harness</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>A Unified Memory Perspective for Trustworthy AI</h2>
-                <div class="meta">arXiv:2603.25692 | cs.LG | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：可信AI依赖概率计算，但随机采样带来性能和效率问题。<br>
-                    <strong>方法</strong>：统一视角——确定性数据访问视为随机采样的极限情况。揭示：增加随机需求会降低有效数据访问效率，可能导致系统进入<strong>熵限制操作</strong>。<br>
-                    <strong>贡献</strong>：定义记忆级评估标准（操作效率、分布可编程性、鲁棒性等）
+<div class="link"><a href="https://arxiv.org/abs/2603.25723" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent评测</span>
+<span class="tag">标准化</span>
+<span class="tag">Harness</span>
+</div>
+                <div class="paper-card">
+<h2>A Unified Memory Perspective for Trustworthy AI</h2>
+<div class="meta">arXiv:2603.25692 | cs.LG | 2026-03-26</div>
+<div class="abstract">
+<strong>核心问题</strong>：可信AI依赖概率计算，但随机采样带来性能和效率问题。<br/>
+<strong>方法</strong>：统一视角——确定性数据访问视为随机采样的极限情况。揭示：增加随机需求会降低有效数据访问效率，可能导致系统进入<strong>熵限制操作</strong>。<br/>
+<strong>贡献</strong>：定义记忆级评估标准（操作效率、分布可编程性、鲁棒性等）
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：从硬件架构角度理解不确定性来源——采样过程本身可能成为瓶颈。这对设计高效推理系统有参考价值。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25692" target="_blank">论文链接 →</a></div>
-                <span class="tag">可信AI</span>
-                <span class="tag">概率计算</span>
-                <span class="tag">硬件架构</span>
+<div class="link"><a href="https://arxiv.org/abs/2603.25692" target="_blank">论文链接 →</a></div>
+<span class="tag">可信AI</span>
+<span class="tag">概率计算</span>
+<span class="tag">硬件架构</span>
+</div>
             </div>
-        </div>
-        
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-27
-            <div class="paper-card">
-                <h2>MARCH: Multi-Agent Reinforced Self-Check for LLM Hallucination</h2>
-                <div class="meta">arXiv:2603.24579 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
-                    幻觉仍是 LLM 的关键瓶颈，尤其在 RAG 系统中。现有方法使用 LLM-as-judge 验证输出，但存在确认偏差。MARCH 提出多 Agent 协作自检，减少幻觉。
-                </div>
-                <div class="insight">
-                    💡 <strong>核心洞见</strong>：Multi-Agent Self-Check 比 Single LLM-as-judge 更可靠，可纳入「幻觉检测」诊断方法库
-                </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24579" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥 强推</span>
-                <span class="tag">幻觉检测</span>
-                <span class="tag">Multi-Agent</span>
-                <span class="tag">RAG</span>
-            </div>
-            <div class="paper-card">
-                <h2>Why Does Self-Distillation (Sometimes) Degrade the Reasoning Capability of LLMs?</h2>
-                <div class="meta">arXiv:2603.24472 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-03-27</div>
+                <div class="paper-card">
+<h2>Why Does Self-Distillation (Sometimes) Degrade the Reasoning Capability of LLMs?</h2>
+<div class="meta">arXiv:2603.24472 | cs.CL | 2026-03-25</div>
+<div class="abstract">
                     自蒸馏能压缩 CoT 长度但会损害数学推理能力。问题根源：压制了「认知表达」(epistemic verbalization)——模型在推理时表达不确定性的能力。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：训练时保留推理长度和不确定性表达很重要，自蒸馏可能导致「过度自信」
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24472" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥 强推</span>
-                <span class="tag">自蒸馏</span>
-                <span class="tag">推理训练</span>
-                <span class="tag">CoT</span>
-            </div>
-            <div class="paper-card">
-                <h2>Multi-Agent Reasoning with Consistency Verification Improves Uncertainty Calibration in Medical MCQA</h2>
-                <div class="meta">arXiv:2603.24481 | cs.AI | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24472" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥 强推</span>
+<span class="tag">自蒸馏</span>
+<span class="tag">推理训练</span>
+<span class="tag">CoT</span>
+</div>
+                <div class="paper-card">
+<h2>Multi-Agent Reasoning with Consistency Verification Improves Uncertainty Calibration in Medical MCQA</h2>
+<div class="meta">arXiv:2603.24481 | cs.AI | 2026-03-25</div>
+<div class="abstract">
                     置信度校准是临床 AI 部署的障碍。提出多 Agent 框架：4 个专科 Agent + 两阶段自验证 + S-score 加权融合，提升医学多选 QA 的校准和区分度。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：多专家投票 + 一致性验证 = 更可靠的置信度估计，与 Self-Consistency 类似但更结构化
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24481" target="_blank">论文链接 →</a></div>
-                <span class="tag hot">🔥 强推</span>
-                <span class="tag">置信度校准</span>
-                <span class="tag">Multi-Agent</span>
-                <span class="tag">医疗AI</span>
-            </div>
-            <div class="paper-card">
-                <h2>The Stochastic Gap: Markovian Framework for Agentic AI Reliability Auditing</h2>
-                <div class="meta">arXiv:2603.24582 | cs.AI | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24481" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥 强推</span>
+<span class="tag">置信度校准</span>
+<span class="tag">Multi-Agent</span>
+<span class="tag">医疗AI</span>
+</div>
+                <div class="paper-card">
+<h2>The Stochastic Gap: Markovian Framework for Agentic AI Reliability Auditing</h2>
+<div class="meta">arXiv:2603.24582 | cs.AI | 2026-03-25</div>
+<div class="abstract">
                     用 Markov 框架审计 Agent 的可靠性与监督成本。提出状态盲点、人机交互熵、期望监督成本等指标。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：可用于评估 Agent 部署前的可靠性量化
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24582" target="_blank">论文链接 →</a></div>
-                <span class="tag">Agent</span>
-                <span class="tag">可靠性</span>
-            </div>
-            <div class="paper-card">
-                <h2>Enhanced Mycelium of Thought (EMoT): Bio-Inspired Hierarchical Reasoning</h2>
-                <div class="meta">arXiv:2603.24065 | cs.AI | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24582" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent</span>
+<span class="tag">可靠性</span>
+</div>
+                <div class="paper-card">
+<h2>Enhanced Mycelium of Thought (EMoT): Bio-Inspired Hierarchical Reasoning</h2>
+<div class="meta">arXiv:2603.24065 | cs.AI | 2026-03-25</div>
+<div class="abstract">
                     生物启发的分层推理架构：Micro-Meso-Macro-Meta 四层 + 战略休眠 + 认知节点重激活 + 5种记忆编码。比 CoT/ToT 更适合复杂跨域问题。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：记忆宫殿式架构，持久化记忆可能是未来推理系统的关键
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24065" target="_blank">论文链接 →</a></div>
-                <span class="tag">推理架构</span>
-                <span class="tag">生物启发</span>
-            </div>
-            <div class="paper-card">
-                <h2>UI-Voyager: Self-Evolving GUI Agent</h2>
-                <div class="meta">arXiv:2603.24533 | cs.LG | 2026-03-26</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24065" target="_blank">论文链接 →</a></div>
+<span class="tag">推理架构</span>
+<span class="tag">生物启发</span>
+</div>
+                <div class="paper-card">
+<h2>UI-Voyager: Self-Evolving GUI Agent</h2>
+<div class="meta">arXiv:2603.24533 | cs.LG | 2026-03-26</div>
+<div class="abstract">
                     GUI Agent 通过「失败经验」自我进化。从失败中学习，不断改进。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24533" target="_blank">论文链接 →</a> | <a href="https://github.com/ui-voyager/UI-Voyager" target="_blank">代码 →</a></div>
-                <span class="tag">GUI Agent</span>
-                <span class="tag">Self-Evolution</span>
-            </div>
-        </div>
-        
-        <!-- LLM Evaluation 专场 -->
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-27
-            <div class="paper-card">
-                <h2>GameplayQA: 3D虚拟代理的多视频理解评测</h2>
-                <div class="meta">arXiv:2603.24329 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24533" target="_blank">论文链接 →</a> | <a href="https://github.com/ui-voyager/UI-Voyager" target="_blank">代码 →</a></div>
+<span class="tag">GUI Agent</span>
+<span class="tag">Self-Evolution</span>
+</div>
+                <div class="paper-card">
+<h2>GameplayQA: 3D虚拟代理的多视频理解评测</h2>
+<div class="meta">arXiv:2603.24329 | cs.CL | 2026-03-25</div>
+<div class="abstract">
                     多模态 LLM 在3D环境中作为感知骨干越来越重要，但现有 benchmark 无法充分评估。<strong>GameplayQA</strong> 通过视频理解评估 agentic-centric 感知和推理。密集标注多人3D游戏视频（1.22标签/秒），包含时间同步的并发状态、动作和事件注释。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：评测发现主流 MLLM 与人类性能差距大，主要失败点：时间和跨视频定位、agent-role 归属、决策密度处理。可用于诊断多模态 Agent 的感知弱点。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24329" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">🔥 Benchmark</span>
-                <span class="tag eval">多模态评测</span>
-                <span class="tag eval">Agent感知</span>
-            </div>
-            <div class="paper-card">
-                <h2>SCoOP: 多VLM系统的不确定性量化</h2>
-                <div class="meta">arXiv:2603.23853 | cs.AI | ICLR 2024 Workshop</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24329" target="_blank">论文链接 →</a></div>
+<span class="tag eval">🔥 Benchmark</span>
+<span class="tag eval">多模态评测</span>
+<span class="tag eval">Agent感知</span>
+</div>
+                <div class="paper-card">
+<h2>SCoOP: 多VLM系统的不确定性量化</h2>
+<div class="meta">arXiv:2603.23853 | cs.AI | ICLR 2024 Workshop</div>
+<div class="abstract">
                     组合多个视觉语言模型(VLM)可增强多模态推理，但聚合异构模型输出会增加不确定性和幻觉风险。<strong>SCoOP</strong> (Semantic-Consistent Opinion Pooling) 通过不确定性加权的线性意见池化，提供无需训练的不确定性量化框架。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：ScienceQA上幻觉检测 AUROC 0.866（比基线高10-13%），弃权 AURAC 0.907。可纳入「置信度检测」诊断工具箱。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.23853" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">🔥 幻觉检测</span>
-                <span class="tag eval">不确定性量化</span>
-                <span class="tag eval">多VLM</span>
-            </div>
-            <div class="paper-card">
-                <h2>Bridging the Evaluation Gap: 多目标搜索标准化评测</h2>
-                <div class="meta">arXiv:2603.24084 | cs.AI | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.23853" target="_blank">论文链接 →</a></div>
+<span class="tag eval">🔥 幻觉检测</span>
+<span class="tag eval">不确定性量化</span>
+<span class="tag eval">多VLM</span>
+</div>
+                <div class="paper-card">
+<h2>Bridging the Evaluation Gap: 多目标搜索标准化评测</h2>
+<div class="meta">arXiv:2603.24084 | cs.AI | 2026-03-25</div>
+<div class="abstract">
                     多目标搜索(MOS)的实证评估历史上存在碎片化问题，使用异构问题实例和不相容的目标定义。提出首个综合标准化评测套件，覆盖四个结构多样化领域：真实道路网络、结构化合成图、基于游戏的网格环境、高维机器人运动规划路线图。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：标准化评测对可复现性至关重要。提供固定图实例、标准化的起止查询、以及精确和近似参考 Pareto 最优解集。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24084" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">Benchmark</span>
-                <span class="tag eval">标准化评测</span>
-            </div>
-            <div class="paper-card">
-                <h2>RAG for AI Policy QA: 检索改进不保证答案质量</h2>
-                <div class="meta">arXiv:2603.24580 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24084" target="_blank">论文链接 →</a></div>
+<span class="tag eval">Benchmark</span>
+<span class="tag eval">标准化评测</span>
+</div>
+                <div class="paper-card">
+<h2>RAG for AI Policy QA: 检索改进不保证答案质量</h2>
+<div class="meta">arXiv:2603.24580 | cs.CL | 2026-03-25</div>
+<div class="abstract">
                     RAG 系统越来越多地用于分析复杂政策文档，但在密集法律语言和重叠监管框架领域中达到专家级可靠性仍然具有挑战性。使用 AI 治理和监管档案(AGORA)语料库(947份AI政策文档)研究发现：领域特定微调改善检索指标，但不一定改善端到端问答性能。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：关键发现——更强的检索可能<strong>反直觉地导致更自信的幻觉</strong>（当语料库中缺少相关文档时）。这对 RAG 评测有重要启示：应同时评估检索质量和答案忠实度。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24580" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">🔥 RAG评测</span>
-                <span class="tag eval">幻觉检测</span>
-                <span class="tag eval">Policy QA</span>
-            </div>
-            <div class="paper-card">
-                <h2>Interaction2Eval: LLM作为幼儿教育评估队友</h2>
-                <div class="meta">arXiv:2603.24389 | cs.CL | AIED 2026</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24580" target="_blank">论文链接 →</a></div>
+<span class="tag eval">🔥 RAG评测</span>
+<span class="tag eval">幻觉检测</span>
+<span class="tag eval">Policy QA</span>
+</div>
+                <div class="paper-card">
+<h2>Interaction2Eval: LLM作为幼儿教育评估队友</h2>
+<div class="meta">arXiv:2603.24389 | cs.CL | AIED 2026</div>
+<div class="abstract">
                     高质量师幼互动(TCI)是幼儿发展的基础，但传统专家评估面临关键的可扩展性挑战。<strong>TEPE-TCI-370h</strong> 数据集：370小时、105个教室的中国幼儿园师幼互动，包含标准化 ECQRS-EC 和 SSTEW 注释。<strong>Interaction2Eval</strong> 框架达到88%的人类专家一致性。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：18x评估效率提升，从年度专家审计转向月度AI辅助监测。可扩展AI增强评估的新范式。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24389" target="_blank">论文链接 →</a> | <a href="https://qingyonghu.github.io/Interaction2Eval/" target="_blank">项目页 →</a></div>
-                <span class="tag eval">LLM评估</span>
-                <span class="tag eval">教育AI</span>
-            </div>
-            <div class="paper-card">
-                <h2>PINGALA: 引用无参考的诗歌生成评估</h2>
-                <div class="meta">arXiv:2603.24413 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24389" target="_blank">论文链接 →</a> | <a href="https://qingyonghu.github.io/Interaction2Eval/" target="_blank">项目页 →</a></div>
+<span class="tag eval">LLM评估</span>
+<span class="tag eval">教育AI</span>
+</div>
+                <div class="paper-card">
+<h2>PINGALA: 引用无参考的诗歌生成评估</h2>
+<div class="meta">arXiv:2603.24413 | cs.CL | 2026-03-25</div>
+<div class="abstract">
                     梵文诗歌生成需要语义连贯且遵守韵律规则。提出使用 cross-encoders 进行<strong>引用无参考评估</strong>的新方法，在诗歌实例上取得更好的对齐效果。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：无需参考答案的评估方法，对生成质量评估有价值。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24413" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">无参考评估</span>
-                <span class="tag eval">生成质量</span>
-            </div>
-            <div class="paper-card">
-                <h2>Stance Labels Fail: 立场检测的标注问题</h2>
-                <div class="meta">arXiv:2603.24231 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
+<div class="link"><a href="https://arxiv.org/abs/2603.24413" target="_blank">论文链接 →</a></div>
+<span class="tag eval">无参考评估</span>
+<span class="tag eval">生成质量</span>
+</div>
+                <div class="paper-card">
+<h2>Stance Labels Fail: 立场检测的标注问题</h2>
+<div class="meta">arXiv:2603.24231 | cs.CL | 2026-03-25</div>
+<div class="abstract">
                     立场检测几乎总是被表述为将文本分类为 Favor/Against/Neutral——但对复杂目标的态度不是单一的。<strong>投影问题</strong>：当文本维度一致时，任何权重都产生相同标签；当维度冲突时，标签一致性崩溃而维度一致性保持完整。
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：标注设计影响评测可靠性。在设计评测 benchmark 时需考虑标注的投影问题——尤其是在维度冲突的场景。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24231" target="_blank">论文链接 →</a></div>
-                <span class="tag eval">Benchmark设计</span>
-                <span class="tag eval">标注质量</span>
-            </div>
-        </div>
-        
-        <!-- 评测方法论专版 -->
-        <div class="date-section">
-            <div class="date-header">📅 2026-03-27
-            
-            <div class="paper-card">
-                <h2>LogitScope: Token级不确定性分析框架</h2>
-                <div class="meta">arXiv:2603.24929 | cs.AI | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：传统评测方法无法洞察生成过程中单个token位置上的模型置信度。<br>
-                    <strong>方法</strong>：通过概率分布计算token级信息度量（entropy、varentropy），揭示模型置信度模式、识别幻觉、暴露高不确定性决策点。<br>
-                    <strong>特点</strong>：无需标注数据、模型无关（HuggingFace兼容）、计算高效（惰性求值）
+<div class="link"><a href="https://arxiv.org/abs/2603.24231" target="_blank">论文链接 →</a></div>
+<span class="tag eval">Benchmark设计</span>
+<span class="tag eval">标注质量</span>
+</div>
+                <div class="paper-card">
+<h2>LogitScope: Token级不确定性分析框架</h2>
+<div class="meta">arXiv:2603.24929 | cs.AI | 2026-03-26</div>
+<div class="abstract">
+<strong>核心问题</strong>：传统评测方法无法洞察生成过程中单个token位置上的模型置信度。<br/>
+<strong>方法</strong>：通过概率分布计算token级信息度量（entropy、varentropy），揭示模型置信度模式、识别幻觉、暴露高不确定性决策点。<br/>
+<strong>特点</strong>：无需标注数据、模型无关（HuggingFace兼容）、计算高效（惰性求值）
                 </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：LogitScope 提供了一种<strong>无需训练的诊断工具</strong>，可在推理时实时监控模型行为。这填补了「黑盒评测」和「可解释性分析」之间的空白。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24929" target="_blank">论文链接 →</a> | <a href="https://github.com/farhanahmed/logitscope" target="_blank">代码 →</a></div>
-                <span class="tag method">🔥🔥🔥 方法论核心</span>
-                <span class="tag method">不确定性量化</span>
-                <span class="tag method">Token级分析</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>MARCH: 三角色Agent幻觉检测框架</h2>
-                <div class="meta">arXiv:2603.24579 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：LLM-as-judge存在确认偏差，验证器无意中复现原始生成的错误。<br>
-                    <strong>方法</strong>：三角色协作——Solver生成响应 → Proposer分解为原子命题 → <strong>Checker在隔离环境中验证</strong>（无Solver原始输出）。<br>
-                    <strong>关键</strong>：「信息不对称」打破自我确认循环 + MARL协同进化
+<div class="link"><a href="https://arxiv.org/abs/2603.24929" target="_blank">论文链接 →</a> | <a href="https://github.com/farhanahmed/logitscope" target="_blank">代码 →</a></div>
+<span class="tag method">🔥🔥🔥 方法论核心</span>
+<span class="tag method">不确定性量化</span>
+<span class="tag method">Token级分析</span>
+</div>
+                <div class="paper-card">
+<h2>MolQuest: Agentic科学推理评估框架</h2>
+<div class="meta">arXiv:2603.25253 | cs.CL | 2026-03-26</div>
+<div class="abstract">
+<strong>核心问题</strong>：现有科学评测依赖静态单轮QA，无法评估需要多步迭代和实验交互的复杂科学任务。<br/>
+<strong>方法</strong>：多轮交互式评估——模型需主动规划实验步骤、整合异构图谱(NMR/MS)、迭代修正结构假设。<br/>
+<strong>发现</strong>：SOTA模型准确率仅~50%，大多数模型&lt;30%
                 </div>
-                <div class="insight">
-                    💡 <strong>核心洞见</strong>：<strong>信息不对称设计</strong>是打破确认偏差的关键。8B模型+MARCH可媲美强大闭源模型。方法论价值：诊断→定位→修正的完整Pipeline。
-                </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24579" target="_blank">论文链接 →</a> | <a href="https://github.com/Qwen-Applications/MARCH" target="_blank">代码 →</a></div>
-                <span class="tag method">🔥🔥🔥 方法论核心</span>
-                <span class="tag method">幻觉检测</span>
-                <span class="tag method">Multi-Agent</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>SCoOP: 多VLM系统不确定性量化</h2>
-                <div class="meta">arXiv:2603.23853 | cs.AI | ICLR 2024 Workshop</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：聚合异构VLM输出会放大不确定性，增加幻觉风险。<br>
-                    <strong>方法</strong>：语义一致性意见池化——测量<strong>群体级</strong>不确定性（而非单模型级）。<br>
-                    <strong>效果</strong>：ScienceQA幻觉检测 AUROC 0.866，弃权 AURAC 0.907
-                </div>
-                <div class="insight">
-                    💡 <strong>核心洞见</strong>：SCoOP 提供了一种<strong>系统级不确定性测量</strong>的方法，比单模型方法更可靠。可用于「置信度检测」诊断工具箱。
-                </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.23853" target="_blank">论文链接 →</a></div>
-                <span class="tag method">🔥 方法论</span>
-                <span class="tag method">多VLM聚合</span>
-                <span class="tag method">不确定性</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>MolQuest: Agentic科学推理评估框架</h2>
-                <div class="meta">arXiv:2603.25253 | cs.CL | 2026-03-26</div>
-                <div class="abstract">
-                    <strong>核心问题</strong>：现有科学评测依赖静态单轮QA，无法评估需要多步迭代和实验交互的复杂科学任务。<br>
-                    <strong>方法</strong>：多轮交互式评估——模型需主动规划实验步骤、整合异构图谱(NMR/MS)、迭代修正结构假设。<br>
-                    <strong>发现</strong>：SOTA模型准确率仅~50%，大多数模型<30%
-                </div>
-                <div class="insight">
+<div class="insight">
                     💡 <strong>核心洞见</strong>：<strong>Agentic评估</strong>是未来科学LLM评测的方向——从静态QA转向动态交互任务，更接近真实科研场景。
                 </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.25253" target="_blank">论文链接 →</a></div>
-                <span class="tag method">方法论</span>
-                <span class="tag method">Agentic评估</span>
-                <span class="tag method">科学推理</span>
-            </div>
-            
-            <div class="paper-card">
-                <h2>RAG评测警示: 检索≠答案质量</h2>
-                <div class="meta">arXiv:2603.24580 | cs.CL | 2026-03-25</div>
-                <div class="abstract">
-                    <strong>核心发现</strong>：领域特定微调改善检索指标，但<strong>不一定改善端到端QA性能</strong>。<br>
-                    <strong>警示</strong>：更强的检索可能反直觉地导致<strong>更自信的幻觉</strong>（当相关文档缺失时）。<br>
-                    <strong>启示</strong>：RAG评测需同时评估检索质量和答案忠实度
-                </div>
-                <div class="insight">
-                    💡 <strong>核心洞见</strong>：评测「组件改进」不等于「系统改进」。这提醒我们设计评测时要考虑<strong>组件间的交互效应</strong>和<strong>失败模式的传递</strong>。
-                </div>
-                <div class="link"><a href="https://arxiv.org/abs/2603.24580" target="_blank">论文链接 →</a></div>
-                <span class="tag method">🔥 方法论警示</span>
-                <span class="tag method">RAG评测</span>
-                <span class="tag method">组件解耦</span>
+<div class="link"><a href="https://arxiv.org/abs/2603.25253" target="_blank">论文链接 →</a></div>
+<span class="tag method">方法论</span>
+<span class="tag method">Agentic评估</span>
+<span class="tag method">科学推理</span>
+</div>
             </div>
         </div>
-    </div>
-    <footer>Daily Paper &copy; 2026 | 每日自动调研 arXiv</footer>
+    <footer>Daily Paper © 2026 | 每日自动调研 arXiv</footer>
 </body>
 </html>
