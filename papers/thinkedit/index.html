@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinkEdit - 可解释权重编辑减少短推理 - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.4em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #667eea; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .card p { margin-bottom: 10px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #f0f4ff; border-left: 4px solid #667eea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .highlight { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .formula { background: #f7fafc; padding: 12px; border-radius: 6px; font-family: monospace; margin: 10px 0; text-align: center; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
+        .stat { background: #f0f4ff; padding: 10px 15px; border-radius: 8px; text-align: center; flex: 1; min-width: 100px; }
+        .stat .num { font-size: 1.5em; font-weight: bold; color: #667eea; }
+        .stat .label { font-size: 0.8em; color: #718096; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>通过权重编辑解决推理模型"想太少"问题</h1>
+        <div class="meta">Sun et al. | Trustworthy-ML-Lab | arXiv 2025 (2503.22048)</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>带思维链(CoT)的LLM虽然表现出色，但经常产生<strong>过短的推理</strong>，导致简单数学题也出错。</p>
+            <p>本研究探究推理长度如何嵌入推理模型的隐藏表示中。发现<strong>推理长度由表示空间中的线性方向控制</strong>。</p>
+            <p>基于此发现，提出<strong>ThinkEdit</strong>——一种简单有效的权重编辑方法，仅修改<strong>0.2%参数</strong>即可减少短推理，提升准确率<strong>+6.39%</strong>。</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键数据</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">0.2%</div>
+                    <div class="label">参数修改比例</div>
+                </div>
+                <div class="stat">
+                    <div class="num">4%</div>
+                    <div class="label">关键Attention Heads</div>
+                </div>
+                <div class="stat">
+                    <div class="num">+6.39%</div>
+                    <div class="label">短推理准确率提升</div>
+                </div>
+                <div class="stat">
+                    <div class="num">+3.34%</div>
+                    <div class="label">整体数学基准提升</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心问题</h2>
+            <p><strong>现象</strong>：推理模型有时"偷懒"，生成过短的思维链，导致简单问题也出错。</p>
+            <p><strong>问题</strong>：推理长度在模型的什么地方被控制？</p>
+            <p><strong>假设</strong>：存在一个线性方向，当激活时模型倾向于生成更长的推理。</p>
+        </div>
+
+        <div class="card">
+            <h2>🔧 方法：推理长度方向提取</h2>
+            <p><strong>1. 构建对比数据集</strong>：</p>
+            <div class="formula">
+                D_long: CoT > 1000 tokens<br>
+                D_short: CoT < 100 tokens
+            </div>
+            
+            <p><strong>2. 提取推理长度方向</strong>：</p>
+            <div class="formula">
+                v_ℓ^attn = r̄_ℓ,long^attn - r̄_ℓ,short^attn<br>
+                v_ℓ^mlp = r̄_ℓ,long^mlp - r̄_ℓ,short^mlp
+            </div>
+            
+            <p>通过对比长/短推理的隐藏表示，得到各层的推理长度方向。</p>
+            
+            <p><strong>3. 定位关键Attention Heads</strong>：</p>
+            <p>只识别出约<strong>4%的attention heads</strong>主导短推理行为。</p>
+            
+            <p><strong>4. 权重编辑</strong>：</p>
+            <p>编辑这些关键heads的output projection weights，移除短推理方向。</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. 推理长度由线性方向控制</strong><br>
+                在各层残差流中都存在推理长度方向，可通过steering操作影响推理行为。
+            </div>
+            <div class="key-finding">
+                <strong>2. 少量Attention Heads是关键</strong><br>
+                仅4%的attention heads驱动短推理行为，是高效的干预目标。
+            </div>
+            <div class="key-finding">
+                <strong>3. 极小参数修改即可见效</strong><br>
+                仅修改0.2%的模型参数，即可显著改善短推理问题。
+            </div>
+            <div class="key-finding">
+                <strong>4. 整体性能提升</strong><br>
+                短推理样本+6.39%，GSM8K/MATH等基准整体+3.34%。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 与LiReFs的关系</h2>
+            <div class="highlight">
+                <p><strong>互补性发现</strong>：</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>LiReFs</strong>：发现推理-记忆切换的线性特征（arXiv 2503.23084）</li>
+                    <li><strong>ThinkEdit</strong>：发现推理长度的线性方向（arXiv 2503.22048）</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>共同点</strong>：都证明推理由表示空间中的线性方向控制，都可通过干预这些方向来改善推理。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 相关论文</h2>
+            <p>papershare相关论文：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>LiReFs</strong> - 推理-记忆切换的线性特征</li>
+                <li><strong>ReasonDiag</strong> - CoT错误诊断</li>
+                <li><strong>Self-Refine</strong> - 迭代自反馈优化</li>
+            </ul>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2503.22048" target="_blank">arXiv:2503.22048</a> |
+            <a href="https://arxiv.org/html/2503.22048v4" target="_blank">HTML版本</a> |
+            <a href="https://github.com/Trustworthy-ML-Lab/ThinkEdit" target="_blank">GitHub</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

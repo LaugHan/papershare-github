@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论文分享 - LLM评测与诊断</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 { font-size: 2em; margin-bottom: 8px; }
+        header p { opacity: 0.9; font-size: 1.1em; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        
+        /* 新的分类样式 */
+        .category {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .category h2 {
+            font-size: 1.2em;
+            color: #2d3748;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .category .desc {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        
+        .paper-card {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+        .paper-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #cbd5e0;
+        }
+        .paper-card:last-child { margin-bottom: 0; }
+        .paper-card h3 { 
+            font-size: 1.05em; 
+            color: #2d3748; 
+            margin-bottom: 6px;
+        }
+        .paper-card .meta { color: #718096; font-size: 0.85em; margin-bottom: 8px; }
+        .paper-card .abstract { color: #4a5568; font-size: 0.9em; }
+        .paper-card .link { color: #4299e1; font-size: 0.85em; margin-top: 8px; }
+        .paper-card .link a { color: #3182ce; text-decoration: none; }
+        .paper-card .link a:hover { text-decoration: underline; }
+        .tag {
+            display: inline-block;
+            background: #ebf4ff;
+            color: #4299e1;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-right: 4px;
+            margin-top: 8px;
+        }
+        
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body data-page-type="list">
+    <header>
+        <h1>论文分享</h1>
+        <p>LLM评测 · 诊断 · 优化</p>
+    </header>
+    <div class="container">
+        
+        <!-- 📊 诊断与评测 -->
+        <div class="category">
+            <h2>📊 诊断与评测</h2>
+            <p class="desc">方差分析、缺陷诊断、鲁棒性评测、Benchmark设计</p>
+            
+            <div class="paper-card" data-paper-id="variance-in-evaluation-benchmarks" onclick="window.location.href='/papershare-github/papers/variance-in-evaluation-benchmarks/'">
+                <h3>Madaan 2024: 评测基准方差量化</h3>
+                <div class="meta">arXiv 2024 | 280模型 × 13 benchmark 方差分析</div>
+                <div class="abstract">
+                    选择题→补全格式可减少方差；IRT在减少方差方面效果有限。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2406.10229" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">方差分解</span><span class="tag">评测可靠性</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="psn-irt" onclick="window.location.href='/papershare-github/papers/psn-irt/'">
+                <h3>PSN-IRT: IRT重新思考LLM评测</h3>
+                <div class="meta">AAAI 2026 Oral | 41,871 items × 11 benchmarks</div>
+                <div class="abstract">
+                    神经网络估计IRT参数。发现饱和问题严重、数据污染普遍、高质量题目筛选更符合人类偏好。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2505.15055" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">IRT评分</span><span class="tag">题目筛选</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="g-theory-nlp" onclick="window.location.href='/papershare-github/papers/g-theory-nlp/'">
+                <h3>G-Theory: 多语言NLP不确定性量化</h3>
+                <div class="meta">IJCNLP-AACL 2025 | 重采样方差分解</div>
+                <div class="abstract">
+                    模型来源 × 数据来源方差分解。忽略任一方都会低估40-60%总体变异性。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2509.22612" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">G-Theory</span><span class="tag">重采样</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="reason-diag" onclick="window.location.href='/papershare-github/papers/reason-diag/'">
+                <h3>ReasonDiag: CoT推理错误诊断</h3>
+                <div class="meta">arXiv 2026 | 通用缺陷分类</div>
+                <div class="abstract">
+                    事实错误、逻辑错误、错误传播。前提树生成 → 事实核查 → 逻辑验证。
+                </div>
+                <div class="link"><a href="https://arxiv.org/html/2603.21286v1" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">CoT诊断</span><span class="tag">错误分类</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="picon" onclick="window.location.href='/papershare-github/papers/picon/'">
+                <h3>PICon: Persona Agent 三维度一致性评估</h3>
+                <div class="meta">arXiv:2603.25620 | cs.CL | 2026-03-26</div>
+                <div class="abstract">
+                    通过逻辑链多轮追问评估：内部一致性、外部一致性、重测一致性。即使"高度一致"系统也未达人类基线。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2603.25620" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">一致性检测</span><span class="tag">多轮追问</span><span class="tag">Persona</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="collective-intelligence-memetic-drift" onclick="window.location.href='/papershare-github/papers/collective-intelligence-memetic-drift/'">
+                <h3>Collective Intelligence: Multi-Agent Memetic Drift</h3>
+                <div class="meta">arXiv:2603.24676 | cs.AI | 2026-03-25</div>
+                <div class="abstract">
+                    QSG模型揭示共识形成机制：Drift主导区（共识=彩票）vs Selection主导区（偏见被放大）。为Self-Consistency提供理论解释。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2603.24676" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">Memetic Drift</span><span class="tag">Multi-Agent</span><span class="tag">Scaling Laws</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="self-consistency" onclick="window.location.href='/papershare-github/papers/self-consistency/'">
+                <h3>Self-Consistency: 多路径推理检测不一致性</h3>
+                <div class="meta">ICLR 2023 | Google | 多路径采样</div>
+                <div class="abstract">
+                    多路径采样 + 多数投票。答案不一致 = 模型不确定 = 可能出错。GSM8K +17.9%。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2203.11171" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">置信度检测</span><span class="tag">多数投票</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="easy2hard-bench" onclick="window.location.href='/papershare-github/papers/easy2hard-bench/'">
+                <h3>Easy2Hard-Bench: 难度分级Benchmark</h3>
+                <div class="meta">arXiv 2024 | IRT/Glicko-2连续难度标注</div>
+                <div class="abstract">
+                    精确定位LLM的能力边界和弱点难度区间。LLM在难度突变点性能骤降。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2409.18433" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">难度标注</span><span class="tag">能力边界</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="rupbench" onclick="window.location.href='/papershare-github/papers/rupbench/'">
+                <h3>RUPBench: 推理扰动鲁棒性Benchmark</h3>
+                <div class="meta">arXiv 2024 | 9种扰动 × 365,580样本</div>
+                <div class="abstract">
+                    词汇/句法/语义扰动鲁棒性评测。大模型更鲁棒；语义层扰动最致命。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2406.11020" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">扰动评测</span><span class="tag">鲁棒性</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="mmlu-pro" onclick="window.location.href='/papershare-github/papers/mmlu-pro/'">
+                <h3>MMLU-Pro: 更难更稳定的MMLU</h3>
+                <div class="meta">NeurIPS 2024 | 推理增强 + 选项扩展</div>
+                <div class="abstract">
+                    Accuracy drop 16-33%；prompt敏感度降低；CoT更有效；增加头部模型区分度。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2406.01574" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">Benchmark设计</span><span class="tag">饱和问题</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="benchmarker-mcq" onclick="window.location.href='/papershare-github/papers/benchmarker-mcq/'">
+                <h3>BenchMarker: MCQ缺陷自动检测</h3>
+                <div class="meta">2025 | 19条规则检测MCQ质量</div>
+                <div class="abstract">
+                    自动检测答案错误、题目歧义、选项不平衡等数据质量缺陷。
+                </div>
+                <div class="link"><a href="#" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">MCQ质量</span><span class="tag">规则检测</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="reasoning-memorization-lirefs" onclick="window.location.href='/papershare-github/papers/reasoning-memorization-lirefs/'">
+                <h3>LiReFs: 推理-记忆切换的线性特征</h3>
+                <div class="meta">arXiv 2025 | 可解释性 | 推理机制</div>
+                <div class="abstract">
+                    发现残差流中的线性推理特征(LiReFs)控制推理/记忆模式切换。可因果干预提升推理泛化性。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2503.23084" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">LiReFs</span><span class="tag">可解释性</span><span class="tag">机制分析</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="thinkedit" onclick="window.location.href='/papershare-github/papers/thinkedit/'">
+                <h3>ThinkEdit: 权重编辑解决"想太少"问题</h3>
+                <div class="meta">arXiv 2025 | 权重编辑 | 推理长度控制</div>
+                <div class="abstract">
+                    推理长度由线性方向控制。编辑4% attention heads的0.2%参数，减少短推理(+6.39%)，提升整体准确率(+3.34%)。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2503.22048" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">权重编辑</span><span class="tag">推理长度</span><span class="tag">Attention Heads</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="linear-rep-hypothesis" onclick="window.location.href='/papershare-github/papers/linear-rep-hypothesis/'">
+                <h3>Linear Rep Hypothesis: 形式化线性表示理论</h3>
+                <div class="meta">ICML 2024 | 因果内积 | Probing+Steering统一</div>
+                <div class="abstract">
+                    用反事实框架形式化"线性表示假设"。提出因果内积统一Linear Probing和Steering，揭示内积选择对语义方向识别的根本性影响。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2311.03658" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">因果内积</span><span class="tag">反事实</span><span class="tag">可解释性</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="origins-linear-rep" onclick="window.location.href='/papershare-github/papers/origins-linear-rep/'">
+                <h3>On the Origins of Linear Representations</h3>
+                <div class="meta">arXiv 2024 | 理论证明 | LLaMA-2验证</div>
+                <div class="abstract">
+                    从理论和实验证明：线性表示是next-token prediction目标与梯度下降隐式偏差的必然结果。同概念对齐，异概念正交。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2403.03867" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">理论基础</span><span class="tag">梯度下降</span><span class="tag">log-odds</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="rogue-scalpel" onclick="window.location.href='/papershare-github/papers/rogue-scalpel/'">
+                <h3>⚠️ The Rogue Scalpel: Steering安全漏洞</h3>
+                <div class="meta">arXiv 2025 | 安全研究 | XAI风险</div>
+                <div class="abstract">
+                    Activation steering系统性破坏对齐！随机方向+SAE特征都能jailbreak。仅20向量创造Universal Attack，挑战"可解释性=安全"范式。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2509.22067" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">安全漏洞</span><span class="tag">Jailbreak</span><span class="tag">Universal Attack</span>
+            </div>
+        </div>
+
+        <!-- 🔧 优化与改进 -->
+        <div class="category">
+            <h2>🔧 优化与改进</h2>
+            <p class="desc">评测→改进闭环、自改进、模型优化</p>
+            
+            <div class="paper-card" data-paper-id="wizardmath" onclick="window.location.href='/papershare-github/papers/wizardmath/'">
+                <h3>WizardMath: RLEIF数学推理优化</h3>
+                <div class="meta">ICLR 2025 Oral | Microsoft | 诊断→生成→PRM</div>
+                <div class="abstract">
+                    诊断弱点 → 针对性生成 → PRM微调。7B超越GPT-3.5。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2308.09583" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">RLEIF</span><span class="tag">Process Reward</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="tinygsm" onclick="window.location.href='/papershare-github/papers/tinygsm/'">
+                <h3>TinyGSM: 1.3B模型达81.5% GSM8K</h3>
+                <div class="meta">arXiv 2023 | CMU + MSR | 合成数据闭环</div>
+                <div class="abstract">
+                    高质量合成数据 + 验证器选择。种子数据 → 生成变体 → 微调 → 投票。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2312.09241" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">合成数据</span><span class="tag">Verifier</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="self-refine" onclick="window.location.href='/papershare-github/papers/self-refine/'">
+                <h3>Self-Refine: 迭代自反馈优化</h3>
+                <div class="meta">NeurIPS 2023 | 同一LLM生成→反馈→修正</div>
+                <div class="abstract">
+                    无需训练，平均提升~20%。局限：数学推理提升有限（+0.2%）。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2303.17651" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">迭代修正</span><span class="tag">Self-Feedback</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="self-debugging" onclick="window.location.href='/papershare-github/papers/self-debugging/'">
+                <h3>Self-Debugging: 橡皮鸭调试</h3>
+                <div class="meta">ICLR 2024 | Google DeepMind</div>
+                <div class="abstract">
+                    让LLM解释自己的代码来发现问题。难题提升9%，样本效率提升10倍。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2304.05128" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">代码调试</span><span class="tag">Few-shot</span>
+            </div>
+        </div>
+
+        <!-- 📚 经典论文 -->
+        <div class="category">
+            <h2>📚 经典论文</h2>
+            <p class="desc">Transformer、预训练等基础工作</p>
+            
+            <div class="paper-card" data-paper-id="attention-is-all-you-need" onclick="window.location.href='/papershare-github/papers/attention-is-all-you-need/'">
+                <h3>Attention Is All You Need</h3>
+                <div class="meta">NeurIPS 2017 | Transformer</div>
+                <div class="abstract">
+                    完全基于注意力机制的序列建模架构，显著影响后续 NLP 与多模态模型设计。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/1706.03762" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+            </div>
+            
+            <div class="paper-card" data-paper-id="bert" onclick="window.location.href='/papershare-github/papers/bert/'">
+                <h3>BERT: Pre-training of Deep Bidirectional Transformers</h3>
+                <div class="meta">NAACL 2019 | Pre-training</div>
+                <div class="abstract">
+                    双向 Transformer 预训练显著提升 NLP 下游任务表现，推动预训练范式普及。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/1810.04805" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+            </div>
+            
+            <div class="paper-card" data-paper-id="deep-residual-learning" onclick="window.location.href='/papershare-github/papers/deep-residual-learning/'">
+                <h3>Deep Residual Learning for Image Recognition</h3>
+                <div class="meta">CVPR 2016 | ResNet</div>
+                <div class="abstract">
+                    通过残差连接缓解深层网络训练退化问题，成为计算机视觉中的经典基础结构。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/1512.03385" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+            </div>
+        </div>
+        
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSN-IRT - Rethinking LLM Benchmarking with Item Response Theory - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.5em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #c05621; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card p { margin-bottom: 12px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #fffaf0; border-left: 4px solid #fbd38d; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .diff-box { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>PSN-IRT: Rethinking LLM Benchmarking with Item Response Theory</h1>
+        <div class="meta">Zhou et al. | HIT + CESI | AAAI 2026 Oral (arXiv:2505.15055)</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>当前LLM评测存在<strong>两个核心问题</strong>：① 不同leaderboard之间排名不一致 ② 头部模型区分度不足。</p>
+            <p>本研究提出<strong>PSN-IRT (Pseudo-Siamese Network for Item Response Theory)</strong>，用神经网络估计IRT参数，对41,871个题目×11个benchmark进行系统分析。</p>
+            <p><strong>关键发现</strong>：① LLM benchmarks无法在多维度同时优秀 ② 普遍存在饱和和难度上限不足 ③ 许多题目存在数据污染</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            <p><strong>问题1</strong>：同一模型在不同benchmark上排名差异大，researcher难以判断真实能力。</p>
+            <p><strong>问题2</strong>：头部模型（GPT-4, Claude等）在多数benchmark上接近饱和，无法区分。</p>
+            <p><strong>解决思路</strong>：引入心理测量学中的Item Response Theory (IRT)，对题目和模型能力进行细粒度建模。</p>
+        </div>
+
+        <div class="card">
+            <h2>🔧 PSN-IRT 架构</h2>
+            <p><strong>双路神经网络</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>Model Network</strong>：输入模型ID → 输出模型能力θ</li>
+                <li><strong>Item Network</strong>：输入题目ID → 输出4个IRT参数</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>4PL (四参数逻辑) 模型</strong>：</p>
+            <p style="font-family: monospace; background: #f7fafc; padding: 10px; border-radius: 4px;">
+                P(X=1|θ) = c + (d-c) / (1 + e^(-a(θ-b)))
+            </p>
+            <ul style="margin-left: 20px; color: #4a5568; margin-top: 10px;">
+                <li><strong>b (difficulty)</strong>：难度 - 正确率50%时对应的能力值</li>
+                <li><strong>a (discriminability)</strong>：区分度 - 曲线陡峭程度</li>
+                <li><strong>c (guessing-rate)</strong>：猜测率 - 能力极低时的正确率</li>
+                <li><strong>d (feasibility)</strong>：可行性 - 能力极高时的正确率上限</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. LLM benchmarks无法多维度同时优秀</strong><br>
+                在区分度、难度范围、信度等维度上存在权衡。
+            </div>
+            <div class="key-finding">
+                <strong>2. 饱和问题严重</strong><br>
+                头部模型在多数benchmark上接近天花板，无法有效区分。
+            </div>
+            <div class="key-finding">
+                <strong>3. 数据污染普遍</strong><strong></strong><br>
+                许多题目被模型"记忆"，而非真正"理解"。
+            </div>
+            <div class="key-finding">
+                <strong>4. PSN-IRT筛选的题目更符合人类偏好</strong><br>
+                用高质量题目组成的子集，模型排名与人类判断更一致。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 和你的框架的区别</h2>
+            <div class="diff-box">
+                <p><strong>PSN-IRT 建模的是：能力 vs 难度</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>θ (模型能力) × b (题目难度)</li>
+                    <li>关注"模型能否回答对"</li>
+                    <li>没有扰动维度</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>你的框架关注的是：扰动鲁棒性</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>原始性能 vs 扰动后性能</li>
+                    <li>关注"模型对输入扰动的敏感程度"</li>
+                    <li>分解：扰动类型 × 模型能力 × 问题难度</li>
+                </ul>
+            </div>
+            <p><strong>潜在结合</strong>：可以结合！用PSN-IRT估计难度，用你的框架估计鲁棒性，形成二维分析。</p>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2505.15055" target="_blank">arXiv:2505.15055</a> |
+            <a href="https://github.com/Joe-Hall-Lee/PSN-IRT" target="_blank">GitHub</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

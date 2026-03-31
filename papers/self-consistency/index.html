@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Consistency - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .back-link { display: inline-block; padding: 16px 20px; color: #4299e1; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+        .paper-header { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .paper-header h1 { font-size: 1.6em; color: #2d3748; margin-bottom: 8px; }
+        .paper-header .meta { color: #718096; font-size: 0.9em; margin-bottom: 16px; }
+        .paper-header .abstract { color: #4a5568; font-size: 0.95em; }
+        .paper-link { display: inline-block; margin-top: 16px; padding: 8px 16px; background: #4299e1; color: white; border-radius: 6px; text-decoration: none; }
+        .paper-link:hover { background: #3182ce; }
+        .tag { display: inline-block; background: #ebf4ff; color: #4299e1; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-right: 6px; margin-top: 12px; }
+        .detail-section { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .detail-section h2 { font-size: 1.3em; color: #2d3748; margin-bottom: 16px; border-bottom: 2px solid #9f7aea; padding-bottom: 8px; }
+        .detail-section h3 { font-size: 1.1em; color: #4a5568; margin: 20px 0 12px; }
+        .detail-section p { margin-bottom: 12px; color: #4a5568; }
+        .detail-section ul { margin: 12px 0; padding-left: 24px; color: #4a5568; }
+        .detail-section li { margin-bottom: 8px; }
+        .highlight-box { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .method-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .warning-box { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; }
+        th { background: #f7fafc; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <a href="/papershare/" class="back-link">← 返回列表</a>
+    <div class="container">
+        <div class="paper-header">
+            <h1>Self-Consistency Improves Chain of Thought Reasoning in Language Models</h1>
+            <div class="meta">Wang et al. | Google Brain | ICLR 2023 | arXiv:2203.11171</div>
+            <div class="abstract">
+                <strong>摘要</strong><br>
+                Chain-of-thought prompting结合预训练LLM在复杂推理任务上取得了令人鼓舞的成果。本论文提出一种新的解码策略——Self-Consistency（自洽性），取代CoT prompting中简单的贪婪解码。它首先采样多样化的推理路径（而非仅取贪婪路径），然后通过边际化采样路径选择最一致的答案。
+            </div>
+            <a href="https://arxiv.org/abs/2203.11171" target="_blank" class="paper-link">查看原论文 →</a>
+            <div>
+                <span class="tag">多路径推理</span>
+                <span class="tag">多数投票</span>
+                <span class="tag">推理置信度</span>
+                <span class="tag">解码策略</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>🔍 核心洞察：LLM推理的不一致性缺陷</h2>
+            
+            <h3>问题观察</h3>
+            <div class="highlight-box">
+                <strong>核心发现</strong>：LLM在复杂推理问题上，用贪婪解码（greedy decoding）往往只能得到单一推理路径，这条路径可能包含错误。但如果允许模型"多想几次"，多次采样会得到多条不同的推理路径。
+            </div>
+            
+            <h3>不一致性揭示的缺陷类型</h3>
+            <ul>
+                <li><strong>推理路径不稳定</strong>：同一问题，多次采样得到不同答案</li>
+                <li><strong>答案置信度虚高</strong>：模型对自己错误答案也很"自信"</li>
+                <li><strong>推理链脆弱</strong>：微小的prompt变化导致结果大变</li>
+                <li><strong>伪推理</strong>：模型可能生成看似合理但实际错误的推理</li>
+            </ul>
+            
+            <h3>为什么不一致的答案更可能是错的？</h3>
+            <p>论文假设：一个复杂推理问题通常只有一种正确的思维方式通向正确答案。如果多次采样得到多个不同答案，说明模型对该问题没有稳定的"正确推理模式"，这些答案中大概率包含推理错误。</p>
+        </div>
+
+        <div class="detail-section">
+            <h2>🔧 Self-Consistency 方法</h2>
+            
+            <h3>Pipeline</h3>
+            <div class="method-box">
+                <strong>Step 1: 多路径采样</strong><br>
+                - 对同一问题，使用非零温度（temperature）采样多条推理路径（如40条）<br>
+                - 每条路径独立生成完整的CoT推理
+                
+                <br><br><strong>Step 2: 答案提取</strong><br>
+                - 从每条推理路径的最终输出中提取答案（如最终数字、选择项）
+                
+                <br><br><strong>Step 3: 多数投票</strong><br>
+                - 统计各答案出现的频率<br>
+                - 选择出现次数最多的答案作为最终输出
+            </div>
+            
+            <h3>公式</h3>
+            <div class="highlight-box">
+                最终答案 = argmax<sub>c</sub> ∑<sub>i</sub> 1<sub>(c<sub>i</sub> = c)</sub><br><br>
+                其中 c 是候选答案，c<sub>i</sub> 是第i条采样路径的答案。
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>📊 实验结果</h2>
+            
+            <h3>性能提升</h3>
+            <table>
+                <tr>
+                    <th>Benchmark</th>
+                    <th>CoT Greedy</th>
+                    <th>Self-Consistency</th>
+                    <th>提升</th>
+                </tr>
+                <tr>
+                    <td>GSM8K</td>
+                    <td>~46%</td>
+                    <td>~64%</td>
+                    <td><strong>+17.9%</strong></td>
+                </tr>
+                <tr>
+                    <td>SVAMP</td>
+                    <td>~67%</td>
+                    <td>~78%</td>
+                    <td><strong>+11.0%</strong></td>
+                </tr>
+                <tr>
+                    <td>AQuA</td>
+                    <td>~54%</td>
+                    <td>~66%</td>
+                    <td><strong>+12.2%</strong></td>
+                </tr>
+                <tr>
+                    <td>StrategyQA</td>
+                    <td>~80%</td>
+                    <td>~86%</td>
+                    <td><strong>+6.4%</strong></td>
+                </tr>
+                <tr>
+                    <td>ARC-Challenge</td>
+                    <td>~75%</td>
+                    <td>~79%</td>
+                    <td><strong>+3.9%</strong></td>
+                </tr>
+            </table>
+            
+            <h3>关键发现</h3>
+            <ul>
+                <li>采样数量越多，效果越好（但收益递减）</li>
+                <li>在算术推理上提升最显著</li>
+                <li>与CoT prompting完全兼容</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>💡 诊断应用：对LLM优化的启示</h2>
+            
+            <h3>1. 用不一致性作为"错误信号"</h3>
+            <div class="highlight-box">
+                <strong>原则</strong>：如果模型对同一问题的多次回答不一致，这是一个强烈的"我不确定"的信号。
+            </div>
+            
+            <h3>2. 构建诊断指标</h3>
+            <ul>
+                <li><strong>答案熵</strong>：多次采样答案的分布熵，高熵=不确定</li>
+                <li><strong>置信度校准</strong>：模型自评置信度与实际正确率的差距</li>
+                <li><strong>推理路径多样性</strong>：不同推理路径的语义相似度</li>
+            </ul>
+            
+            <h3>3. 优化方向</h3>
+            <ul>
+                <li><strong>提高基础推理质量</strong>：一致性提高需要更好的单次推理能力</li>
+                <li><strong>Process Reward</strong>：在推理过程中引入过程监督</li>
+                <li><strong>不确定性表达</strong>：训练模型学会说"我不确定"</li>
+            </ul>
+            
+            <h3>4. 结合其他诊断方法</h3>
+            <p>Self-Consistency可以与ReasonDiag结合：</p>
+            <ol>
+                <li>用Self-Consistency检测哪些问题模型回答不稳定</li>
+                <li>对不稳定问题用ReasonDiag深入分析推理错误</li>
+                <li>有针对性地收集错误类型数据进行微调</li>
+            </ol>
+        </div>
+
+        <div class="detail-section">
+            <h2>📋 总结</h2>
+            
+            <h3>一句话概括</h3>
+            <div class="highlight-box">
+                <strong>通过多路径采样+多数投票，Self-Consistency将LLM推理准确率提升最高17.9%，揭示了单次贪婪解码的不稳定性缺陷。</strong>
+            </div>
+            
+            <h3>速记版Pipeline</h3>
+            <ol>
+                <li><strong>多路径采样</strong>：温度采样生成N条推理路径</li>
+                <li><strong>提取答案</strong>：从每条路径提取最终答案</li>
+                <li><strong>多数投票</strong>：选择出现最多的答案</li>
+                <li><strong>不一致信号</strong>：记录答案分布用于诊断</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

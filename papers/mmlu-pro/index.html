@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMLU-Pro - More Robust and Challenging Benchmark - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.5em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #b7791f; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card p { margin-bottom: 12px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #fffff0; border-left: 4px solid #f6e05e; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .diff-box { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>MMLU-Pro: A More Robust and Challenging Multi-Task Language Understanding Benchmark</h1>
+        <div class="meta">Wang et al. | NeurIPS 2024 Datasets & Benchmarks Spotlight (arXiv:2406.01574)</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>解决MMLU饱和问题：增加推理难度 + 扩展选项数(4→10)。</p>
+            <p><strong>核心改进</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li>集成更多需要推理的题目</li>
+                <li>去除trivial/noisy问题</li>
+                <li>选项扩展到10个（减少猜测率）</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. Accuracy Drop 16-33%</strong><br>
+                相比MMLU，所有模型性能显著下降，区分度增加。
+            </div>
+            <div class="key-finding">
+                <strong>2. Prompt稳定性提升</strong><br>
+                24种prompt下，敏感度从4-5%降到2%。
+            </div>
+            <div class="key-finding">
+                <strong>3. CoT在MMLU-Pro上更有效</strong><br>
+                与原版MMLU相反，MMLU-Pro上CoT显著提升，说明需要更多推理。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 和你的框架的区别</h2>
+            <div class="diff-box">
+                <p><strong>MMLU-Pro 是：更难的评测集</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>重新设计题目（难度↑）</li>
+                    <li>扩展选项（猜测率↓）</li>
+                    <li>不分析"扰动响应"</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>你的框架关注的是：扰动鲁棒性</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>保持题目，添加扰动</li>
+                    <li>分析性能变化来源</li>
+                    <li>诊断"为什么"脆弱</li>
+                </ul>
+            </div>
+            <p><strong>互补性</strong>：MMLU-Pro提高难度，你的框架分析鲁棒性。可以结合：在MMLU-Pro上做扰动分析。</p>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2406.01574" target="_blank">arXiv:2406.01574</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

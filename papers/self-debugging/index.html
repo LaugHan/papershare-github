@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Debugging - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 16px 20px;
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+        .paper-header {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .paper-header h1 { font-size: 1.8em; color: #2d3748; margin-bottom: 8px; }
+        .paper-header .meta { color: #718096; font-size: 0.9em; margin-bottom: 16px; }
+        .paper-header .abstract { color: #4a5568; font-size: 1em; }
+        .paper-link { 
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: #4299e1;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .paper-link:hover { background: #3182ce; }
+        .tag {
+            display: inline-block;
+            background: #ebf4ff;
+            color: #4299e1;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 6px;
+            margin-top: 12px;
+        }
+        .detail-section {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .detail-section h2 { font-size: 1.3em; color: #2d3748; margin-bottom: 16px; border-bottom: 2px solid #4299e1; padding-bottom: 8px; }
+        .detail-section h3 { font-size: 1.1em; color: #4a5568; margin: 20px 0 12px; }
+        .detail-section p { margin-bottom: 12px; color: #4a5568; }
+        .detail-section ul { margin: 12px 0; padding-left: 24px; color: #4a5568; }
+        .detail-section li { margin-bottom: 8px; }
+        .highlight-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .warning-box { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .table-container { overflow-x: auto; margin: 16px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; }
+        th { background: #f7fafc; font-weight: 600; }
+        code { background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .pipeline-box { background: #ebf8ff; border-left: 4px solid #4299e1; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+    </style>
+</head>
+<body>
+    <a href="/papershare/" class="back-link">← 返回列表</a>
+    <div class="container">
+        <div class="paper-header">
+            <h1>Teaching Large Language Models to Self-Debug</h1>
+            <div class="meta">Xinyun Chen et al. | Google DeepMind + UC Berkeley | arXiv:2304.05128 | ICLR 2024</div>
+            <div class="abstract">
+                <strong>摘要（原文翻译）</strong><br>
+                大语言模型（LLM）在代码生成方面已取得令人瞩目的性能。然而，对于复杂的编程任务，一次性生成正确解决方案仍然具有挑战性，因此一些先前的工作设计了程序修复方法来提高代码生成性能。在本工作中，我们提出了SELF-DEBUGGING，它通过few-shot演示教大语言模型调试其预测的程序。特别地，我们证明SELF-DEBUGGING可以教LLM进行"橡皮鸭调试"——即在没有任何关于代码正确性的人类反馈或错误消息的情况下，模型能够通过研究执行结果和用自然语言解释生成的代码来识别其错误。SELF-DEBUGGING在多个代码生成基准测试中达到最先进性能，包括Spider（文本到SQL生成）、TransCoder（C++到Python翻译）和MBPP（文本到Python生成）。在Spider基准测试中（没有单元测试验证预测正确性），带代码解释的SELF-DEBUGGING持续改进基线2-3%，在最难题型上提升9%。在TransCoder和MBPP（有单元测试）中，SELF-DEBUGGING将基线准确率提升高达12%。同时，通过利用反馈消息和重用失败预测，SELF-DEBUGGING显著提高了样本效率，可以匹配或超越生成超过10倍候选程序的基线模型。
+            </div>
+            <a href="https://arxiv.org/abs/2304.05128" target="_blank" class="paper-link">查看原论文 →</a>
+            <div>
+                <span class="tag">Self-Debugging</span>
+                <span class="tag">代码生成</span>
+                <span class="tag">橡皮鸭调试</span>
+                <span class="tag">Few-shot</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>1. 方法动机</h2>
+            
+            <h3>a) 驱动力</h3>
+            <p>代码生成任务中，一次性生成完全正确的代码仍然困难。之前的工作依赖多个采样+重排，但这需要大量候选样本（如100个）。作者想探索：LLM能否自我调试，减少所需采样数量？</p>
+            
+            <h3>b) 现存痛点</h3>
+            <ul>
+                <li><strong>多采样成本高</strong>：需要生成大量候选才能找到正确代码</li>
+                <li><strong>先前方法需额外训练</strong>：代码修复模型需要专门训练</li>
+                <li><strong>缺乏自我纠错能力</strong>：之前认为LLM在没有外部反馈时无法修正代码</li>
+                <li><strong>无单元测试场景</strong>：如Text-to-SQL，没有验证手段</li>
+            </ul>
+            
+            <h3>c) 研究假设</h3>
+            <div class="highlight-box">
+                <strong>核心假设</strong>：LLM可以通过"橡皮鸭调试"（Rubber Duck Debugging）进行自我纠错——即通过解释代码执行结果来识别错误，无需人类反馈。
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>2. 方法设计（重点）</h2>
+            
+            <h3>a) Pipeline 流程</h3>
+            <div class="pipeline-box">
+                <strong>Self-Debugging 循环：</strong><br>
+                代码生成 → 执行 → 代码解释 → 反馈 → (修正代码) × N
+            </div>
+            
+            <h3>Step 1: 代码生成（Code Generation）</h3>
+            <ul>
+                <li><strong>输入</strong>：问题描述（如Text-to-SQL的表结构+问题）</li>
+                <li><strong>方法</strong>：Few-shot prompting，示例为(问题, SQL)对</li>
+                <li><strong>输出</strong>：候选程序</li>
+            </ul>
+            
+            <h3>Step 2: 代码执行（Code Execution）</h3>
+            <ul>
+                <li><strong>有单元测试</strong>：直接用单元测试验证</li>
+                <li><strong>无单元测试</strong>：执行SQL/Python代码获取结果</li>
+                <li><strong>作用</strong>：为后续解释提供执行上下文</li>
+            </ul>
+            
+            <h3>Step 3: 代码解释（Code Explanation）</h3>
+            <p>这是"橡皮鸭调试"的核心步骤：</p>
+            <ul>
+                <li><strong>Text-to-SQL</strong>：解释SQL的每个子句、返回的列数、整体含义</li>
+                <li><strong>代码翻译</strong>：逐行解释翻译后的Python代码</li>
+                <li><strong>作用</strong>：通过自言自语发现逻辑错误</li>
+            </ul>
+            
+            <h3>Step 4: 反馈生成（Feedback）</h3>
+            <ul>
+                <li><strong>判断</strong>：根据代码解释判断当前代码是否正确</li>
+                <li><strong>有单元测试</strong>：执行结果直接决定反馈</li>
+                <li><strong>无单元测试</strong>：让模型自己判断（如"SQL预测正确/错误"）</li>
+                <li><strong>终止条件</strong>：反馈说正确，或达到最大调试轮次</li>
+            </ul>
+
+            <h3>b) 三种反馈类型</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>反馈类型</th>
+                        <th>适用场景</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Simple Feedback</strong></td>
+                        <td>任何场景</td>
+                        <td>仅判断正确/错误，无细节</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unit Test (UT)</strong></td>
+                        <td>有单元测试</td>
+                        <td>包含执行结果、失败信息</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Explanation (Expl)</strong></td>
+                        <td>无单元测试</td>
+                        <td>让模型解释代码发现问题</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Execution Trace</strong></td>
+                        <td>有单元测试</td>
+                        <td>逐步执行trace（论文发现Expl效果更好）</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>3. 与其他方法对比</h2>
+            
+            <h3>a) 本质差异</h3>
+            <p>Self-Debugging通过<strong>few-shot prompting</strong>教LLM自我调试，无需额外训练。在无单元测试场景下，创新性地使用"代码解释"代替人工反馈。</p>
+            
+            <h3>b) 性能对比</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>基准</th>
+                        <th>基线</th>
+                        <th>+Self-Debugging</th>
+                        <th>提升</th>
+                    </tr>
+                    <tr>
+                        <td>Spider (无UT)</td>
+                        <td>基线</td>
+                        <td>+2-3%</td>
+                        <td>代码解释有效</td>
+                    </tr>
+                    <tr>
+                        <td>Spider最难级别</td>
+                        <td>基线</td>
+                        <td>+9%</td>
+                        <td>难题提升更显著</td>
+                    </tr>
+                    <tr>
+                        <td>TransCoder</td>
+                        <td>基线</td>
+                        <td>+12%</td>
+                        <td>有UT反馈</td>
+                    </tr>
+                    <tr>
+                        <td>MBPP</td>
+                        <td>基线</td>
+                        <td>+12%</td>
+                        <td>有UT反馈</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>c) 样本效率优势</h3>
+            <div class="highlight-box">
+                Self-Debugging可以匹配或超越生成<strong>10倍以上</strong>候选程序的基线模型。例如，原来需要采样100个候选，现在只需采样10个+调试。
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>4. 实验表现与优势</h2>
+            
+            <h3>a) 评估任务</h3>
+            <ul>
+                <li><strong>Spider</strong>：Text-to-SQL生成（无单元测试）</li>
+                <li><strong>TransCoder</strong>：C++到Python翻译（有单元测试）</li>
+                <li><strong>MBPP</strong>：Text-to-Python生成（有部分单元测试）</li>
+            </ul>
+            
+            <h3>b) 关键发现</h3>
+            <ul>
+                <li><strong>代码解释有效</strong>：即使没有外部反馈，解释也能发现问题</li>
+                <li><strong>难题收益更大</strong>：最难级别SQL问题提升9%</li>
+                <li><strong>迭代有效</strong>：多轮调试逐步逼近正确答案</li>
+                <li><strong>可复用失败</strong>：失败预测的反馈信息可帮助生成正确代码</li>
+            </ul>
+            
+            <h3>c) 局限性</h3>
+            <div class="warning-box">
+                <ul>
+                    <li><strong>适用场景</strong>：主要针对代码生成，其他领域需适配</li>
+                    <li><strong>LLM能力依赖</strong>：依赖LLM的代码理解和解释能力</li>
+                    <li><strong>简单反馈不够</strong>：仅判断正确/错误的Simple Feedback效果不佳</li>
+                    <li><strong>迭代成本</strong>：多次调试增加LLM调用次数</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>5. 学习与应用</h2>
+            
+            <h3>a) 开源情况</h3>
+            <p>代码和数据已开源（GitHub + HuggingFace）</p>
+            
+            <h3>b) 实现要点</h3>
+            <ul>
+                <li><strong>Few-shot演示</strong>：需要精心设计的调试示例</li>
+                <li><strong>反馈格式</strong>：Code Explanation > Execution Trace > Simple</li>
+                <li><strong>停止条件</strong>：模型判断正确或达到最大轮次</li>
+                <li><strong>执行环境</strong>：需要Python解释器/SQL执行环境</li>
+            </ul>
+            
+            <h3>c) 迁移能力</h3>
+            <p>可迁移到其他有执行验证的领域：</p>
+            <ul>
+                <li>形式化验证（如Lean'smathlib）</li>
+                <li>其他编程语言翻译</li>
+                <li>算法正确性验证</li>
+                <li>任何可执行的推理任务</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>6. 总结</h2>
+            
+            <h3>a) 一句话概括（≤20字）</h3>
+            <div class="highlight-box">
+                <strong>教LLM通过"解释代码"进行自我调试，无外部反馈也能发现并修正错误。</strong>
+            </div>
+            
+            <h3>b) 速记版Pipeline（3-5步）</h3>
+            <ol>
+                <li><strong>生成代码</strong>：用Few-shot让LLM生成候选程序</li>
+                <li><strong>执行看结果</strong>：运行代码获取输出或单元测试结果</li>
+                <li><strong>解释代码</strong>：让LLM"自言自语"解释代码逻辑</li>
+                <li><strong>判断正误</strong>：根据解释判断代码是否正确</li>
+                <li><strong>迭代修正</strong>：错误则重复，直到正确或达到上限</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

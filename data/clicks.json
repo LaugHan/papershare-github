@@ -1,0 +1,9 @@
+{
+  "attention-is-all-you-need": 2,
+  "deep-residual-learning": 3,
+  "tinygsm": 2,
+  "self-refine": 3,
+  "reason-diag": 2,
+  "picon": 2,
+  "collective-intelligence-memetic-drift": 1
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On the Origins of Linear Representations - 线性表示的起源 - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.4em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #667eea; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .card p { margin-bottom: 10px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #f0f4ff; border-left: 4px solid #667eea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .highlight { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .formula { background: #f7fafc; padding: 12px; border-radius: 6px; font-family: monospace; margin: 10px 0; text-align: center; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; margin-right: 15px; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>线性表示的起源：从理论到实验</h1>
+        <div class="meta">arXiv 2403.03867 | next-token prediction + gradient descent</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>近期研究表明，高层语义概念在大语言模型的表示空间中以<strong>"线性"方式</strong>编码。</p>
+            <p>本文研究这种线性表示的<strong>起源</strong>：引入简单的<strong>潜在变量模型</strong>来形式化 next-token prediction 的概念动态。</p>
+            <p><strong>核心证明</strong>：① 线性表示从 log-odds 匹配中自然产生；② next-token prediction 目标结合梯度下降的隐式偏差导致线性表示涌现。</p>
+            <p>在 LLaMA-2 上的实验验证了理论发现。</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心问题与假设</h2>
+            <div class="key-finding">
+                <strong>科学问题</strong>：线性表示是<em>如何产生</em>的？是训练中自然涌现还是巧合？
+            </div>
+            <div class="key-finding">
+                <strong>核心假设</strong>：线性表示是 <strong>next-token prediction 目标</strong> 和 <strong>梯度下降隐式偏差</strong> 共同作用的自然结果。
+            </div>
+            <div class="highlight">
+                <strong>建模假设</strong>：
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>上下文句子反映潜在二元概念变量</li>
+                    <li>下一个 token 也反映潜在二元概念变量</li>
+                    <li>通过梯度下降学习，相似的概念向量会趋向对齐</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 方法：潜在变量模型</h2>
+            <p><strong>模型结构</strong></p>
+            <div class="formula">
+                Context (x) → 潜在概念 z ∈ {0,1}^K → Next Token (y)<br>
+                z: K个二元概念变量 | f: 双射映射函数
+            </div>
+            
+            <p><strong>梯度下降演化方程</strong></p>
+            <div class="formula">
+                u_{t+1} = u_t + η·L(t)·v_t<br>
+                v_{t+1} = v_t + η·L(t)·u_t
+            </div>
+            <p>其中 u=嵌入向量, v=unembed向量, η=学习率, L(t)=损失函数</p>
+            
+            <p><strong>关键结论</strong></p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li>内积 ⟨u_t, v_t⟩ 的变化量始终为正</li>
+                <li>对齐程度 cos(u, v) → 1（单调递增）</li>
+                <li>不同概念向量保持近似正交</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. Log-odds 匹配 → 线性结构</strong><br>
+                当学习的概率 log-odds 匹配时，线性结构在子空间中自然涌现。
+            </div>
+            <div class="key-finding">
+                <strong>2. 梯度下降 → 向量对齐</strong><br>
+                梯度下降的隐式偏差导致同概念向量趋于完全对齐（cos→1），异概念保持正交。
+            </div>
+            <div class="key-finding">
+                <strong>3. LLaMA-2 实验验证</strong><br>
+                同一概念的 steering vectors 有非平凡的对齐度，不同概念的 steering vectors 几乎正交。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 理论贡献</h2>
+            <div class="highlight">
+                <p><strong>统一解释链</strong>：</p>
+                <div style="margin: 10px 0; text-align: center;">
+                    Next-token Prediction Objective<br>
+                    ↓<br>
+                    Gradient Descent Implicit Bias<br>
+                    ↓<br>
+                    Linear Representations Emerge<br>
+                    ↓<br>
+                    ↑ ↑ ↑<br>
+                    同概念对齐 | 异概念正交
+                </div>
+                <p>这是首次从理论上证明：线性表示不是巧合，而是训练的<strong>必然结果</strong>。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 局限性</h2>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>模型简化</strong>：潜在变量模型可能过于简化真实LLM</li>
+                <li><strong>二元假设</strong>：真实概念可能是多元或连续的</li>
+                <li><strong>实验范围</strong>：主要在LLaMA-2验证，需更多模型验证</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📂 相关论文</h2>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>Linear Rep Hypothesis</strong> — 形式化线性表示定义</li>
+                <li><strong>LiReFs</strong> — 推理-记忆切换的线性特征</li>
+                <li><strong>ThinkEdit</strong> — 权重编辑控制推理长度</li>
+            </ul>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2403.03867" target="_blank">arXiv:2403.03867</a> |
+            <a href="https://arxiv.org/html/2403.03867v1" target="_blank">HTML版本</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

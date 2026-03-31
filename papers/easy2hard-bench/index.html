@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy2Hard-Bench - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .back-link { display: inline-block; padding: 16px 20px; color: #4299e1; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+        .paper-header { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .paper-header h1 { font-size: 1.6em; color: #2d3748; margin-bottom: 8px; }
+        .paper-header .meta { color: #718096; font-size: 0.9em; margin-bottom: 16px; }
+        .paper-header .abstract { color: #4a5568; font-size: 0.95em; }
+        .paper-link { display: inline-block; margin-top: 16px; padding: 8px 16px; background: #4299e1; color: white; border-radius: 6px; text-decoration: none; }
+        .paper-link:hover { background: #3182ce; }
+        .tag { display: inline-block; background: #ebf4ff; color: #4299e1; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-right: 6px; margin-top: 12px; }
+        .detail-section { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .detail-section h2 { font-size: 1.3em; color: #2d3748; margin-bottom: 16px; border-bottom: 2px solid #38a169; padding-bottom: 8px; }
+        .detail-section h3 { font-size: 1.1em; color: #4a5568; margin: 20px 0 12px; }
+        .detail-section p { margin-bottom: 12px; color: #4a5568; }
+        .detail-section ul { margin: 12px 0; padding-left: 24px; color: #4a5568; }
+        .detail-section li { margin-bottom: 8px; }
+        .highlight-box { background: #f0fff4; border-left: 4px solid #38a169; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .method-box { background: #ebf8ff; border-left: 4px solid #4299e1; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; }
+        th { background: #f7fafc; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <a href="/papershare/" class="back-link">← 返回列表</a>
+    <div class="container">
+        <div class="paper-header">
+            <h1>Easy2Hard-Bench: Standardized Difficulty Labels for Profiling LLM Performance</h1>
+            <div class="meta">Ding et al. | UMD + CMU | arXiv:2409.18433 | 2024</div>
+            <div class="abstract">
+                <strong>摘要</strong><br>
+                为了系统评估LLM从简单到困难任务的泛化能力，我们提出Easy2Hard-Bench，包含6个benchmark数据集，涵盖数学、编程、棋类、推理等领域。每个问题都标注了数值难度分数，使用Item Response Theory (IRT) 和 Glicko-2等统计模型估计难度。
+            </div>
+            <a href="https://arxiv.org/abs/2409.18433" target="_blank" class="paper-link">查看原论文 →</a>
+            <div>
+                <span class="tag">难度标注</span>
+                <span class="tag">Easy2Hard泛化</span>
+                <span class="tag">IRT评分</span>
+                <span class="tag">Benchmark</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>🔍 LLM通用缺陷：难度敏感性问题</h2>
+            
+            <h3>核心发现</h3>
+            <div class="highlight-box">
+                <strong>关键洞察</strong>：LLM在不同难度级别的问题上表现差异巨大，且呈现"难度突变"现象——模型在某个难度阈值前表现尚可，突破阈值后性能骤降。
+            </div>
+            
+            <h3>LLM难度相关的缺陷模式</h3>
+            <ul>
+                <li><strong>简单题 vs 难题性能差距巨大</strong>：同一模型在easy和hard问题上的准确率可能相差40%+</li>
+                <li><strong>难度泛化失败</strong>：模型在训练分布内（简单题）表现好，但难以泛化到更难的问题</li>
+                <li><strong>多跳推理脆弱</strong>：需要2-3步以上推理的问题，错误率急剧上升</li>
+                <li><strong>边界情况失效</strong>：边界条件、特殊情况处理能力弱</li>
+            </ul>
+            
+            <h3>为什么需要连续难度标注？</h3>
+            <p>传统benchmark的粗粒度标注（如"简单/中等/困难"三档）掩盖了真实的难度分布。连续难度分数可以：</p>
+            <ul>
+                <li>精确识别模型的"能力边界"</li>
+                <li>比较不同模型在相同难度级别下的表现</li>
+                <li>追踪模型能力的渐进提升</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>📊 Easy2Hard-Bench 数据集</h2>
+            
+            <h3>数据集概览</h3>
+            <table>
+                <tr>
+                    <th>数据集</th>
+                    <th>领域</th>
+                    <th>难度来源</th>
+                    <th>估算方法</th>
+                </tr>
+                <tr>
+                    <td>E2H-AMC</td>
+                    <td>数学竞赛</td>
+                    <td>人类统计数据</td>
+                    <td>IRT</td>
+                </tr>
+                <tr>
+                    <td>E2H-Codeforces</td>
+                    <td>编程竞赛</td>
+                    <td>提交记录+选手等级</td>
+                    <td>Glicko-2</td>
+                </tr>
+                <tr>
+                    <td>E2H-Lichess</td>
+                    <td>棋类谜题</td>
+                    <td>玩家等级+谜题难度</td>
+                    <td>Glicko-2</td>
+                </tr>
+                <tr>
+                    <td>E2H-GSM8K</td>
+                    <td>数学应用题</td>
+                    <td>Open LLM Leaderboard</td>
+                    <td>IRT</td>
+                </tr>
+                <tr>
+                    <td>E2H-ARC</td>
+                    <td>科学问答</td>
+                    <td>Open LLM Leaderboard</td>
+                    <td>IRT</td>
+                </tr>
+                <tr>
+                    <td>E2H-Winogrande</td>
+                    <td>常识推理</td>
+                    <td>Open LLM Leaderboard</td>
+                    <td>IRT</td>
+                </tr>
+            </table>
+            
+            <h3>难度估算方法</h3>
+            <div class="method-box">
+                <strong>Item Response Theory (IRT)</strong><br>
+                - 收集大量被试（人或LLM）对每个问题的作答结果<br>
+                - 建模"问题难度"和"被试能力"的对应关系<br>
+                - 输出：连续难度分数 + 不确定性估计
+                
+                <br><br><strong>Glicko-2</strong><br>
+                - 类似于Elo评分的进阶版<br>
+                - 考虑时间因素，被试能力会随时间变化<br>
+                - 适合有竞技属性的任务（编程竞赛、棋类）<br>
+                - 同时输出问题难度和不确定性
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>💡 对LLM优化的启示</h2>
+            
+            <h3>1. 诊断模型的能力边界</h3>
+            <div class="highlight-box">
+                <strong>方法</strong>：用Easy2Hard-Bench测试模型，找出模型准确率从高→低的"突变点"对应的难度分数，这就是模型的能力边界。
+            </div>
+            
+            <h3>2. 针对性的数据增强策略</h3>
+            <ul>
+                <li><strong>识别弱点难度区间</strong>：模型在哪个难度区间表现最差</li>
+                <li><strong>自适应采样</strong>：训练时更多采样弱点难度的数据</li>
+                <li><strong>Curriculum Learning</strong>：从易到难逐步训练</li>
+            </ul>
+            
+            <h3>3. Easy-to-Hard泛化训练</h3>
+            <p>研究发现：</p>
+            <ul>
+                <li>在简单数据上微调的模型，有时比只在困难数据上微调效果更好</li>
+                <li>因为简单数据的标注更干净、噪音更少</li>
+                <li>但需要在简单→困难的连续谱上训练</li>
+            </ul>
+            
+            <h3>4. 构建诊断Pipeline</h3>
+            <ol>
+                <li><strong>难度分级测试</strong>：在连续难度分布上测试模型</li>
+                <li><strong>弱点定位</strong>：找出准确率骤降的难度区间</li>
+                <li><strong>错误分析</strong>：分析该难度区间的典型错误类型</li>
+                <li><strong>针对性增强</strong>：生成/收集该难度区间的更多训练数据</li>
+            </ol>
+        </div>
+
+        <div class="detail-section">
+            <h2>📋 总结</h2>
+            
+            <h3>一句话概括</h3>
+            <div class="highlight-box">
+                <strong>Easy2Hard-Bench提供连续难度标注，帮助精确定位LLM的能力边界和弱点难度区间。</strong>
+            </div>
+            
+            <h3>诊断LLM缺陷的完整Pipeline</h3>
+            <ol>
+                <li><strong>难度分级</strong>：用IRT/Glicko-2给问题标注连续难度分数</li>
+                <li><strong>性能曲线</strong>：绘制"难度分数 → 准确率"曲线</li>
+                <li><strong>边界识别</strong>：找到准确率骤降点 = 能力边界</li>
+                <li><strong>弱点聚焦</strong>：分析能力边界附近的典型错误</li>
+                <li><strong>针对性训练</strong>：在弱点难度区间做数据增强</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Statistical Significance - Quantifying Uncertainty in NLP Evaluation - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #38a169 0%, #276749 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.5em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #276749; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card p { margin-bottom: 12px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #f0fff4; border-left: 4px solid #68d391; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .diff-box { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>Beyond Statistical Significance: Quantifying Uncertainty in NLP Evaluation</h1>
+        <div class="meta">Sälevä et al. | IJCNLP-AACL 2025 (arXiv:2509.22612)</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>引入一套<strong>基于重采样的方法</strong>，用于量化多语言和多任务NLP评测中的不确定性和统计精度。</p>
+            <p>研究表明：性能分数的变异来源于<strong>模型相关来源</strong>和<strong>数据相关来源</strong>两个方面，忽略任一方都会<strong>显著低估总体变异性</strong>。</p>
+            <p>在QA、MT、NER三个任务上展示了如何量化leaderboard中模型排名和模型间差异的复制不确定性。</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            <p><strong>核心问题</strong>：当看到两个模型在benchmark上差2分，这个差异是真实的还是噪声？</p>
+            <p><strong>传统做法</strong>：做t检验看p值，但往往忽略数据侧的变异。</p>
+            <p><strong>G-Theory思想</strong>：将方差分解为多个来源，量化每个来源的贡献。</p>
+        </div>
+
+        <div class="card">
+            <h2>🔧 核心方法</h2>
+            <p><strong>方差分解 (Variance Decomposition)</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>模型来源</strong>：不同模型能力差异</li>
+                <li><strong>数据来源</strong>：测试集采样变异</li>
+                <li><strong>交互效应</strong>：模型×数据的交互</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>重采样方法</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li>Bootstrap：对测试集多次重采样</li>
+                <li>Jackknife：leave-one-out估计</li>
+                <li>计算置信区间和标准误</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. 必须同时考虑模型和数据来源</strong><br>
+                忽略任一方都会低估总体变异性40-60%。
+            </div>
+            <div class="key-finding">
+                <strong>2. 模型排名不稳定</strong><br>
+                即使在大型测试集上，模型排名顺序也存在显著不确定性。
+            </div>
+            <div class="key-finding">
+                <strong>3. 任务类型影响方差来源</strong><br>
+                生成任务比分类任务方差更大。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 和你的框架的区别</h2>
+            <div class="diff-box">
+                <p><strong>G-Theory 分解的是：模型变异 × 数据变异</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>关注"测试集重采样"导致的变异</li>
+                    <li>没有"扰动"维度</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>你的框架分解的是：扰动 × 模型 × 难度</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>关注"输入扰动"导致的变异</li>
+                    <li>关注"模型对扰动的脆弱性"</li>
+                </ul>
+            </div>
+            <p><strong>方法论相似</strong>：都是方差分解思想，你的框架可以看作G-Theory在扰动维度的扩展。</p>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2509.22612" target="_blank">arXiv:2509.22612</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

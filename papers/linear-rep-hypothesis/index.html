@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Representation Hypothesis - 形式化线性表示理论 - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.4em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #11998e; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .card p { margin-bottom: 10px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #f0f9f4; border-left: 4px solid #11998e; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .highlight { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .formula { background: #f7fafc; padding: 12px; border-radius: 6px; font-family: monospace; margin: 10px 0; text-align: center; overflow-x: auto; }
+        .link-box { background: #ecfdf5; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #059669; text-decoration: none; font-weight: 500; margin-right: 15px; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9em; }
+        .comparison-table th, .comparison-table td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        .comparison-table th { background: #f7fafc; font-weight: 600; }
+        .comparison-table td:first-child { font-weight: 500; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>线性表示假设与LLM几何结构</h1>
+        <div class="meta">Park, Choe & Veitch | ICML 2024 | arXiv 2311.03658</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p><strong>线性表示假设</strong>：高层概念在模型表示空间中作为方向被线性编码。</p>
+            <p>本文回答两个问题：<strong>①"线性表示"实际意味着什么？②如何理解表示空间中的几何概念？</strong></p>
+            <p>使用<strong>反事实语言</strong>给出两种形式化定义：输出（词）表示空间 和 输入（句子）空间。证明这些连接到 <strong>Linear Probing</strong> 和 <strong>Model Steering</strong>。</p>
+            <p>核心发现：存在一种<strong>因果内积（causal inner product）</strong>，在精确意义上尊重语言结构，可统一所有线性表示概念。</p>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心问题与假设</h2>
+            <div class="key-finding">
+                <strong>三个模糊地带</strong>：
+                <ul style="margin: 10px 0 0 20px;">
+                    <li><strong>定义层面</strong>："线性表示"从未被精确定义</li>
+                    <li><strong>几何层面</strong>：余弦相似度在语义空间中是否有效？</li>
+                    <li><strong>方法层面</strong>：Probing 和 Steering 缺乏统一理论</li>
+                </ul>
+            </div>
+            <div class="key-finding">
+                <strong>核心假设（因果形式）</strong>：存在一种内积结构，使得概念可以通过反事实对被一致地识别为一个方向——概念既是"可读的"也是"可写的"。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 方法：反事实框架</h2>
+            <p><strong>Step 1: 反事实对定义概念</strong></p>
+            <div class="formula">
+                Y(0): 若 W=0（概念不存在）时的输出<br>
+                Y(1): 若 W=1（概念存在）时的输出
+            </div>
+            
+            <p><strong>Step 2: 因果内积</strong></p>
+            <p>标准欧氏内积忽略语言模型结构。存在非欧几里得内积：</p>
+            <div class="formula">
+                ⟨u, v⟩_causal = u^⊤ M v
+            </div>
+            <p>其中 M 由数据分布决定，在某种精确意义上尊重语言结构。</p>
+            
+            <p><strong>Step 3: 两种线性表示定义</strong></p>
+            <table class="comparison-table">
+                <tr><th>空间</th><th>定义</th><th>对应方法</th></tr>
+                <tr><td>输出（词）</td><td>λ₁ - λ₀ ∈ Cone(λ̄_W)</td><td>Linear Probing</td></tr>
+                <tr><td>输入（句子）</td><td>概率偏移的线性关系</td><td>Model Steering</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. 因果内积 vs 欧氏内积</strong><br>
+                使用欧氏内积时，部分概念方向判断完全错误；因果内积后方向一致。
+            </div>
+            <div class="key-finding">
+                <strong>2. 内积选择是根本性的</strong><br>
+                标准几何度量在语言模型中不适用，需要从数据分布推导的内积。
+            </div>
+            <div class="key-finding">
+                <strong>3. Probing + Steering 统一</strong><br>
+                同一概念方向同时具备可读性（Probing）和可写性（Steering）。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 理论贡献图谱</h2>
+            <div class="highlight">
+                <p><strong>本文贡献</strong>：从反事实因果理论出发，统一了所有线性表示直觉：</p>
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>Mikolov et al. (2013) — 词类比可被线性操作 → <em>为何可以？</em></li>
+                    <li>Arora et al. (2016) — 词向量线性组合 → <em>因果关联？</em></li>
+                    <li>Elhage et al. (2022) — Transformer叠加 → <em>内积解释？</em></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 局限性</h2>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>多义性</strong>：二元变量假设不适用于一词多义</li>
+                <li><strong>因果假设</strong>：需满足概念因果可分离条件</li>
+                <li><strong>计算成本</strong>：因果内积估计在大模型中开销大</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📂 相关论文</h2>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>On the Origins of Linear Reps</strong> — 线性表示为何涌现</li>
+                <li><strong>LiReFs</strong> — 推理-记忆切换的线性特征</li>
+                <li><strong>ThinkEdit</strong> — 权重编辑控制推理长度</li>
+                <li><strong>The Rogue Scalpel</strong> — Steering的安全隐患</li>
+            </ul>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2311.03658" target="_blank">arXiv:2311.03658</a> |
+            <a href="https://arxiv.org/html/2311.03658v2" target="_blank">HTML版本</a> |
+            <a href="https://proceedings.mlr.press/v202/park24a.html" target="_blank">ICML 2024</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

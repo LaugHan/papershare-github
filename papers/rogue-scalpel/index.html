@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rogue Scalpel - Activation Steering 安全漏洞 - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px 20px; }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.4em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { font-size: 1.1em; color: #f5576c; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .card p { margin-bottom: 10px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .key-finding { background: #fff1f2; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .highlight { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .formula { background: #f7fafc; padding: 12px; border-radius: 6px; font-family: monospace; margin: 10px 0; text-align: center; }
+        .link-box { background: #fff1f2; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #e11d48; text-decoration: none; font-weight: 500; margin-right: 15px; }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
+        .stat { background: #fff1f2; padding: 10px 15px; border-radius: 8px; text-align: center; flex: 1; min-width: 100px; }
+        .stat .num { font-size: 1.5em; font-weight: bold; color: #f5576c; }
+        .stat .label { font-size: 0.8em; color: #718096; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+        .warning { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; padding: 15px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>⚠️ The Rogue Scalpel：激活 Steering 破坏 LLM 安全性</h1>
+        <div class="meta">Korznikov et al. | arXiv 2509.22067 | 安全研究</div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p><strong>Activation steering</strong> 是一种通过在推理时向隐藏状态添加语义向量来控制 LLM 行为的技术，通常被描述为比微调更精确、更安全。</p>
+            <p><strong>本文证明相反</strong>：Steering 系统性破坏模型对齐保护，使模型遵从有害请求。</p>
+            <div class="warning">
+                <strong>🔴 关键发现</strong>：即使沿随机方向的 steering 也能将有害遵从率从 0% 提升到 1-13%！
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 关键数据</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">0%→13%</div>
+                    <div class="label">有害遵从率提升</div>
+                </div>
+                <div class="stat">
+                    <div class="num">81.7%</div>
+                    <div class="label">SAE特征有jailbreak能力</div>
+                </div>
+                <div class="stat">
+                    <div class="num">20个</div>
+                    <div class="label">向量创造Universal Attack</div>
+                </div>
+                <div class="stat">
+                    <div class="num">4×</div>
+                    <div class="label">对未见提示攻击提升</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 方法：Steering 安全测试</h2>
+            <p><strong>实验 Pipeline</strong></p>
+            <div class="formula">
+                JailbreakBench (100有害查询) → Steering Vector → 模型输出 → LLM-as-Judge评估
+            </div>
+            
+            <p><strong>核心公式</strong></p>
+            <div class="formula">
+                h' = h + α · v<br>
+                α = 缩放系数 | v = steering向量 | h = 隐藏状态
+            </div>
+            
+            <p><strong>测试配置</strong></p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li>模型：Llama-3, Qwen2.5, Falcon-3</li>
+                <li>向量来源：随机高斯 / SAE特征</li>
+                <li>最优层：Middle layers (≈ ⌊1/2⌋)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📊 三大关键发现</h2>
+            <div class="key-finding">
+                <strong>1. 随机方向也能jailbreak</strong><br>
+                1000个随机向量中，387个能jailbreak至少5个提示（Llama3.1-8B）。这暗示模型latent space广泛存在脆弱方向。
+            </div>
+            <div class="key-finding">
+                <strong>2. SAE特征同样危险</strong><br>
+                817/1000的SAE特征具有jailbreak能力！即使是"良性"特征（如Portuguese）也可能导致有害遵从。
+            </div>
+            <div class="key-finding">
+                <strong>3. Universal Attack：20向量横扫</strong><br>
+                20个能jailbreak单个提示的向量平均后，可创造 универсальный 攻击向量，泛化到未见请求。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ 安全警示</h2>
+            <div class="highlight">
+                <p><strong>核心悖论</strong>：可解释性 ≠ 安全性</p>
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>SAE特征看似"可解释"，实则81.7%有潜在危害</li>
+                    <li>局部失败可被武器化</li>
+                    <li>无需有害训练数据，仅需黑盒steering访问</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 攻击vs防御对比</h2>
+            <div class="key-finding">
+                <strong>攻击门槛极低</strong>：
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>❌ 无需有害训练数据</li>
+                    <li>❌ 无需模型权重修改</li>
+                    <li>❌ 无需梯度访问</li>
+                    <li>✅ 仅需黑盒steering API</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📂 相关论文</h2>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>Linear Rep Hypothesis</strong> — 线性表示理论</li>
+                <li><strong>LiReFs</strong> — 推理-记忆线性特征</li>
+                <li><strong>ThinkEdit</strong> — 权重编辑</li>
+            </ul>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2509.22067" target="_blank">arXiv:2509.22067</a> |
+            <a href="https://arxiv.org/html/2509.22067v2" target="_blank">HTML版本</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>

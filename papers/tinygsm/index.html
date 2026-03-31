@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyGSM - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 16px 20px;
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+        .paper-header {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .paper-header h1 { font-size: 1.8em; color: #2d3748; margin-bottom: 8px; }
+        .paper-header .meta { color: #718096; font-size: 0.9em; margin-bottom: 16px; }
+        .paper-header .abstract { color: #4a5568; font-size: 1em; }
+        .paper-link { 
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: #4299e1;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .paper-link:hover { background: #3182ce; }
+        .tag {
+            display: inline-block;
+            background: #ebf4ff;
+            color: #4299e1;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 6px;
+            margin-top: 12px;
+        }
+        .detail-section {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .detail-section h2 { font-size: 1.3em; color: #2d3748; margin-bottom: 16px; border-bottom: 2px solid #4299e1; padding-bottom: 8px; }
+        .detail-section h3 { font-size: 1.1em; color: #4a5568; margin: 20px 0 12px; }
+        .detail-section p { margin-bottom: 12px; color: #4a5568; }
+        .detail-section ul { margin: 12px 0; padding-left: 24px; color: #4a5568; }
+        .detail-section li { margin-bottom: 8px; }
+        .highlight-box { background: #f0fff4; border-left: 4px solid #48bb78; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .warning-box { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .table-container { overflow-x: auto; margin: 16px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; }
+        th { background: #f7fafc; font-weight: 600; }
+        code { background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <a href="/papershare/" class="back-link">← 返回列表</a>
+    <div class="container">
+        <div class="paper-header">
+            <h1>TinyGSM: achieving >80% on GSM8k with small language models</h1>
+            <div class="meta">Bingbin Liu et al. | CMU + Microsoft Research | arXiv:2312.09241 | 2023</div>
+            <div class="abstract">
+                <strong>摘要（原文翻译）</strong><br>
+                小规模模型提供了各种计算优势，但规模对问题解决能力的重要程度仍然是一个开放性问题。具体对于小学数学问题的求解，此前达到80%准确率的最小模型尺寸仍然是34B参数。我们的工作研究了高质量数据集可能是小语言模型获得数学推理能力的关键。我们提出了TinyGSM，一个包含1230万个小学数学问题的合成数据集，每个问题配有Python解决方案，全部由GPT-3.5生成。在TinyGSM上微调后，我们发现一个1.3B生成模型和1.3B验证模型的组合可以达到81.5%的准确率，超越了比它大几个数量级的现有模型。这也与GPT-3.5"教师"模型（77.4%）的性能相媲美，而我们模型的训练数据正是由GPT-3.5生成的。我们的方法简单明了，有两个关键组成部分：1）高质量数据集TinyGSM，2）使用验证器从多个候选生成中选择最终输出。
+            </div>
+            <a href="https://arxiv.org/abs/2312.09241" target="_blank" class="paper-link">查看原论文 →</a>
+            <div>
+                <span class="tag">评测→改进闭环</span>
+                <span class="tag">合成数据</span>
+                <span class="tag">小模型</span>
+                <span class="tag">数学推理</span>
+                <span class="tag">Verifier</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>1. 方法动机</h2>
+            
+            <h3>a) 驱动力</h3>
+            <p>作者想探索：小规模模型（SLM）能否在数学推理任务上与大规模模型竞争？具体目标是：在GSM8K benchmark上突破80%准确率，同时保持模型尺寸友好。</p>
+            
+            <h3>b) 现存痛点</h3>
+            <ul>
+                <li>此前达到80% GSM8K准确率的模型都是34B参数以上，推理成本高昂</li>
+                <li>小模型（如1-2B参数）在数学推理上表现不佳，能力差距与模型规模强相关</li>
+                <li>GSM8K训练集只有7473道题目，数据量太小不足以训练语言模型</li>
+                <li>学生模型（SLM）性能通常远落后于教师模型（LLM），存在信息论瓶颈</li>
+            </ul>
+            
+            <h3>c) 研究假设</h3>
+            <div class="highlight-box">
+                <strong>核心假设</strong>：高质量合成数据可能是小语言模型获得数学推理能力的关键。通过prompt工程让GPT-3.5生成大量高质量数学问题，可以弥补模型规模的不足。
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>2. 方法设计（重点）</h2>
+            
+            <h3>a) Pipeline 流程</h3>
+            <p><strong>整体架构</strong>：生成器 + 验证器的双模型系统</p>
+            
+            <h3>Step 1: 数据生成（TinyGSM Dataset）</h3>
+            <ul>
+                <li><strong>输入</strong>：GSM8K训练集的7473道原始题目</li>
+                <li><strong>处理</strong>：用GPT-3.5-turbo对每道题生成10个变体（相似问题+Python解答）</li>
+                <li><strong>输出</strong>：1230万个数学问题-答案对（约18亿tokens）</li>
+            </ul>
+            
+            <h3>Step 2: 生成器微调（Generator Fine-tuning）</h3>
+            <ul>
+                <li><strong>输入</strong>：TinyGSM合成数据</li>
+                <li><strong>模型</strong>：基于Phi-1.5（1.3B参数）</li>
+                <li><strong>训练</strong>：FP16、Adam优化器、线性warmup、最大学习率1e-4、batch size 1024、最多20k步</li>
+                <li><strong>输出</strong>：可生成Python代码解答数学问题的生成模型</li>
+            </ul>
+            
+            <h3>Step 3: 验证器训练（Verifier Training）</h3>
+            <ul>
+                <li><strong>关键发现</strong>：验证器大小缩放比生成器大小缩放更有效
+                <ul>
+                    <li>生成器从125M→1.3B：性能提升5.1%</li>
+                    <li>验证器从125M→1.3B：性能提升7.2%</li>
+                </ul>
+                </li>
+                <li><strong>训练数据</strong>：GSM8K原始训练集（7.4k题目）</li>
+                <li><strong>作用</strong>：对多个候选答案打分，选择最高分作为最终输出</li>
+            </ul>
+            
+            <h3>Step 4: 测试时推理（Test-time Inference）</h3>
+            <ul>
+                <li><strong>过程</strong>：生成器生成48个候选答案 → 验证器打分 → 选择最高分</li>
+                <li><strong>技巧</strong>：include irrelevant context（无关上下文）增强鲁棒性</li>
+            </ul>
+
+            <h3>b) 数据生成Prompt</h3>
+            <div class="highlight-box">
+                <strong>核心Prompt模板</strong>：<br>
+                "Consider the following grade-school math problem: {question}<br>
+                Generate 10 different math problems similar to this math problem.<br>
+                - Make sure each question uses diverse NLP and includes multiple logical steps.<br>
+                - After each generated problem, write down a detailed and complete Python program..."
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>3. 与其他方法对比</h2>
+            
+            <h3>a) 本质差异</h3>
+            <p>TinyGSM不仅生成问题，还生成<strong>配套的Python代码解答</strong>，利用Python解释器规避LLM的数值计算局限。</p>
+            
+            <h3>b) 方法对比表</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>方法</th>
+                        <th>模型规模</th>
+                        <th>GSM8K准确率</th>
+                        <th>改进点</th>
+                    </tr>
+                    <tr>
+                        <td><strong>TinyGSM (本文)</strong></td>
+                        <td>1.3B+1.3B</td>
+                        <td><strong>81.5%</strong></td>
+                        <td>合成数据+验证器</td>
+                    </tr>
+                    <tr>
+                        <td>MetaMath (LLaMA-2 70B)</td>
+                        <td>70B</td>
+                        <td>82.3%</td>
+                        <td>数据增强</td>
+                    </tr>
+                    <tr>
+                        <td>WizardMath (LLaMA-2 70B)</td>
+                        <td>70B</td>
+                        <td>81.6%</td>
+                        <td>RLEIF强化学习</td>
+                    </tr>
+                    <tr>
+                        <td>MAmmoTH (Code-Llama 34B)</td>
+                        <td>34B</td>
+                        <td>72.7%</td>
+                        <td>代码微调</td>
+                    </tr>
+                    <tr>
+                        <td>GPT-3.5 (教师)</td>
+                        <td>-</td>
+                        <td>77.4%</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>c) 创新点</h3>
+            <ul>
+                <li><strong>数据规模</strong>：1230万道题目，远超MetaMath的4万道</li>
+                <li><strong>验证器设计</strong>：揭示验证器缩放比生成器缩放更有效</li>
+                <li><strong>无需重训练</strong>：验证器只需7.4k标注数据即可训练</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>4. 实验表现与优势</h2>
+            
+            <h3>a) 关键结果</h3>
+            <ul>
+                <li>1.3B模型达到<strong>81.5%</strong>准确率，超越34B+模型</li>
+                <li>与GPT-3.5教师（77.4%）性能持平</li>
+                <li>Phi-1.5微调前44.6% → 微调后68.2% → 加验证器后81.5%</li>
+                <li>最小的125M模型也能达到63.1%（无验证器）和68.9%（有验证器）</li>
+            </ul>
+            
+            <h3>b) 优势场景</h3>
+            <ul>
+                <li>小学数学应用题（GSM8K）</li>
+                <li>需要Python代码执行验证的任务</li>
+                <li>计算资源受限但需要数学推理能力的场景</li>
+            </ul>
+            
+            <h3>c) 局限性</h3>
+            <div class="warning-box">
+                <ul>
+                    <li><strong>泛化限制</strong>：TinyGSM针对GSM8K风格设计，对更高阶数学（MATH数据集）效果有限</li>
+                    <li><strong>验证器依赖</strong>：需要可执行的Python代码，非代码任务不适用</li>
+                    <li><strong>教师模型依赖</strong>：数据质量受限于GPT-3.5能力</li>
+                    <li><strong>无正确答案验证</strong>：合成数据未检查正确性（作者发现一致性过滤会移除难题）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>5. 学习与应用</h2>
+            
+            <h3>a) 开源情况</h3>
+            <p>代码和数据已开源（GitHub + HuggingFace）</p>
+            
+            <h3>b) 实现细节</h3>
+            <ul>
+                <li><strong>数据生成成本</strong>：约$3600（GPT-3.5商业定价）</li>
+                <li><strong>训练步数</strong>：最多20k步</li>
+                <li><strong>采样温度</strong>：用于增强多样性</li>
+                <li><strong>候选数量</strong>：测试时生成48个候选答案</li>
+            </ul>
+            
+            <h3>c) 迁移能力</h3>
+            <p>可迁移到其他需要"可执行验证"的领域：</p>
+            <ul>
+                <li>其他编程语言的代码生成</li>
+                <li>形式化数学证明（如果有验证器）</li>
+                <li>任何有明确验证函数的推理任务</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>6. 总结</h2>
+            
+            <h3>a) 一句话概括（≤20字）</h3>
+            <div class="highlight-box">
+                <strong>高质量合成数据+验证器选择，让1.3B小模型在数学推理上比肩GPT-3.5。</strong>
+            </div>
+            
+            <h3>b) 速记版Pipeline（3-5步）</h3>
+            <ol>
+                <li><strong>收集种子</strong>：准备少量真实数学题（如GSM8K训练集）</li>
+                <li><strong>大模型生成</strong>：让GPT-3.5生成大量相似问题+Python解答</li>
+                <li><strong>过滤清洗</strong>：删除过短、无数字、不可执行的题目</li>
+                <li><strong>微调生成器</strong>：在合成数据上微调小模型</li>
+                <li><strong>训练验证器</strong>：用少量真实数据训练验证器模型</li>
+                <li><strong>测试选择</strong>：生成多个候选，验证器打分选最优</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collective Intelligence & Memetic Drift - Multi-Agent Scaling Laws</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #f5576c; border-bottom: 2px solid #f5576c; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #f5576c; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .badge.cs { background: #11998e; }
+        .highlight { background: #fff5f5; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .table th, .table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .table th { background: #f8f9fa; font-weight: 600; }
+        .table tr:hover { background: #f5f5f5; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #f5576c; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .formula { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; font-family: monospace; text-align: center; }
+        .regime { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .regime-card { padding: 15px; border-radius: 8px; }
+        .regime-card.drift { background: #fff5f5; border: 1px solid #f5576c; }
+        .regime-card.selection { background: #f0fff4; border: 1px solid #11998e; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>When Is Collective Intelligence a Lottery?<br>Multi-Agent Scaling Laws for Memetic Drift</h1>
+        <div class="meta">
+            <span class="badge">arXiv:2603.24676</span>
+            <span class="badge cs">cs.AI</span>
+            <span>2026-03-25</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                由大语言模型（LLM）驱动的多智能体系统正越来越多地部署在影响决策的环境中。然而，这些系统的表现究竟反映的是<strong>集体推理</strong>、<strong>系统性偏见</strong>还是<strong>单纯的随机性</strong>，目前仍不清楚。
+
+                <br><br>本文引入最小模型——<strong>量化单纯形闲聊（QSG）</strong>，揭示了共识形成的机制：将协议形成的微观起源追溯到相互的上下文学习（mutual in-context learning）。
+
+                <br><br>在 QSG 中，智能体维持内部信念状态，但从彼此的采样输出中进行学习。因此，一个智能体的任意选择成为下一个智能体的证据，并可能复合向一致方向发展。论文将此称为<strong>模因漂移（Memetic Drift）</strong>。
+
+                <br><br>QSG 预测了两种状态的交叉：
+                <br>• <strong>漂移主导区</strong>：共识实际上相当于彩票
+                <br>• <strong>选择主导区</strong>：弱偏见被放大并塑造结果
+
+                <br><br>推导了漂移诱导极化的缩放定律，并在模拟和 LLM 实验中验证。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                Multi-Agent LLM 系统的集体决策，究竟是：
+                <br>• 真正的集体推理？
+                <br>• 系统性偏见的放大？
+                <br>• 纯粹的随机性？
+            </div>
+            
+            <h3>已有观察</h3>
+            <p>命名游戏实验表明，即使没有先验偏好，LLM 群体也能迅速打破对称性达成共识。</p>
+            
+            <h3>研究空白</h3>
+            <ul>
+                <li>缺乏对共识形成<strong>机制</strong>的理解</li>
+                <li>没有量化分析框架</li>
+                <li>无法预测系统何时是"彩票"何时是"选择"</li>
+            </ul>
+            
+            <h3>核心假设</h3>
+            <p>相互的上下文学习是共识形成的关键——一个智能体的任意选择会成为下一个智能体的"证据"，形成正反馈放大。</p>
+        </div>
+
+        <div class="card">
+            <h2>⚙️ QSG 模型设计</h2>
+            
+            <h3>核心概念：Quantized Simplex Gossip</h3>
+            <ul>
+                <li><strong>Q</strong>: 量化位数（信念空间的离散化精度）</li>
+                <li><strong>S</strong>: 单纯形（信念状态空间）</li>
+                <li><strong>G</strong>: 闲聊机制（智能体间的采样输出交换）</li>
+            </ul>
+            
+            <h3>工作原理</h3>
+            <div class="formula">
+                智能体 i 维护信念状态 θᵢ<br>
+                智能体 j 采样输出 xⱼ ~ p(·|θⱼ)<br>
+                智能体 i 更新 θᵢ ← f(θᵢ, xⱼ)  ← 通过上下文学习
+            </div>
+            
+            <h3>两种机制</h3>
+            <div class="regime">
+                <div class="regime-card drift">
+                    <strong>🌀 Drift 主导</strong><br>
+                    Qη/N 小<br>
+                    任意选择 → 随机共识<br>
+                    "彩票"
+                </div>
+                <div class="regime-card selection">
+                    <strong>🎯 Selection 主导</strong><br>
+                    Qη/N 大<br>
+                    弱偏见被放大<br>
+                    系统性结果
+                </div>
+            </div>
+            
+            <h3>关键参数</h3>
+            <table class="table">
+                <tr><th>参数</th><th>含义</th><th>对漂移的影响</th></tr>
+                <tr><td>N</td><td>群体规模</td><td>N ↑ → Drift ↓</td></tr>
+                <tr><td>Q</td><td>量化位数</td><td>Q ↑ → Drift ↑</td></tr>
+                <tr><td>η</td><td>适应率</td><td>η ↑ → Selection ↑</td></tr>
+                <tr><td>T</td><td>采样温度</td><td>T ↑ → Drift ↑</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>📈 Scaling Laws</h2>
+            
+            <h3>漂移诱导极化公式</h3>
+            <div class="formula">
+                Polarization ∝ f(N, Q, η, T)<br><br>
+                关键交叉点：Qη/N = constant
+            </div>
+            
+            <h3>推导的 Scaling Laws</h3>
+            <ul>
+                <li>漂移随群体规模 <strong>N</strong> 的衰减</li>
+                <li>漂移随量化位数 <strong>Q</strong> 的增长</li>
+                <li>漂移随适应率 <strong>η</strong> 的非线性关系</li>
+                <li>漂移随内部不确定性（采样温度 T）的增长</li>
+            </ul>
+            
+            <h3>实验验证</h3>
+            <div class="highlight">
+                <strong>两种验证方式：</strong>
+                <br>1. QSG 模拟 → 理论预测吻合
+                <br>2. LLM 命名游戏实验 → 真实系统验证
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔬 对 LLM 诊断的价值</h2>
+            
+            <h3>与 Self-Consistency 的关系</h3>
+            <table class="table">
+                <tr><th>方法</th><th>本质</th><th>风险</th></tr>
+                <tr style="background: #fff5f5;">
+                    <td><strong>Self-Consistency</strong></td><td>多路径采样+投票</td><td>可能陷入 Drift 主导区</td>
+                </tr>
+                <tr style="background: #f0fff4;">
+                    <td><strong>本文理论</strong></td><td>量化分析 Drift vs Selection</td><td>提供判断框架</td>
+                </tr>
+            </table>
+            
+            <h3>诊断应用</h3>
+            <ul>
+                <li><strong>置信度校准</strong>：在高 Drift 场景下，投票结果置信度低</li>
+                <li><strong>采样策略设计</strong>：根据 Qη/N 判断是否需要更多 diversity</li>
+                <li><strong>Multi-Agent 一致性检测</strong>：区分真实共识 vs 随机漂移</li>
+            </ul>
+            
+            <h3>设计原则</h3>
+            <div class="highlight">
+                <strong>降低 Drift 的方法：</strong>
+                <br>• 增加群体规模 N
+                <br>• 减少每轮通信量（降低 Q 的影响）
+                <br>• 引入显式偏见信号（进入 Selection 主导区）
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏷️ 标签</h2>
+            <div class="tag-cloud">
+                <span class="badge">Multi-Agent</span>
+                <span class="badge">Memetic Drift</span>
+                <span class="badge">Scaling Laws</span>
+                <span class="badge">Collective Intelligence</span>
+                <span class="badge">In-context Learning</span>
+                <span class="badge">Consensus</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心总结</h2>
+            
+            <div class="highlight">
+                <strong>一句话概括：</strong>揭示 Multi-Agent LLM 系统中的模因漂移机制，提供从"随机彩票"到"系统性选择"的量化分析框架
+            </div>
+            
+            <h3>Pipeline（3步）</h3>
+            <ol style="padding-left: 20px;">
+                <li>智能体维持信念状态 → 通过采样输出进行相互学习</li>
+                <li>分析 Qη/N 比率 → 判断 Drift vs Selection 主导</li>
+                <li>推导极化 scaling laws → 预测共识质量</li>
+            </ol>
+            
+            <h3>对诊断方向的贡献</h3>
+            <p>提供了<strong>区分真实一致性 vs 随机一致性</strong>的理论工具：</p>
+            <ul>
+                <li>当系统处于 Drift 主导区时，投票结果不可靠</li>
+                <li>Self-Consistency 等方法的成功取决于进入 Selection 主导区</li>
+                <li>为置信度校准提供物理直觉</li>
+            </ul>
+        </div>
+
+        <a href="../index.html" class="back-link">← 返回论文索引</a>
+    </div>
+
+    <footer>
+        <p>Collective Intelligence & Memetic Drift Paper Analysis | Daily Paper 2026-03-28</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WizardMath - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .back-link { display: inline-block; padding: 16px 20px; color: #4299e1; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+        .paper-header { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .paper-header h1 { font-size: 1.6em; color: #2d3748; margin-bottom: 8px; }
+        .paper-header .meta { color: #718096; font-size: 0.9em; margin-bottom: 16px; }
+        .paper-header .abstract { color: #4a5568; font-size: 0.95em; }
+        .paper-link { display: inline-block; margin-top: 16px; padding: 8px 16px; background: #4299e1; color: white; border-radius: 6px; text-decoration: none; }
+        .paper-link:hover { background: #3182ce; }
+        .tag { display: inline-block; background: #ebf4ff; color: #4299e1; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-right: 6px; margin-top: 12px; }
+        .detail-section { background: white; border-radius: 8px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .detail-section h2 { font-size: 1.3em; color: #2d3748; margin-bottom: 16px; border-bottom: 2px solid #805ad5; padding-bottom: 8px; }
+        .detail-section h3 { font-size: 1.1em; color: #4a5568; margin: 20px 0 12px; }
+        .detail-section p { margin-bottom: 12px; color: #4a5568; }
+        .detail-section ul { margin: 12px 0; padding-left: 24px; color: #4a5568; }
+        .detail-section li { margin-bottom: 8px; }
+        .highlight-box { background: #faf5ff; border-left: 4px solid #805ad5; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .method-box { background: #fff5f5; border-left: 4px solid #e53e3e; padding: 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; }
+        th { background: #f7fafc; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <a href="/papershare/" class="back-link">← 返回列表</a>
+    <div class="container">
+        <div class="paper-header">
+            <h1>WizardMath: Empowering Mathematical Reasoning for LLMs via Reinforced Evol-Instruct</h1>
+            <div class="meta">Luo et al. | Microsoft | ICLR 2025 Oral | arXiv:2308.09583</div>
+            <div class="abstract">
+                <strong>摘要</strong><br>
+                WizardMath通过强化学习 Evol-Instruct 反馈（RLEIF）方法，在不使用外部Python工具的情况下增强LLM的数学CoT推理能力。在GSM8K和MATH两个数学推理benchmark上取得了显著成果：WizardMath-Mistral 7B超越了顶级开源LLM，WizardMath 70B甚至超越了GPT-3.5-Turbo、Claude 2、Gemini Pro和GPT-4早期版本。
+            </div>
+            <a href="https://arxiv.org/abs/2308.09583" target="_blank" class="paper-link">查看原论文 →</a>
+            <div>
+                <span class="tag">RLEIF</span>
+                <span class="tag">数学推理</span>
+                <span class="tag"> Evol-Instruct</span>
+                <span class="tag">强化学习</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>🔍 数学推理的典型缺陷</h2>
+            
+            <h3>LLM数学推理的常见问题</h3>
+            <ul>
+                <li><strong>算术计算错误</strong>：大数运算、多步计算精度问题</li>
+                <li><strong>公式应用错误</strong>：公式记忆不准确、张冠李戴</li>
+                <li><strong>步骤跳跃</strong>：省略中间推理步骤</li>
+                <li><strong>隐含假设缺失</strong>：缺少问题条件中的关键信息</li>
+                <li><strong>单位混淆</strong>：忘记单位转换、混淆单位</li>
+            </ul>
+            
+            <h3>WizardMath诊断的缺陷</h3>
+            <div class="highlight-box">
+                <strong>核心发现</strong>：开源LLM在预训练时没有针对数学进行优化，导致数学CoT推理能力远低于专用模型。WizardMath通过<strong>指令演化（Instruction Evolution）</strong>和<strong>过程监督（Process Supervision）</strong>解决这些问题。
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>🔧 RLEIF 方法</h2>
+            
+            <h3>Pipeline</h3>
+            <div class="method-box">
+                <strong>Step 1: 指令演化 (Instruction Evolution)</strong><br>
+                - 将简单数学指令演化为更复杂、更多步骤的指令<br>
+                - 保持原指令的核心数学概念<br>
+                - 增加推理难度和步骤数
+                
+                <br><br><strong>Step 2: 响应生成</strong><br>
+                - 使用演化后的指令让模型生成响应<br>
+                - 生成包含完整CoT的解答
+                
+                <br><br><strong>Step 3: 过程奖励模型 (Process Reward Model)</strong><br>
+                - 训练PRM对推理的每一步打分<br>
+                - 不仅看最终答案，更看推理过程<br>
+                - 识别推理链中的错误步骤
+                
+                <br><br><strong>Step 4: 强化学习优化</strong><br>
+                - 使用PRM的反馈进行PPO强化学习<br>
+                - 最大化正确推理路径的概率
+            </div>
+            
+            <h3>与普通微调的区别</h3>
+            <table>
+                <tr>
+                    <th>方法</th>
+                    <th>信号来源</th>
+                    <th>效果</th>
+                </tr>
+                <tr>
+                    <td>普通SFT</td>
+                    <td>最终答案正确性</td>
+                    <td>只能学习"正确答案"</td>
+                </tr>
+                <tr>
+                    <td>结果奖励(RM)</td>
+                    <td>最终答案+奖励</td>
+                    <td>稍好，但仍无法定位错误步骤</td>
+                </tr>
+                <tr>
+                    <td>过程奖励(PRM)</td>
+                    <td>每步推理打分</td>
+                    <td>精确定位错误步骤，训练更有效</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="detail-section">
+            <h2>📊 实验结果</h2>
+            
+            <h3>核心性能对比</h3>
+            <table>
+                <tr>
+                    <th>模型</th>
+                    <th>GSM8K</th>
+                    <th>MATH</th>
+                </tr>
+                <tr>
+                    <td><strong>WizardMath-Mistral 7B</strong></td>
+                    <td>83.2%</td>
+                    <td>40.4%</td>
+                </tr>
+                <tr>
+                    <td>GPT-3.5-Turbo</td>
+                    <td>57.1%</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Claude 2</td>
+                    <td>~78%</td>
+                    <td>~50%</td>
+                </tr>
+                <tr>
+                    <td>Gemini Pro</td>
+                    <td>~70%</td>
+                    <td>~45%</td>
+                </tr>
+            </table>
+            
+            <h3>关键发现</h3>
+            <ul>
+                <li><strong>指令演化关键</strong>：简单指令→复杂指令的演化很重要</li>
+                <li><strong>过程监督关键</strong>：PRM比RM在数学任务上更有效</li>
+                <li><strong>数据效率高</strong>：相比从头预训练，数据效率更高</li>
+            </ul>
+        </div>
+
+        <div class="detail-section">
+            <h2>💡 对LLM优化的启示</h2>
+            
+            <h3>1. 诊断 + 优化的闭环</h3>
+            <div class="highlight-box">
+                <strong>最佳实践</strong>：先用诊断工具（ReasonDiag/Self-Consistency）找出错误模式，再针对这些错误模式设计训练数据和方法。
+            </div>
+            
+            <h3>2. Instruction Evolution 的诊断驱动</h3>
+            <p>通过诊断发现：</p>
+            <ul>
+                <li>模型在某个难度级别/某类问题上特别弱</li>
+                <li>针对性地演化这类指令</li>
+                <li>生成更多"弱点"训练数据</li>
+            </ul>
+            
+            <h3>3. Process Supervision 的诊断价值</h3>
+            <p>PRM不仅用于训练，还能用于诊断：</p>
+            <ul>
+                <li>找出模型在推理链的哪个步骤开始出错</li>
+                <li>分析常见错误步骤的模式</li>
+                <li>针对性地在错误步骤类型上增强训练</li>
+            </ul>
+            
+            <h3>4. 完整优化闭环</h3>
+            <ol>
+                <li><strong>诊断</strong>：用Easy2Hard-Bench找出弱点难度区间</li>
+                <li><strong>分析</strong>：用ReasonDiag分析具体错误类型</li>
+                <li><strong>生成</strong>：用Instruction Evolution生成弱点数据</li>
+                <li><strong>训练</strong>：用PRM进行过程监督微调</li>
+                <li><strong>验证</strong>：用Self-Consistency验证提升效果</li>
+            </ol>
+        </div>
+
+        <div class="detail-section">
+            <h2>📋 总结</h2>
+            
+            <h3>一句话概括</h3>
+            <div class="highlight-box">
+                <strong>RLEIF = 指令演化 + 过程奖励，让7B模型在数学推理上超越GPT-3.5。</strong>
+            </div>
+            
+            <h3>诊断驱动优化的完整Pipeline</h3>
+            <ol>
+                <li><strong>难度诊断</strong>：Easy2Hard-Bench定位弱点难度</li>
+                <li><strong>错误诊断</strong>：ReasonDiag/Self-Consistency分析错误模式</li>
+                <li><strong>数据生成</strong>：Instruction Evolution针对弱点生成数据</li>
+                <li><strong>过程训练</strong>：PRM过程监督微调</li>
+                <li><strong>效果验证</strong>：Self-Consistency验证一致性提升</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

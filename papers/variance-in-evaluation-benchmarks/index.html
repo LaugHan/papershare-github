@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantifying Variance in Evaluation Benchmarks - 论文分享</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+            padding: 30px 20px;
+        }
+        header .back { color: white; text-decoration: none; opacity: 0.8; font-size: 0.9em; }
+        header .back:hover { opacity: 1; }
+        header h1 { font-size: 1.6em; margin: 10px 0; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .card h2 { font-size: 1.1em; color: #c53030; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card p { margin-bottom: 12px; color: #4a5568; }
+        .card strong { color: #2d3748; }
+        .tag { display: inline-block; background: #ebf8ff; color: #3182ce; padding: 3px 12px; border-radius: 15px; font-size: 0.85em; margin: 3px; }
+        .key-finding { background: #fff5f5; border-left: 4px solid #fc8181; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .diff-box { background: #faf5ff; border-left: 4px solid #9f7aea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .link-box { background: #ebf8ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .link-box a { color: #3182ce; text-decoration: none; font-weight: 500; }
+        .link-box a:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 30px; color: #a0aec0; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/papershare/" class="back">← 返回论文列表</a>
+        <h1>Quantifying Variance in Evaluation Benchmarks</h1>
+        <div class="meta">Madaan et al. | Stanford | arXiv 2024 (2406.10229)</div>
+    </header>
+    <div class="container">
+        <!-- 摘要翻译 -->
+        <div class="card">
+            <h2>📖 摘要</h2>
+            <p>
+                评测基准是衡量LLM能力、推动能力进步的核心工具。然而，尽管评测基准被广泛用于训练选择决策，<strong>我们很少量化评测基准的方差</strong>，而这决定了性能差异是否有意义。
+            </p>
+            <p>
+                本研究定义并测量了多种方差指标，包括<strong>跨初始化的seed方差</strong>和<strong>训练过程中的单调性</strong>。通过对大量模型（包括开源和从零预训练的模型）进行研究，提供了多种方差指标的实证估计。
+            </p>
+            <p>
+                关键发现：① 简单改变（如将选择题格式转为补全格式）可减少7B规模模型的方差；② 来自人类测试文献的方法（如项目分析和IRT）在减少方差方面效果有限。
+            </p>
+        </div>
+
+        <!-- 方法动机 -->
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            <p><strong>核心问题</strong>：评测分数的差异真的是"模型能力差异"还是"随机噪声"？</p>
+            <p><strong>研究规模</strong>：280个模型 × 13个benchmark，是当时最大规模的评测方差研究。</p>
+            <p><strong>动机</strong>：Benchmark被广泛用于：① 判断SOTA ② 指导训练决策 ③ 决定是否发布模型。但方差往往被忽视。</p>
+        </div>
+
+        <!-- 核心方法 -->
+        <div class="card">
+            <h2>🔧 核心方法</h2>
+            <p><strong>方差指标定义</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li><strong>Seed Variance</strong>：相同模型、相同配置、不同随机种子下的性能差异</li>
+                <li><strong>Monotonicity</strong>：训练过程中性能是否单调递增（训练曲线应该向上）</li>
+                <li><strong>Continuous vs Discrete</strong>：连续指标 vs 离散指标的方差比较</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>实验设计</strong>：</p>
+            <ul style="margin-left: 20px; color: #4a5568;">
+                <li>开源模型：LLaMA, Mistral, Gemma等</li>
+                <li>从零预训练模型：控制变量分析</li>
+                <li>Benchmark：MMLU, GSM8K, HellaSwag等13个</li>
+            </ul>
+        </div>
+
+        <!-- 关键发现 -->
+        <div class="card">
+            <h2>📊 关键发现</h2>
+            <div class="key-finding">
+                <strong>1. 选择题→补全任务可减少方差</strong><br>
+                MMLU等选择题格式转为你问我答格式后，7B模型的方差显著降低。
+            </div>
+            <div class="key-finding">
+                <strong>2. IRT等复杂方法效果有限</strong><br>
+                尽管IRT在教育测试中常用，但在LLM评测中减少方差的效果并不理想。
+            </div>
+            <div class="key-finding">
+                <strong>3. 方差因模型规模而异</strong><br>
+                小模型方差大，大模型方差相对稳定。
+            </div>
+        </div>
+
+        <!-- 和你的区别 -->
+        <div class="card">
+            <h2>⚠️ 和你的框架的区别</h2>
+            <div class="diff-box">
+                <p><strong>Madaan 2024 分析的是：原始分数的方差</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>相同输入、多次运行的随机波动</li>
+                    <li>Seed初始化导致的差异</li>
+                    <li>训练过程中的性能波动</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>你的框架关注的是：扰动引起的变化</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>输入扰动（措辞、句法、语义变化）导致的性能变化</li>
+                    <li>将变化分解到：扰动类型 × 模型能力 × 问题难度</li>
+                    <li>关注"脆弱性"而非"随机波动"</li>
+                </ul>
+            </div>
+            <p><strong>总结</strong>：这是两个互补的维度——Madaan关注"测量的可靠性"，你的框架关注"评测的鲁棒性"。</p>
+        </div>
+
+        <!-- 学习启示 -->
+        <div class="card">
+            <h2>💡 对你的启示</h2>
+            <p>1. <strong>方差分解思想</strong>：将总体方差分解为不同来源（模型、样本、扰动）是通用的方法论。</p>
+            <p>2. <strong>格式敏感性</strong>：选择题格式可能引入额外方差，考虑统一用补全格式。</p>
+            <p>3. <strong>连续指标</strong>：如果用CoT评分，连续指标可能比离散accuracy更稳定。</p>
+        </div>
+
+        <div class="link-box">
+            <strong>📎 论文链接</strong><br>
+            <a href="https://arxiv.org/abs/2406.10229" target="_blank">arXiv:2406.10229</a>
+        </div>
+    </div>
+    <footer>Paper Share &copy; 2026</footer>
+</body>
+</html>
