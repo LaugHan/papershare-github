@@ -102,6 +102,68 @@
     </header>
         <div class="container">
         <a href="/" class="back-home">← 返回首页</a>
+ 
+            <div class="date-section">
+                <div class="date-header">📅 2026-04-01</div>
+                <div class="paper-card">
+<h2>Beyond Completion: Cumulative State Tracking 评估LLM Agent性能 🔥🔥</h2>
+<div class="meta">arXiv:2603.27343 | cs.CL | 2026-03-29</div>
+<div class="abstract">
+<strong>核心问题</strong>：Task-completion rate是评估LLM Agent的标准指标，但<strong>完成率相同的模型可能在状态跟踪能力上差异巨大</strong>。<br/><br/>
+<strong>方法</strong>：提出Cumulative State Tracking评估范式，通过探测模型跟踪中间状态的能力来预测Agent性能。<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • 完成率相同时，状态跟踪能力强的模型在实际任务中表现更稳定<br/>
+                    • 传统的completion指标可能高估某些模型的能力<br/>
+                    • 状态跟踪能力与多步推理能力高度相关
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这篇论文呼应了"脆弱性"评估的思路——<strong>相同的准确率背后可能有不同的能力结构</strong>。将"状态跟踪"作为诊断维度，可以更细粒度地评估Agent。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2603.27343" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 评估</span>
+<span class="tag">Agent评估</span>
+<span class="tag">状态跟踪</span>
+</div>
+<div class="paper-card">
+<h2>LLM Readiness Harness: 评估→部署决策工作流</h2>
+<div class="meta">arXiv:2603.27355 | cs.CL | 2026-03-28</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何将LLM评估从"打分"转化为"部署决策"？<br/><br/>
+<strong>方案</strong>：LLM Readiness Harness——结合自动化benchmark、OpenTelemetry可观测性、CI质量门的部署决策工作流。<br/><br/>
+<strong>核心组件</strong>：<br/>
+                    • <strong>Automated Benchmarks</strong> - 标准化性能评估<br/>
+                    • <strong>OpenTelemetry Observability</strong> - 运行时监控<br/>
+                    • <strong>CI Quality Gates</strong> - 自动化质量门禁<br/>
+                    • <strong>Minimal API Contract</strong> - 统一接口
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这篇论文体现了<strong>MLOps视角下的评估实践</strong>——从"模型评测"到"持续集成"的转变。对LLM系统上线前的标准化评估有参考价值。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2603.27355" target="_blank">论文链接 →</a></div>
+<span class="tag">评估</span>
+<span class="tag">MLOps</span>
+<span class="tag">CI/CD</span>
+</div>
+<div class="paper-card">
+<h2>Beyond Code Snippets: Repository级代码QA Benchmark</h2>
+<div class="meta">arXiv:2603.26567 | cs.CL | 2026-03-27</div>
+<div class="abstract">
+<strong>核心问题</strong>：现有代码LLM评估聚焦单文件snippet，忽视<strong>真实仓库级代码理解</strong>的挑战。<br/><br/>
+<strong>数据集</strong>：StackRepoQA - 首个多项目仓库级QA数据集，包含1318个真实开发者问题和134个Java开源项目的accepted answers。<br/><br/>
+<strong>评估</strong>：Claude 3.5 Sonnet和GPT-4o在direct prompting和agentic配置下的表现。<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • 基准准确率中等，结构化信号可改善<br/>
+                    • 高分往往来自<strong>verbatim复制Stack Overflow答案</strong>而非真正的推理<br/>
+                    • 首次实证揭示仓库级QA中memorization vs reasoning的混淆问题
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这篇与None of the Others(2502.12896)的思路一致——<strong>Accuracy可能掩盖了memorization</strong>。在代码领域，复制粘贴比推理更"有效"，这对评估方法有重要启示。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2603.26567" target="_blank">论文链接 →</a></div>
+<span class="tag eval">Benchmark</span>
+<span class="tag eval">代码LLM</span>
+<span class="tag eval">Memorization检测</span>
+</div>
 
             <div class="date-section">
                 <div class="date-header">📅 2026-03-31</div>
