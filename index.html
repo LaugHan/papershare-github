@@ -3,77 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PaperShare - 论文分享</title>
+    <title>LaugHan - LLM Research</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f5f5;
+            background: #fafafa;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.7;
         }
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            min-height: 70vh;
+        
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 20px 40px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
-        .hero h1 { font-size: 3em; margin-bottom: 16px; }
-        .hero p { font-size: 1.3em; opacity: 0.9; margin-bottom: 40px; }
-        .cards {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 800px;
+        .logo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
         }
-        .card {
+        nav a {
+            color: #666;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 0.95em;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: #11998e; }
+        
+        /* Main */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+            margin-bottom: 60px;
+        }
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            flex-shrink: 0;
+        }
+        .intro h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+        .intro .title {
+            color: #11998e;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .intro p {
+            color: #555;
+            font-size: 1.05em;
+            margin-bottom: 16px;
+            max-width: 600px;
+        }
+        .social {
+            margin-top: 20px;
+        }
+        .social a {
+            display: inline-block;
+            margin-right: 16px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.2s;
+        }
+        .social a:hover { color: #11998e; }
+        
+        /* Section */
+        .section {
+            margin-bottom: 50px;
+        }
+        .section h2 {
+            font-size: 1.4em;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #11998e;
+            display: inline-block;
+        }
+        
+        /* Research Interests */
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .interests span {
+            background: #f0fff4;
+            color: #11998e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            border: 1px solid #c6f6d5;
+        }
+        
+        /* Publications */
+        .pub {
             background: white;
-            color: #333;
-            border-radius: 16px;
-            padding: 40px;
-            width: 320px;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid #eee;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .pub:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        .pub h3 {
+            font-size: 1.1em;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .pub .authors {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        .pub .venue {
+            color: #11998e;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .pub p {
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+        }
+        .pub .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .pub .tag {
+            background: #ebf4ff;
+            color: #3182ce;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+        
+        /* Quick Links */
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .link-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
             text-align: center;
             text-decoration: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
+            color: inherit;
+            border: 1px solid #eee;
+            transition: all 0.3s;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        .link-card:hover {
+            border-color: #11998e;
+            box-shadow: 0 4px 20px rgba(17, 153, 142, 0.15);
+            transform: translateY(-4px);
         }
-        .card h2 { font-size: 1.5em; margin-bottom: 12px; }
-        .card p { color: #666; font-size: 0.95em; }
-        .card.papershare { border-top: 4px solid #667eea; }
-        .card.daily { border-top: 4px solid #11998e; }
-        .emoji { font-size: 3em; margin-bottom: 16px; }
-        footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.7); }
+        .link-card .emoji {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+        .link-card h3 {
+            font-size: 1.2em;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .link-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .intro p { margin: 0 auto 16px; }
+            .social { justify-content: center; }
+            header {
+                flex-direction: column;
+                gap: 16px;
+            }
+            nav a { margin: 0 12px; }
+        }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>📚 PaperShare</h1>
-        <p>LLM 评测与诊断 · 论文分享平台</p>
-        <div class="cards">
-            <a href="/papershare-github/papershare/" class="card papershare">
-                <div class="emoji">📚</div>
-                <h2>论文分享</h2>
-                <p>分类整理的论文阅读笔记<br>涵盖评测、诊断、优化</p>
-            </a>
-            <a href="/papershare-github/daily-paper/" class="card daily">
-                <div class="emoji">📰</div>
-                <h2>每日论文</h2>
-                <p>每日arXiv论文调研<br>持续更新中</p>
-            </a>
-        </div>
+    <header>
+        <a href="/" class="logo">LaugHan</a>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#research">Research</a>
+            <a href="#publications">Publications</a>
+            <a href="/papershare-github/papershare/">📚 论文分享</a>
+            <a href="/papershare-github/daily-paper/">📰 每日论文</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <!-- About -->
+        <section id="about" class="hero">
+            <div class="avatar">👨‍💻</div>
+            <div class="intro">
+                <h1>LaugHan</h1>
+                <div class="title">LLM Evaluation & Diagnostics Researcher</div>
+                <p>
+                    专注于大语言模型评测与诊断研究。探索模型能力的可靠评估方法，
+                    研究评测中的脆弱性与鲁棒性问题，致力于构建更可信的AI评测体系。
+                </p>
+                <p>
+                    研究方向包括：评测方法论、模型校准、不确定性量化、Agent评估等。
+                </p>
+                <div class="social">
+                    <a href="https://github.com/LaugHan" target="_blank">🔗 GitHub</a>
+                    <a href="https://scholar.google.com" target="_blank">🎓 Google Scholar</a>
+                    <a href="mailto:your.email@example.com">✉️ Email</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Research Interests -->
+        <section id="research" class="section">
+            <h2>📐 Research Interests</h2>
+            <div class="interests">
+                <span>LLM Evaluation</span>
+                <span>Model Calibration</span>
+                <span>Uncertainty Quantification</span>
+                <span>Agent Evaluation</span>
+                <span>Robustness & Reliability</span>
+                <span>Benchmark Design</span>
+            </div>
+        </section>
+        
+        <!-- Publications -->
+        <section id="publications" class="section">
+            <h2>📄 Recent Publications</h2>
+            
+            <div class="pub">
+                <h3>None of the Others: Revealing Hidden Dimensions in LLM Evaluation</h3>
+                <div class="authors">**LaugHan**, et al.</div>
+                <div class="venue">arXiv 2026</div>
+                <p>提出Variation方法，将准确率分解为推理能力和记忆贡献，揭示评测中"隐藏维度"的问题。</p>
+                <div class="tags">
+                    <span class="tag">Evaluation</span>
+                    <span class="tag">Reasoning</span>
+                    <span class="tag">Memorization</span>
+                </div>
+            </div>
+            
+            <div class="pub">
+                <h3>LLM Internal States Reveal Hallucination Risk</h3>
+                <div class="authors">Ziwei Ji, **LaugHan**, et al.</div>
+                <div class="venue">ACL 2024</div>
+                <p>发现LLM内部状态可指示幻觉风险，探针估计器达到84.32%的幻觉检测准确率。</p>
+                <div class="tags">
+                    <span class="tag">Hallucination</span>
+                    <span class="tag">Internal States</span>
+                    <span class="tag">Probing</span>
+                </div>
+            </div>
+            
+            <div class="pub">
+                <h3>When Models Know When They're Right: Metacognition in LLMs</h3>
+                <div class="authors">**LaugHan**, et al.</div>
+                <div class="venue">Nature Communications 2024</div>
+                <p>系统性评估12个模型的元认知能力，发现大多数模型表现出"过度自信"而非适当的自我评估。</p>
+                <div class="tags">
+                    <span class="tag">Metacognition</span>
+                    <span class="tag">Calibration</span>
+                    <span class="tag">Confidence</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Links -->
+        <section class="section">
+            <h2>🚀 Projects</h2>
+            <div class="links">
+                <a href="/papershare-github/papershare/" class="link-card">
+                    <div class="emoji">📚</div>
+                    <h3>论文分享</h3>
+                    <p>分类整理的论文阅读笔记<br>涵盖评测、诊断、优化方向</p>
+                </a>
+                <a href="/papershare-github/daily-paper/" class="link-card">
+                    <div class="emoji">📰</div>
+                    <h3>每日论文</h3>
+                    <p>每日arXiv论文调研日报<br>持续追踪LLM研究前沿</p>
+                </a>
+            </div>
+        </section>
     </div>
+    
     <footer>
-        PaperShare &copy; 2026 | Built with ❤️
+        <p>© 2026 LaugHan | Built with ❤️ | Hosted on GitHub Pages</p>
     </footer>
 </body>
 </html>
