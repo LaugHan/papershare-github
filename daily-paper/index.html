@@ -102,7 +102,154 @@
     </header>
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
- 
+  
+            <div class="date-section">
+                <div class="date-header">📅 2026-04-02</div>
+                <div class="paper-card">
+<h2>Beyond pass@1: 长程LLM Agent的可靠性科学框架 🔥🔥🔥</h2>
+<div class="meta">arXiv:2603.29231 | cs.AI | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：现有评估聚焦"能力"（单次成功率），但生产部署需要"可靠性"（多次调用的一致性）。<br/><br/>
+<strong>四维可靠性指标框架</strong>：<br/>
+                    • <strong>RDC</strong> - Reliability Decay Curve：描述pass@k如何随任务持续时间退化<br/>
+                    • <strong>VAF</strong> - Variance Amplification Factor：量化持续时间如何放大随机失败模式<br/>
+                    • <strong>GDS</strong> - Graceful Degradation Score：长任务Partial-credit指标<br/>
+                    • <strong>MOP</strong> - Meltdown Onset Point：检测行为崩溃<br/><br/>
+<strong>核心发现</strong>：<br/>
+                    • 可靠性衰减是领域分层的（SE: GDS 0.90→0.44，DP: 基本持平）<br/>
+                    • VAF按能力层级二分：前沿模型VAF≥2.37，中间层级VAF≤1.26<br/>
+                    • <strong>Memory脚手架对长程任务普遍有害</strong>——为朴素Episodic Memory提供反证<br/>
+                    • 前沿模型有最高崩溃率（高达19%）——"MOP悖论"
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这篇与<strong>方向A调研</strong>高度相关——"能力"和"可靠性"是能力的正交维度。相同pass@1下，模型可能有完全不同的可靠性特征。Memory Augmentation需要重新审视！
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29231" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/reliability-science-framework-long-horizon-agents/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 必读</span>
+<span class="tag">Agent评估</span>
+<span class="tag">可靠性科学</span>
+<span class="tag">Memory脚手架</span>
+</div>
+                <div class="paper-card">
+<h2>Measuring the Metacognition of AI: 首次系统测量AI元认知能力 🔥🔥🔥</h2>
+<div class="meta">arXiv:2603.29693 | cs.AI | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：AI是否具有"知道自己知道什么"的元认知能力？如何测量？<br/><br/>
+<strong>方法</strong>：借鉴人类心理学信号检测论(SDT)，使用meta-d'指标测量：<br/>
+                    • <strong>d'</strong> - 感知灵敏度（模型区分正确/错误响应的能力）<br/>
+                    • <strong>meta-d'</strong> - 元认知灵敏度（"知道自己对/错"的准确性）<br/>
+                    • <strong>Mr ratio</strong> - 元认知比率（meta-d'/d'）<br/><br/>
+<strong>测试模型</strong>：GPT-5、DeepSeek-V3.2-Exp、Mistral-Medium-2508<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • Mr ratio < 1 普遍存在——即使顶级模型，元认知也不完美<br/>
+                    • Mistral-Medium在简单任务上元认知效率最高（Mr=0.90）<br/>
+                    • 困难任务上元认知能力显著下降
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这是<strong>方向A（Metacognition Evaluation）</strong>的直接相关论文！meta-d'提供了一种量化模型"元认知"的方法。与Nature Communications论文"LLM缺乏基本元认知"形成呼应，但提供了更精细的测量工具。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29693" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/measuring-metacognition-ai/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 方向A核心</span>
+<span class="tag">元认知</span>
+<span class="tag">信号检测论</span>
+<span class="tag">置信度校准</span>
+</div>
+                <div class="paper-card">
+<h2>VCC: Agent轨迹分析的视图导向对话编译器 🔥🔥</h2>
+<div class="meta">arXiv:2603.29678 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：Agent轨迹包含嵌套工具调用、CoT推理块、子Agent调用等复杂结构，现有grep/JSON格式会降低分析质量。<br/><br/>
+<strong>方案</strong>：View-oriented Conversation Compiler (VCC)——将原始JSONL日志转换为结构化视图：<br/>
+                    • Full View：完整转录（无丢失的canonical行号坐标系统）<br/>
+                    • UI View：重建用户实际感知到的交互<br/>
+                    • Adaptive View：结构保持投影（由相关性谓词governed）<br/><br/>
+<strong>效果</strong>：AppWorld实验中，仅替换reflector输入格式（JSONL→VCC视图），所有模型配置通过率提升，token消耗降低50-66%
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：消息格式是<strong>Context Engineering的基础设施</strong>，而非偶然的实现选择。格式优化比模型调优更高效！
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29678" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 Context工程</span>
+<span class="tag">Agent分析</span>
+<span class="tag">格式优化</span>
+</div>
+                <div class="paper-card">
+<h2>MemFactory: Agent记忆的统一训练框架 🔥🔥</h2>
+<div class="meta">arXiv:2603.29493 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：Memory-Augmented LLM是长期AI Agent的核心，但现有实现高度碎片化且任务特定。<br/><br/>
+<strong>方案</strong>：MemFactory——首个统一的模块化训练推理框架：<br/>
+                    • 将记忆生命周期抽象为原子化、插拔式组件<br/>
+                    • 原生集成GRPO（Group Relative Policy Optimization）<br/>
+                    • 支持Memory-R1、RMM、MemAgent等前沿范式<br/><br/>
+<strong>效果</strong>：相对基线提升高达14.8%
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：为Agent记忆优化提供了标准化基础设施。与Reliability Framework论文的"Memory脚手架有害"形成有趣对比——可能是实现方式而非Memory本身的问题。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29493" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent Memory</span>
+<span class="tag">RL训练</span>
+<span class="tag">框架</span>
+</div>
+                <div class="paper-card">
+<h2>AgentFixer: LLM Agent系统的失败检测与修复推荐 🔥🔥</h2>
+<div class="meta">arXiv:2603.29848 | cs.AI | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何自动检测LLM Agentic系统中的失败并推荐修复方案？<br/><br/>
+<strong>方案</strong>：从失败检测到修复推荐的端到端框架<br/>
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：为Agent系统提供可操作的诊断工具，可与Reliability Framework的MOP指标结合使用。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29848" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent调试</span>
+<span class="tag">失败检测</span>
+</div>
+                <div class="paper-card">
+<h2>Near-Miss: Agentic工作流中的潜在策略失败检测 🔥🔥</h2>
+<div class="meta">arXiv:2603.29665 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：Agent工作流中的"near-miss"（差点就成功）如何检测？<br/><br/>
+<strong>方案</strong>：识别和分类Agent决策中的潜在失败模式
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：填补了"成功/失败"二值评估的中间地带，可用于更细粒度的Agent诊断。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29665" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent评估</span>
+<span class="tag">失败检测</span>
+</div>
+                <div class="paper-card">
+<h2>ELT-Bench-Verified: Benchmark质量问题低估AI Agent能力 🔥</h2>
+<div class="meta">arXiv:2603.29399 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：现有benchmark可能低估了AI Agent的真实能力，因为评估设计本身存在问题。<br/><br/>
+<strong>发现</strong>：系统性地揭示benchmark设计缺陷对能力评估的影响
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与Reliability Framework论文呼应——评估方法本身可能系统性地低估或误导我们对模型能力的认知。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.29399" target="_blank">论文链接 →</a></div>
+<span class="tag">Benchmark评估</span>
+<span class="tag">方法论</span>
+</div>
+                <div class="paper-card">
+<h2>ContextClaim: 上下文驱动的可验证声明检测 🔥🔥</h2>
+<div class="meta">arXiv:2603.30025 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何检测声明的可验证性并追踪其来源？<br/><br/>
+<strong>方案</strong>：上下文驱动的声明检测范式
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与MARCH框架互补——都是解决幻觉检测问题，但ContextClaim更聚焦于声明级别的可验证性追踪。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2603.30025" target="_blank">论文链接 →</a></div>
+<span class="tag hot">🔥🔥 幻觉检测</span>
+<span class="tag">声明验证</span>
+</div>
+            </div>
+
             <div class="date-section">
                 <div class="date-header">📅 2026-04-01</div>
                 <div class="paper-card">
