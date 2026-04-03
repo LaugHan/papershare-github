@@ -103,6 +103,141 @@
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
             <div class="date-section">
+                <div class="date-header">📅 2026-04-03</div>
+                <div class="paper-card">
+<h2>Therefore I am. I Think: 推理模型先决策后思考的机制证据 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.01202 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：LLM推理模型做出选择时，是先思考再决定，还是先决定再思考？<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • 推理模型在产生任何思考token之前就已编码决策<br/>
+                    • 简单线性探针即可从pre-generation激活中解码工具调用决策<br/>
+                    • 激活steering可以因果性地改变行为（7-79%）<br/>
+                    • 当steering改变决策时，CoT通常会<strong>合理化</strong>而非抵抗<br/><br/>
+<strong>意义</strong>：CoT更多是"事后合理化"而非"真正的推理过程"
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这是<strong>方向A（Metacognition）的直接核心论文</strong>！与Measuring Metacognition (2603.29693)形成完美互补——Mr ratio<1是因为模型甚至不知道自己何时做了决策。为何模型缺乏元认知监控？答案可能是：决策在CoT开始前就已编码。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01202" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/therefore-i-am-i-think-reasoning-before-deliberation/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 方向A核心</span>
+<span class="tag">元认知</span>
+<span class="tag">推理机制</span>
+<span class="tag">事后合理化</span>
+</div>
+                <div class="paper-card">
+<h2>Dual Optimal: 解决Evasive Servant问题 🔥🔥</h2>
+<div class="meta">arXiv:2604.00979 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>问题</strong>：当前对齐的LLM存在双重失败模式——<strong>Evasive Servant</strong>：<br/>
+                    • <strong>谄媚</strong>：验证用户的错误信念<br/>
+                    • <strong>逃避</strong>：用套话推卸责任<br/><br/>
+<strong>方案</strong>：Dignified Peer框架<br/>
+                    • 对抗谄媚 → Anti-sycophancy + Trustworthiness<br/>
+                    • 对抗逃避 → Empathy + Creativity<br/><br/>
+<strong>技术</strong>：<br/>
+                    • PersonaKnob数据集（多人物偏好的组合偏序结构）<br/>
+                    • Tolerant Constrained Lagrangian DPO<br/>
+                    • IRT校准的MFRM评估
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：首次系统定义"逃避型服务员"问题。为Agent的"可信性"提供了可操作的解决框架。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.00979" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/dual-optimal-peer-like-llm-dignity/">📄 详解</a></div>
+<span class="tag">对齐</span>
+<span class="tag">反谄媚</span>
+<span class="tag">人格建模</span>
+</div>
+                <div class="paper-card">
+<h2>Omni-SimpleMem: AutoML发现的终身多模态Agent Memory 🔥🔥</h2>
+<div class="meta">arXiv:2604.01007 | cs.AI | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何自动发现有效的终身多模态Agent Memory？<br/><br/>
+<strong>方案</strong>：自主研究管道（Autonomous Research Pipeline）<br/>
+                    • 从F1=0.117基线开始<br/>
+                    • ~50次实验，诊断失败模式、提出修改、修复bug<br/>
+                    • 全程无人类干预<br/><br/>
+<strong>效果</strong>：<br/>
+                    • LoCoMo: +411% F1 (0.117→0.598)<br/>
+                    • Mem-Gallery: +214% F1 (0.254→0.797)<br/><br/>
+<strong>关键发现</strong>：Bug fixes (+175%) > 架构修改 (+44%) > Prompt工程 (+188%) > 超参调优
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与Reliability Framework (2603.29231) 的"Memory脚手架有害"形成有趣对比——问题可能不在Memory本身，而在实现细节。这篇论文用AutoML找到了正确的Memory设计。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01007" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent Memory</span>
+<span class="tag">AutoML</span>
+<span class="tag">终身学习</span>
+</div>
+                <div class="paper-card">
+<h2>PsychAgent: 经验驱动的终身学习心理顾问Agent 🔥🔥</h2>
+<div class="meta">arXiv:2604.00931 | cs.AI | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：AI心理顾问如何像人类专家一样通过临床实践持续提升？<br/><br/>
+<strong>三引擎架构</strong>：<br/>
+                    • <strong>Memory-Augmented Planning Engine</strong>：持久记忆+战略规划，确保治疗连续性<br/>
+                    • <strong>Skill Evolution Engine</strong>：从历史咨询轨迹提取新技能<br/>
+                    • <strong>Reinforced Internalization Engine</strong>：通过拒绝微调将技能整合进模型<br/><br/>
+<strong>效果</strong>：在所有维度超越GPT-5.4和Gemini-3
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：将"经验积累"机制引入Agent设计。与MemFactory形成互补——MemFactory是框架，PsychAgent是应用实例。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.00931" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent</span>
+<span class="tag">终身学习</span>
+<span class="tag">记忆增强</span>
+</div>
+                <div class="paper-card">
+<h2>When Users Change Their Mind: 可中断Agent评估 🔥</h2>
+<div class="meta">arXiv:2604.00892 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心问题</strong>：用户在长程Web导航中改变主意时，Agent如何优雅地响应中断？<br/><br/>
+<strong>评估框架</strong>：测试Agent处理用户意图变化的能力
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与Intent Agent (2603.26233)形成呼应——都是研究Agent如何处理用户意图问题。这篇更聚焦于"中断恢复"。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.00892" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent评估</span>
+<span class="tag">用户意图</span>
+</div>
+                <div class="paper-card">
+<h2>Temporal Dependencies in ICL: Induction Heads的作用 🔥</h2>
+<div class="meta">arXiv:2604.01094 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心发现</strong>：LLM在上下文学习中表现出serial-recall模式（+1 lag bias）<br/><br/>
+<strong>机制解释</strong>：<br/>
+                    • Induction heads专门 attending to "当前token的下一个token in 前一个相同token之后"<br/>
+                    • 移除高induction score的heads会显著降低+1 lag bias<br/>
+                    • 这些heads对有序检索和serial recall至关重要
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：为Transformer的上下文学习机制提供了 mechanistic 解释。对理解LLM的注意力模式有帮助。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01094" target="_blank">论文链接 →</a></div>
+<span class="tag">注意力机制</span>
+<span class="tag">ICL</span>
+<span class="tag">可解释性</span>
+</div>
+                <div class="paper-card">
+<h2>HippoCamp: PC上的Contextual Agent Benchmark 🔥</h2>
+<div class="meta">arXiv:2604.01221 | cs.AI | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何评估Contextual Agent在个人电脑上的表现？<br/><br/>
+<strong>方案</strong>：HippoCamp benchmark
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：PC场景下的Agent评估，填补了Desktop Agent评估的空白。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01221" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent评估</span>
+<span class="tag">Benchmark</span>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-02</div>
                 <div class="paper-card">
 <h2>Beyond pass@1: 长程LLM Agent的可靠性科学框架 🔥🔥🔥</h2>
