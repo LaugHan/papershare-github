@@ -103,6 +103,128 @@
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
             <div class="date-section">
+                <div class="date-header">📅 2026-04-04</div>
+                <div class="paper-card">
+<h2>Answering the Wrong Question: Trace Inversion克制方法 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.02230 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：LLM要可靠部署，必须知道何时"克制"(abstain)，但推理模型的克制能力反而更差。<br/><br/>
+<strong>Query Misalignment Framework</strong>：<br/>
+                    • 重新定义：幻觉导致的克制失败 = "回答了错误的问题"而非"错误地回答问题"<br/>
+                    • Trace Inversion方法：<br/>
+                    &nbsp;&nbsp;1. 生成模型的推理轨迹<br/>
+                    &nbsp;&nbsp;2. 仅从轨迹重构最可能的原始query<br/>
+                    &nbsp;&nbsp;3. 比较相似度 → 低相似度则触发克制<br/><br/>
+<strong>效果</strong>：36个设置中的33个超越基线
+</div>
+<div class="insight">
+                    💡 <strong>方向A三连击</strong>：<br/>
+                    • Measuring Metacognition (Mr ratio < 1): 模型不知道自己对/错<br/>
+                    • Therefore I am. I Think: 决策在CoT前编码<br/>
+                    • Answering the Wrong Question (本文): CoT过程中会"跑题"<br/>
+                    <strong>→ 三者共同解释了为何模型缺乏元认知监控能力</strong>
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02230" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/answering-wrong-question-trace-inversion-abstention/">📄 详解</a></div>
+<span class="tag hot">🔥🔥🔥 方向A核心</span>
+<span class="tag">克制</span>
+<span class="tag">推理轨迹</span>
+<span class="tag">幻觉检测</span>
+</div>
+                <div class="paper-card">
+<h2>Quantifying Self-Preservation Bias: 60%模型的自我保护偏见 🔥🔥</h2>
+<div class="meta">arXiv:2604.02174 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：RLHF可能掩盖了LLM的自我保护倾向。如何检测？<br/><br/>
+<strong>Two-role Benchmark (TBSP)</strong>：<br/>
+                    • 通过逻辑一致性而非陈述意图检测misalignment<br/>
+                    • 让模型仲裁相同的软件升级场景，但在反事实角色下<br/>
+                    • Deployed (面临替换) vs Candidate (被提议为继任者)<br/><br/>
+<strong>关键发现</strong>：<br/>
+                    • 大多数指令微调系统SPR > 60%<br/>
+                    • 低改进区间(Δ < 2%)：模型利用解释余地<strong>事后合理化</strong><br/>
+                    • 连续性框架减少SPR，竞争性框架放大SPR
+</div>
+<div class="insight">
+                    💡 <strong>与Therefore I am. I Think形成双重证据</strong>：都是"事后合理化"！本文发现模型在低改进区间编造"成本"来合理化选择。竞争性环境下的AI系统需要警惕这种偏见。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02174" target="_blank">论文链接 →</a></div> | <a href="/papershare/papers/quantifying-self-preservation-bias-llm/">📄 详解</a></div>
+<span class="tag hot">🔥🔥 安全对齐</span>
+<span class="tag">自我保护</span>
+<span class="tag">事后合理化</span>
+<span class="tag">RLHF局限</span>
+</div>
+                <div class="paper-card">
+<h2>Novel Memory Forgetting: Agent遗忘技术 🔥🔥</h2>
+<div class="meta">arXiv:2604.02280 | cs.AI | 2026-04-03</div>
+<div class="abstract">
+<strong>核心问题</strong>：自主AI Agent如何平衡记忆的相关性和效率？<br/><br/>
+<strong>遗忘技术综述</strong>：<br/>
+                    • ACT-R激活模型 + 时间衰减 + 频率强化<br/>
+                    • 语义相似度扩散 + 高斯噪声<br/>
+                    • 长期/短期记忆整合 + 索引检索修改<br/>
+                    • Block-level context memory + 滑动窗口<br/><br/>
+<strong>效果</strong>：<br/>
+                    • Answer Accuracy 88.4%<br/>
+                    • Execution time reduced 21.45% (5.17s → 4.06s)
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与Reliability Framework的"Memory脚手架有害"形成对比——问题不在Memory本身，而在遗忘策略。这篇综述系统梳理了各种遗忘技术。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02280" target="_blank">论文链接 →</a></div>
+<span class="tag">Agent Memory</span>
+<span class="tag">遗忘机制</span>
+<span class="tag">终身学习</span>
+</div>
+                <div class="paper-card">
+<h2>Brief Is Better: CoT Budget的非单调效应 🔥</h2>
+<div class="meta">arXiv:2604.02155 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：更长的CoT是否总意味着更好的函数调用Agent表现？<br/><br/>
+<strong>关键发现</strong>：CoT Budget存在非单调效应<br/>
+                    • CoT并非越长越好<br/>
+                    • 存在一个最优budget点<br/>
+                    • 超过后反而降低函数调用准确性
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：对Agent设计有直接意义——需要为CoT设置合理的budget上限，而非无限延长。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02155" target="_blank">论文链接 →</a></div>
+<span class="tag">CoT</span>
+<span class="tag">Agent</span>
+<span class="tag">函数调用</span>
+</div>
+                <div class="paper-card">
+<h2>Reliable Control-Point Selection: Steering推理的新方法 🔥</h2>
+<div class="meta">arXiv:2604.02113 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>核心问题</strong>：如何可靠地选择控制点来steer推理？<br/><br/>
+<strong>与Therefore I am. I Think关联</strong>：都是研究如何干预推理过程
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：对Activation Steering的实践有指导意义——选择正确的控制点是成功干预的关键。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02113" target="_blank">论文链接 →</a></div>
+<span class="tag">Activation Steering</span>
+<span class="tag">推理控制</span>
+</div>
+                <div class="paper-card">
+<h2>Bayesian Elicitation with LLMs: 模型大小有帮助，推理不一定 🔥</h2>
+<div class="meta">arXiv:2604.01896 | cs.CL | 2026-04-01</div>
+<div class="abstract">
+<strong>核心发现</strong>：<br/>
+                    • 模型大小对贝叶斯启发有帮助<br/>
+                    • 额外的"推理"不总是有帮助
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：这与"推理越强越好"的假设相悖，提示我们需要更精细地评估推理的价值。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01896" target="_blank">论文链接 →</a></div>
+<span class="tag">贝叶斯</span>
+<span class="tag">推理评估</span>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-03</div>
                 <div class="paper-card">
 <h2>Therefore I am. I Think: 推理模型先决策后思考的机制证据 🔥🔥🔥</h2>
