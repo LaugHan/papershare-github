@@ -103,6 +103,44 @@
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
             <div class="date-section">
+                <div class="date-header">📅 2026-04-06 (周一)</div>
+                <div class="paper-card">
+<h2>SKILL0: Agent技能内化 🔥🔥</h2>
+<div class="meta">arXiv:2604.02268 | cs.LG | 2026-04-02 | 浙江大学 REAL Lab</div>
+<div class="abstract">
+<strong>研究问题</strong>：能否将Agent技能内化到模型参数中，实现零样本自主行为？<br/><br/>
+<strong>核心方法</strong>：SKILL0 - 上下文强化学习框架<br/>
+&nbsp;&nbsp;• 训练时课程：从完整技能上下文开始，逐步撤回<br/>
+&nbsp;&nbsp;• 动态课程：评估技能有用性，只保留模型仍有收益的<br/>
+&nbsp;&nbsp;• 线性衰减预算 [6,3,0]<br/><br/>
+<strong>效果</strong>：ALFWorld +9.7%, Search-QA +6.6%，每步 <0.5k tokens
+</div>
+<div class="insight">
+💡 <strong>核心洞察</strong>：技能不应该只是被"遵循"，更应该被"学会"。通过设计合适的训练课程，可以将外部技能转化为模型参数中的内部知识。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.02268" target="_blank">论文链接 →</a> <span class="tag">Agent</span> <span class="tag">RL</span> <span class="tag">Skill Internalization</span></div>
+</div>
+<div class="paper-card">
+<h2>长CoT SFT中的推理模式与泛化差异 🔥</h2>
+<div class="meta">arXiv:2604.01702 | cs.CL | 2026-04-02</div>
+<div class="abstract">
+<strong>发现</strong>：低训练损失 ≠ 好泛化性能<br/><br/>
+<strong>对比</strong>：DeepSeek-R1-0528 vs gpt-oss-120b<br/>
+&nbsp;&nbsp;• DeepSeek-R1训练损失更低<br/>
+&nbsp;&nbsp;• 但泛化性能更差<br/><br/>
+<strong>原因分析</strong>：<br/>
+&nbsp;&nbsp;• gpt-oss-120b：收敛型演绎轨迹<br/>
+&nbsp;&nbsp;• DeepSeek-R1：发散型探索轨迹<br/><br/>
+<strong>解决方案</strong>：过滤频繁分支轨迹，AIME25 +5.1%, BeyondAIME +5.5%
+</div>
+<div class="insight">
+💡 <strong>启示</strong>：选择CoT数据时，推理模式质量比数量更重要。收敛型推理模式更有利于泛化。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01702" target="_blank">论文链接 →</a> <span class="tag">CoT</span> <span class="tag">SFT</span> <span class="tag">Generalization</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-05 (周日)</div>
                 <div class="paper-card">
 <h2>📋 本日调研简报</h2>
