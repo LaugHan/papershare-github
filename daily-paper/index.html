@@ -103,6 +103,48 @@
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
             <div class="date-section">
+                <div class="date-header">📅 2026-04-07 (周二)</div>
+                <div class="paper-card">
+<h2>BibTeX引用幻觉：科学出版Agent的致命缺陷 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.03159 | cs.DL | 2026-04-03 | UPenn</div>
+<div class="abstract">
+<strong>问题</strong>：LLM Agent生成 BibTeX 引用的错误率极高<br/><br/>
+<strong>Benchmark</strong>：931篇论文 × 3个引用层级 × 9个字段 = ~23,000观察<br/>
+&nbsp;&nbsp;• Popular (>1000 citations)<br/>
+&nbsp;&nbsp;• Low-citation (<20)<br/>
+&nbsp;&nbsp;• Recent post-cutoff<br/><br/>
+<strong>惊人发现</strong>：<br/>
+&nbsp;&nbsp;• 总体准确率83.6%，但仅50.9%完全正确<br/>
+&nbsp;&nbsp;• 热门→近期论文准确率下降27.7pp<br/>
+&nbsp;&nbsp;• 即使有搜索，仍严重依赖参数记忆
+</div>
+<div class="insight">
+💡 <strong>核心洞察</strong>：科学出版Agent生成的引用有近一半是错误的！DOI是最差的字段（经常伪造），使用AI辅助写作务必验证每一条引用。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.03159" target="_blank">论文链接 →</a> <span class="tag">Hallucination</span> <span class="tag">Agent</span> <span class="tag">Evaluation</span></div>
+</div>
+<div class="paper-card">
+<h2>Reference Hallucination in Deep Research Agents 🔥🔥</h2>
+<div class="meta">arXiv:2604.03173 | cs.CL | 2026-04-03 | UPenn</div>
+<div class="abstract">
+<strong>问题</strong>：Commercial LLM 和 Deep Research Agent 的引用URL可靠性如何？<br/><br/>
+<strong>评估规模</strong>：<br/>
+&nbsp;&nbsp;• DRBench: 53,090 URLs, 10个模型<br/>
+&nbsp;&nbsp;• ExpertQA: 168,021 URLs, 32个学术领域<br/><br/>
+<strong>关键发现</strong>：<br/>
+&nbsp;&nbsp;• 3-13% 的引用URL是幻觉（Wayback Machine无记录）<br/>
+&nbsp;&nbsp;• 5-18% 完全无法解析<br/>
+&nbsp;&nbsp;• Deep Research Agent幻觉率更高<br/>
+&nbsp;&nbsp;• 非解析率：Business 5.4% 到 Theology 11.4%
+</div>
+<div class="insight">
+💡 <strong>启示</strong>：Deep Research Agent生成更多引用但幻觉率也更高，开源工具 urlhealth 可用于检测。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.03173" target="_blank">论文链接 →</a> <span class="tag">Hallucination</span> <span class="tag">Deep Research</span> <span class="tag">Citation</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-06 (周一)</div>
                 <div class="paper-card">
 <h2>SKILL0: Agent技能内化 🔥🔥</h2>
