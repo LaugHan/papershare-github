@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BenchmarkProfiling: 机械诊断LLM Benchmarks</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #11998e; border-bottom: 2px solid #11998e; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #11998e; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #f0fff4; border-left: 4px solid #11998e; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #11998e; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #ebf4ff; color: #11998e; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BenchmarkProfiling: Mechanistic Diagnosis of LLM Benchmarks</h1>
+        <div class="meta">
+            <span class="badge">arXiv:2510.01232</span>
+            <span>2025-10</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                现有LLM评估主要关注整体准确率，忽视了benchmark内部的异质性——不同问题可能测试截然不同的能力。论文提出<strong>BenchmarkProfiling</strong>，一个诊断框架，将benchmark性能分解为10个认知能力(cognitively grounded abilities)。
+
+                <br><br>通过这个框架，研究者可以：
+                <br>• 理解benchmark内部真正测量的能力组成
+                <br>• 诊断LLM在不同能力维度上的具体表现
+                <br>• 发现benchmark的设计偏差和盲点
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                <strong>Benchmark的"黑箱"问题：</strong>
+                <br>• MMLU测"语言理解"？但什么类型的理解？
+                <br>• GSM8K测"数学推理"？但什么类型的推理？
+                <br>• 不同问题可能测试完全不同的能力
+            </div>
+            
+            <h3>关键观察</h3>
+            <p>传统benchmark评估的局限：</p>
+            <ul>
+                <li>只看总分，无法发现能力边界</li>
+                <li>无法解释为什么某类问题总是出错</li>
+                <li>benchmark设计者假设的能力 ≠ 实际测量的能力</li>
+            </ul>
+            
+            <h3>解决思路</h3>
+            <p>借鉴认知心理学的方法论，将benchmark问题分解为可解释的认知能力维度：</p>
+            <ul>
+                <li>记忆检索 vs 推理计算</li>
+                <li>单一事实 vs 多步推理</li>
+                <li>歧义容忍 vs 精确理解</li>
+                <li>...</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔬 方法设计</h2>
+            
+            <h3>10个认知能力维度</h3>
+            <p>BenchmarkProfiling定义了10个认知能力维度，每个维度反映一种可分离的能力：</p>
+            <ul>
+                <li><strong>Factual Recall</strong>: 事实性知识召回</li>
+                <li><strong>Conceptual Understanding</strong>: 概念性理解</li>
+                <li><strong>Single-step Reasoning</strong>: 单步推理</li>
+                <li><strong>Multi-step Reasoning</strong>: 多步推理</li>
+                <li><strong>Mathematical Calculation</strong>: 数学计算</li>
+                <li><strong>Logical Deduction</strong>: 逻辑演绎</li>
+                <li><strong>Pattern Recognition</strong>: 模式识别</li>
+                <li><strong>Comprehension</strong>: 阅读理解</li>
+                <li><strong>Contextual Inference</strong>: 上下文推断</li>
+                <li><strong>Abstraction</strong>: 抽象能力</li>
+            </ul>
+            
+            <h3>诊断流程</h3>
+            <div class="highlight">
+                <strong>Step 1: 能力标注</strong>
+                <br>→ 为benchmark中的每个问题标注其主要和次要的认知能力维度
+                <br><br>
+                <strong>Step 2: 性能分解</strong>
+                <br>→ 提取模型在每个能力维度上的表现（而非只看总分）
+                <br><br>
+                <strong>Step 3: 能力画像</strong>
+                <br>→ 生成模型的认知能力画像（哪些维度强，哪些维度弱）
+                <br><br>
+                <strong>Step 4: Benchmark诊断</strong>
+                <br>→ 分析benchmark主要由哪些能力构成，识别设计偏差
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 实验与发现</h2>
+            
+            <h3>实验设置</h3>
+            <ul>
+                <li>从10个标准LLM benchmark中选择问题</li>
+                <li>人工+自动标注认知能力</li>
+                <li>测试多个LLM在各能力维度上的表现</li>
+            </ul>
+            
+            <h3>关键发现</h3>
+            <div class="insight">
+                <strong>1. Benchmark能力组成差异巨大</strong>
+                <br>• 有的benchmark 70%测记忆，30%测推理
+                <br>• 有的benchmark 20%测记忆，80%测推理
+                <br>• 看似相似的benchmark实际测量不同能力
+            </div>
+            
+            <div class="insight">
+                <strong>2. 模型能力画像呈现显著差异</strong>
+                <br>• 模型A：记忆强(95%)，推理弱(60%)
+                <br>• 模型B：记忆弱(70%)，推理强(90%)
+                <br>• 两者总分可能相近，但能力结构完全不同
+            </div>
+            
+            <div class="insight">
+                <strong>3. Benchmark设计偏差被揭示</strong>
+                <br>• 某些benchmark过度依赖特定能力
+                <br>• 可能被"投机取巧"的策略通过
+                <br>• 发现了benchmark的"假阳性"问题
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔍 与General Scales对比</h2>
+            
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">方面</th>
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">BenchmarkProfiling</th>
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">General Scales</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">能力维度</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">10个认知能力</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">18个General Scales</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">方法论</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">认知心理学视角</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">心理测量学视角</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">目标</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">诊断benchmark设计</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">能力profile + 预测</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">粒度</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">问题级别</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">instance级别</td>
+                </tr>
+            </table>
+            
+            <div class="highlight">
+                <strong>互补关系：</strong>
+                <br>• BenchmarkProfiling：诊断"这个benchmark测什么"
+                <br>• General Scales：建立"能力-需求"双画像实现预测
+                <br>• 两者结合可以更全面地理解评估
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 学习应用</h2>
+            
+            <h3>对评估实践的建议</h3>
+            <ul>
+                <li><strong>分解后再聚合</strong>：不要只看总分，要分解到能力维度</li>
+                <li><strong>选择合适的benchmark</strong>：根据想测的能力选择对应的benchmark</li>
+                <li><strong>诊断模型弱点</strong>：通过能力画像发现模型的认知短板</li>
+                <li><strong>发现benchmark偏差</strong>：识别设计中过度依赖的特定能力</li>
+            </ul>
+            
+            <h3>未来方向</h3>
+            <ul>
+                <li>自动化能力标注，减少人工成本</li>
+                <li>扩展到更多benchmark和模型</li>
+                <li>结合能力诊断指导模型训练</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心洞见</h2>
+            <div class="insight">
+                <strong>BenchmarkProfiling的核心贡献：</strong>
+                <br><br>
+                打破了"benchmark = 整体准确率"的传统观念，揭示了benchmark内部的能力异质性。
+                <br><br>
+                <strong>过去</strong>：MMLU总分 = 75%
+                <br><strong>现在</strong>：MMLU = 40%记忆 + 25%推理 + 20%理解 + 15%其他
+                <br><br>
+                这使得评估从"排名比较"走向"能力诊断"，为理解LLM的认知结构提供了工具。
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">Benchmark诊断</span>
+            <span class="tag">认知能力</span>
+            <span class="tag">能力分解</span>
+            <span class="tag">评估粒度</span>
+            <span class="tag">认知心理学</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2510.01232 整理 | 2025-10</p>
+    </footer>
+</body>
+</html>
