@@ -223,6 +223,86 @@
                 <span class="tag">MCQ质量</span><span class="tag">规则检测</span>
             </div>
             
+            <div class="paper-card" data-paper-id="general-scales" onclick="window.location.href='/papershare-github/papers/general-scales/'">
+                <h3>General Scales: 能力维度解耦评估</h3>
+                <div class="meta">arXiv:2503.06378 | 2025-03 | 18个General Scales</div>
+                <div class="abstract">
+                    提出18个general scales，将benchmark映射到能力维度。可解释+可预测：能力profile vs 需求profile。63任务×15模型验证，instance级别预测超越embedding基线。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2503.06378" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">能力分解</span><span class="tag">General Scales</span><span class="tag">能力profile</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="benchmark-profiling" onclick="window.location.href='/papershare-github/papers/benchmark-profiling/'">
+                <h3>BenchmarkProfiling: 机械诊断LLM Benchmarks</h3>
+                <div class="meta">arXiv:2510.01232 | 10个认知能力分解</div>
+                <div class="abstract">
+                    将benchmark性能分解为10个认知能力(cognitively grounded abilities)。诊断benchmark真正测的是什么能力，而非仅仅报告分数。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2510.01232" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">Benchmark诊断</span><span class="tag">认知能力</span><span class="tag">能力分解</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="atlas-adaptive-testing" onclick="window.location.href='/papershare-github/papers/atlas-adaptive-testing/'">
+                <h3>ATLAS: IRT自适应测试减少90%测试量</h3>
+                <div class="meta">arXiv:2511.04689 | Psychometric | IRT</div>
+                <div class="abstract">
+                    基于Item Response Theory的自适应测试框架。Fisher信息引导选题，41题匹配5600题能力估计(MAE 0.157)。能力θ提供更细粒度区分：23-31%模型排名变化>10位。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2511.04689" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">IRT</span><span class="tag">自适应测试</span><span class="tag">能力估计</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="generalizable-evaluation-survey" onclick="window.location.href='/papershare-github/papers/generalizable-evaluation-survey/'">
+                <h3>Toward Generalizable Evaluation: 超越Benchmark综述</h3>
+                <div class="meta">arXiv:2504.18838 | Survey | 2025-04</div>
+                <div class="abstract">
+                    评估从task转向capability的综述。系统梳理LLM评估的挑战与未来方向，强调能力导向评估的重要性。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2504.18838" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">综述</span><span class="tag">Generalizable</span><span class="tag">Capability</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="if-critic" onclick="window.location.href='/papershare-github/papers/if-critic/'">
+                <h3>IF-CRITIC: 细粒度指令遵循评估</h3>
+                <div class="meta">arXiv:2511.01014 | Constraint分解 | Checklist</div>
+                <div class="abstract">
+                    开发checklist generator分解约束为constraint checklists。约束级别的偏好优化，超越o4-mini和Gemini-3-Pro的评估效果。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2511.01014" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">IF评估</span><span class="tag">Constraint</span><span class="tag">Checklist</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="dece" onclick="window.location.href='/papershare-github/papers/dece/'">
+                <h3>DeCE: 超越单点分数的分解评估</h3>
+                <div class="meta">arXiv:2509.16093 | Precision+Recall分解</div>
+                <div class="abstract">
+                    分解为precision(事实准确性) + recall(概念覆盖)。与专家判断相关性r=0.78，远超传统指标r=0.12。通用模型偏recall，专业模型偏precision。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2509.16093" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">分解评估</span><span class="tag">Precision</span><span class="tag">Recall</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="multi-aspect-reasoning" onclick="window.location.href='/papershare-github/papers/multi-aspect-reasoning/'">
+                <h3>What Defines Good Reasoning: 多方面推理评估</h3>
+                <div class="meta">arXiv:2510.20603 | 推理步骤分解</div>
+                <div class="abstract">
+                    分解推理步骤为多个维度评估，探究什么是好的LLM推理。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2510.20603" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">推理评估</span><span class="tag">Multi-Aspect</span>
+            </div>
+            
+            <div class="paper-card" data-paper-id="openrubrics" onclick="window.location.href='/papershare-github/papers/openrubrics/'">
+                <h3>OpenRubrics: 可扩展合成Rubric生成</h3>
+                <div class="meta">arXiv:2510.07743 | Reward Modeling | 对比生成</div>
+                <div class="abstract">
+                    提出Contrastive Rubric Generation (CRG)，通过对比优选/拒绝响应生成rubric。Rubric-RM超越size匹配基线8.4%。
+                </div>
+                <div class="link"><a href="https://arxiv.org/abs/2510.07743" target="_blank" onclick="event.stopPropagation()">论文 →</a></div>
+                <span class="tag">Rubric生成</span><span class="tag">Reward Modeling</span>
+            </div>
+            
             <div class="paper-card" data-paper-id="reasoning-memorization-lirefs" onclick="window.location.href='/papershare-github/papers/reasoning-memorization-lirefs/'">
                 <h3>LiReFs: 推理-记忆切换的线性特征</h3>
                 <div class="meta">arXiv 2025 | 可解释性 | 推理机制</div>
