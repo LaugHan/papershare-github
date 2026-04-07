@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF-CRITIC: 细粒度指令遵循评估</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #00b09b; border-bottom: 2px solid #00b09b; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #00b09b; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #f0fff4; border-left: 4px solid #00b09b; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #00b09b; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #e6faf5; color: #00b09b; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IF-CRITIC: Fine-Grained LLM Critic for Instruction-Following Evaluation</h1>
+        <div class="meta">
+            <span class="badge">arXiv:2511.01014</span>
+            <span>2025-11</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                指令遵循是LLM的基础能力，要求模型生成的输出遵循输入指令中施加的多个约束。大量研究通过偏好优化或基于LLM-as-Judge奖励信号的强化学习来增强这一能力。
+
+                <br><br>然而，现有的指令遵循评估模型仍存在诸多不足：
+                <br>• <strong>成本高</strong>：需要大量计算资源
+                <br>• <strong>评估不可靠</strong>：LLM-as-Judge的评估结果不够准确
+
+                <br><br>本文提出<strong>IF-CRITIC</strong>，一个细粒度、高效、可靠的指令遵循评估LLM critic。
+                <br><br>
+                <strong>核心创新：</strong>
+                <br>1. 开发了<strong>checklist generator</strong>，将指令分解并生成约束checklists
+                <br>2. 通过多阶段critique过滤机制收集高质量训练数据
+                <br>3. 采用<strong>约束级别偏好优化</strong>训练IF-CRITIC
+                <br><br>
+                实验表明，IF-CRITIC的评估效果超越强LLM-as-Judge基线（包括o4-mini和Gemini-3-Pro），且使用其奖励信号进行指令遵循优化时，计算开销更低。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                <strong>指令遵循的挑战：</strong>
+                <br>• 一个指令可能包含多个约束（格式、长度、内容、风格等）
+                <br>• 现有评估方法将所有约束打包成一个分数
+                <br>• 无法知道模型违反了哪个约束
+                <br>• 无法针对性地改进模型
+            </div>
+            
+            <h3>现有方法的不足</h3>
+            <ul>
+                <li><strong>LLM-as-Judge</strong>：整体评分，无法分解约束</li>
+                <li><strong>规则匹配</strong>：只能检测预定义的规则，无法泛化</li>
+                <li><strong>人工评估</strong>：成本高，无法规模化</li>
+            </ul>
+            
+            <h3>解决思路</h3>
+            <p>将指令遵循评估从"整体评分"变为"约束级别评估"：</p>
+            <ul>
+                <li>自动分解指令中的约束</li>
+                <li>逐个检查每个约束的遵循情况</li>
+                <li>提供细粒度的反馈</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔬 方法设计</h2>
+            
+            <h3>1. Checklist Generator</h3>
+            <p>将输入指令分解为约束checklist：</p>
+            <div class="highlight">
+                <strong>输入示例：</strong>
+                <br>"请用中文写一段关于AI的简介，不超过100字，要有积极的态度。"
+                <br><br>
+                <strong>生成的Checklist：</strong>
+                <br>□ 语言：中文
+                <br>□ 主题：AI
+                <br>□ 格式：简介
+                <br>□ 长度：≤100字
+                <br>□ 态度：积极
+            </div>
+            
+            <h3>2. 多阶段Critique过滤</h3>
+            <p>收集高质量的约束级别critique数据：</p>
+            <ul>
+                <li><strong>Stage 1</strong>：生成初始critique</li>
+                <li><strong>Stage 2</strong>：过滤低质量critique</li>
+                <li><strong>Stage 3</strong>：多模型交叉验证</li>
+            </ul>
+            
+            <h3>3. 约束级别偏好优化</h3>
+            <p>不同于传统的整体偏好优化：</p>
+            <div class="highlight">
+                <strong>传统方法：</strong>
+                <br>response_A(整体好) > response_B(整体差)
+                <br><br>
+                <strong>IF-CRITIC：</strong>
+                <br>对于每个约束维度，分别优化偏好
+                <br>→ response_A(遵循约束1) > response_B(违反约束1)
+                <br>→ response_A(遵循约束2) = response_B(遵循约束2)
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 实验与发现</h2>
+            
+            <h3>实验设置</h3>
+            <ul>
+                <li>对比IF-CRITIC vs GPT-4, o4-mini, Gemini-3-Pro</li>
+                <li>测试不同类型的指令遵循任务</li>
+                <li>验证在RLHF中的应用效果</li>
+            </ul>
+            
+            <h3>关键结果</h3>
+            <div class="insight">
+                <strong>1. 评估效果超越基线</strong>
+                <br>• 超越o4-mini的指令遵循评估效果
+                <br>• 超越Gemini-3-Pro的指令遵循评估效果
+                <br>• 在细粒度约束级别评估上优势明显
+            </div>
+            
+            <div class="insight">
+                <strong>2. 训练效率高</strong>
+                <br>• 使用IF-CRITIC作为reward signal
+                <br>• 在指令遵循优化中，计算开销更低
+                <br>• 比强LLM critic基线更高效
+            </div>
+            
+            <div class="insight">
+                <strong>3. 细粒度反馈的价值</strong>
+                <br>• 不仅知道"错了"，还知道"哪个约束错了"
+                <br>• 可以针对性地改进模型
+                <br>• 诊断→优化闭环更高效
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 学习应用</h2>
+            
+            <h3>对评估研究的启发</h3>
+            <ul>
+                <li><strong>分解优于聚合</strong>：将复杂能力分解为可评估的子维度</li>
+                <li><strong>Checklist思维</strong>：自动生成评估清单，提高可解释性</li>
+                <li><strong>约束级别偏好</strong>：细粒度优化比整体优化更有效</li>
+            </ul>
+            
+            <h3>对实践的建议</h3>
+            <div class="highlight">
+                <strong>指令设计优化：</strong>
+                <br>• 清晰的约束规范有助于评估
+                <br>• 自动生成约束清单可以发现隐含假设
+                <br>• 细粒度反馈有助于模型改进
+            </div>
+            
+            <h3>与General Scales的联系</h3>
+            <p>IF-CRITIC的方法论与General Scales一脉相承：</p>
+            <ul>
+                <li>General Scales：将benchmark分解为能力维度</li>
+                <li>IF-CRITIC：将指令遵循分解为约束维度</li>
+                <li>两者都体现了"分解优于聚合"的思想</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心洞见</h2>
+            <div class="insight">
+                <strong>IF-CRITIC的核心贡献：</strong>
+                <br><br>
+                将指令遵循评估从"黑箱评分"变为"白箱诊断"，不仅知道模型错了，还知道错在哪里。
+                <br><br>
+                <strong>过去</strong>："模型X的指令遵循得分是7.5/10"
+                <br><br>
+                <strong>现在</strong>："模型X遵循了5/6个约束：✓中文 ✓主题 ✓格式... ✗长度(120字>100字)"
+                <br><br>
+                这种细粒度评估为模型改进提供了精准的诊断信息。
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">IF评估</span>
+            <span class="tag">Constraint</span>
+            <span class="tag">Checklist</span>
+            <span class="tag">细粒度评估</span>
+            <span class="tag">偏好优化</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2511.01014 整理 | 2025-11</p>
+    </footer>
+</body>
+</html>
