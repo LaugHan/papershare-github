@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toward Generalizable Evaluation: 超越Benchmark综述</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #8e2de2; border-bottom: 2px solid #8e2de2; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #8e2de2; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #f8f0ff; border-left: 4px solid #8e2de2; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #8e2de2; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #f3e8ff; color: #8e2de2; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Toward Generalizable Evaluation in the LLM Era</h1>
+        <h2 style="font-size: 0.9em; font-weight: normal; margin-top: 10px;">超越Benchmark的综述</h2>
+        <div class="meta">
+            <span class="badge">arXiv:2504.18838</span>
+            <span>2025-04</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                大语言模型(LLM)正以惊人的速度发展，已在学术界、工业界和日常应用中不可或缺。为跟上当前发展现状，本文探讨LLM的崛起对评估领域带来的核心挑战。
+
+                <br><br>传统评估方法在LLM时代面临诸多困境：
+                <br>• Benchmark饱和：头部模型趋同
+                <br>• 评估成本：完整评估耗时耗力
+                <br>• 可迁移性：在一个benchmark上表现好 ≠ 在其他任务上也表现好
+                <br>• 能力边界：缺乏对模型能力边界的深入理解
+
+                <br><br>本文作为综述，系统梳理了从Task-centric到Capability-centric评估的转变，为未来评估研究指明方向。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心挑战</h2>
+            
+            <h3>1. Benchmark饱和问题</h3>
+            <div class="highlight">
+                <strong>问题：</strong>
+                <br>• MMLU等主流benchmark上，头部模型准确率趋近90%+
+                <br>• 区分度降低，难以区分能力相近的模型
+                <br>• 新模型"刷分"的意义有限
+            </div>
+            
+            <h3>2. 评估效率问题</h3>
+            <ul>
+                <li>完整评估需要运行数千道题目</li>
+                <li>API调用成本高昂</li>
+                <li>评估时间长达数小时</li>
+                <li>快速迭代场景下无法承受完整评估</li>
+            </ul>
+            
+            <h3>3. 可迁移性问题</h3>
+            <div class="highlight">
+                <strong>核心问题：</strong>
+                <br>Benchmark A上的高分 ≠ Benchmark B上的高分
+                <br><br>
+                <strong>原因：</strong>
+                <br>• 不同benchmark测试的能力维度不同
+                <br>• 模型在不同能力上有不同的强弱分布
+                <br>• 缺乏跨任务的泛化能力评估框架
+            </div>
+            
+            <h3>4. 能力边界模糊</h3>
+            <ul>
+                <li>只知道"模型X得了多少分"</li>
+                <li>不知道为什么得了这个分数</li>
+                <li>不知道模型的能力边界在哪里</li>
+                <li>不知道如何针对性改进</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔄 范式转变</h2>
+            
+            <h3>从 Task-centric 到 Capability-centric</h3>
+            
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px;">维度</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">Task-centric</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">Capability-centric</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">评估对象</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">特定任务</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">抽象能力</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">粒度</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">Task级别聚合</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">能力维度分解</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">可解释性</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">低</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">高</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">泛化能力</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">低</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">高</td>
+                </tr>
+            </table>
+            
+            <h3>能力导向评估的核心思想</h3>
+            <div class="highlight">
+                <strong>核心假设：</strong>
+                <br>模型的能力可以分解为有限数量的通用维度（能力原子）
+                <br><br>
+                <strong>评估目标：</strong>
+                <br>不是评估模型在特定任务上的表现，而是评估其在抽象能力维度上的水平
+                <br><br>
+                <strong>优势：</strong>
+                <br>• 能力维度不饱和（可以无限细分）
+                <br>• 跨任务泛化（能力可迁移）
+                <br>• 可解释性强（知道强在哪、弱在哪）
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📚 综述涵盖方向</h2>
+            
+            <h3>1. 细粒度评估</h3>
+            <ul>
+                <li>能力分解：将复杂能力拆解为子能力</li>
+                <li>多维度评估：同时评估多个能力维度</li>
+                <li>instance级别评估：从总分到单题分析</li>
+            </ul>
+            
+            <h3>2. 自适应评估</h3>
+            <ul>
+                <li>基于模型能力自适应选择测试题目</li>
+                <li>减少评估成本同时保持精度</li>
+                <li>IRT等心理测量学方法的引入</li>
+            </ul>
+            
+            <h3>3. 可解释评估</h3>
+            <ul>
+                <li>不仅报告分数，还解释为什么</li>
+                <li>能力画像：模型在每个维度上的表现</li>
+                <li>错误分析：诊断失败的原因</li>
+            </ul>
+            
+            <h3>4. 预测性评估</h3>
+            <ul>
+                <li>从已知任务预测未知任务的表現</li>
+                <li>能力-需求匹配框架</li>
+                <li>分布外泛化评估</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔮 未来方向</h2>
+            
+            <div class="insight">
+                <strong>1. 能力本体的建立</strong>
+                <br>• 什么是LLM的"原子能力"？
+                <br>• 如何系统地定义能力维度？
+                <br>• 跨模型、跨任务的能力表示
+            </div>
+            
+            <div class="insight">
+                <strong>2. 评估的可扩展性</strong>
+                <br>• 自动化能力标注
+                <br>• 合成测试用例生成
+                <br>• 高效的自适应测试算法
+            </div>
+            
+            <div class="insight">
+                <strong>3. 评估-改进闭环</strong>
+                <br>• 评估不仅是为了排名，更是为了改进
+                <br>• 从能力画像指导模型优化方向
+                <br>• 诊断→改进→再评估的自动化流程
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 核心洞见</h2>
+            <div class="insight">
+                <strong>这篇综述的核心信息：</strong>
+                <br><br>
+                LLM时代呼唤评估范式的根本转变——
+                <br><br>
+                <strong>过去</strong>："模型X在MMLU上得了85分" → 排名
+                <br><br>
+                <strong>未来</strong>："模型X的能力画像是(知识:4.2, 推理:3.8, 元认知:2.1, ...) → 诊断
+                <br><br>
+                评估的终极目标不是排名，而是<strong>理解</strong>和<strong>预测</strong>模型的能力，从而指导更智能的模型开发和部署决策。
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">综述</span>
+            <span class="tag">Generalizable</span>
+            <span class="tag">Capability</span>
+            <span class="tag">范式转变</span>
+            <span class="tag">评估框架</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2504.18838 整理 | 2025-04</p>
+    </footer>
+</body>
+</html>
