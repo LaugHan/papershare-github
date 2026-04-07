@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATLAS: IRT自适应测试</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #fc4a1a; border-bottom: 2px solid #fc4a1a; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #fc4a1a; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #fff8f0; border-left: 4px solid #fc4a1a; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #fc4a1a; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #fff0e6; color: #fc4a1a; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ATLAS: Adaptive Testing for LLM Evaluation</h1>
+        <div class="meta">
+            <span class="badge">arXiv:2511.04689</span>
+            <span>2025-10</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                评估大语言模型(LLM)通常需要数千个benchmark题目，使得评估过程昂贵、缓慢且在大规模场景下越来越不切实际。现有评估协议依赖固定题目集上的平均准确率，将所有题目视为同等信息量，尽管难度和区分度存在显著差异。
+
+                <br><br>本文引入<strong>ATLAS</strong>，一个基于Item Response Theory(IRT)的自适应测试框架，使用Fisher信息引导的选题来估计模型能力。
+                <br><br>
+                <strong>核心成果：</strong>
+                <br>• 减少90%的所需题目数量，同时保持测量精度
+                <br>• 例如：在HellaSwag (5,600题)上，仅用41题就能匹配全量能力估计(MAE 0.157)
+                <br>• 从ATLAS能力估计重建准确率与原始准确率高度一致
+                <br>• 能力θ提供了更细粒度的区分：3000+模型中，23-31%的模型排名变化超过10位
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                <strong>传统评估的痛点：</strong>
+                <br>• <strong>成本高</strong>：评估一个模型需要跑完所有benchmark题目
+                <br>• <strong>速度慢</strong>：完整评估可能需要数小时
+                <br>• <strong>效率低</strong>：所有题目被视为同等信息量
+                <br>• <strong>区分度差</strong>：饱和问题导致高分模型难以区分
+            </div>
+            
+            <h3>传统方法的局限</h3>
+            <p>现有协议存在的问题：</p>
+            <ul>
+                <li>固定题目集 → 每次评估都要跑完所有题</li>
+                <li>平均准确率 → 忽略了题目难度和区分度的差异</li>
+                <li>粗粒度排序 → 无法区分能力相近的模型</li>
+            </ul>
+            
+            <h3>解决思路</h3>
+            <p>借鉴心理测量学中的<strong>自适应测试(Adaptive Testing)</strong>方法：</p>
+            <ul>
+                <li>不是所有题目都同等信息量</li>
+                <li>应该根据模型能力选择最有信息量的题目</li>
+                <li>IRT提供了量化题目"信息量"的理论基础</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔬 方法设计</h2>
+            
+            <h3>Item Response Theory (IRT) 基础</h3>
+            <p>IRT是心理测量学中用于分析测试和评估的理论框架，核心思想：</p>
+            <ul>
+                <li><strong>能力参数(θ)</strong>：被测者的潜在能力水平</li>
+                <li><strong>难度参数(b)</strong>：题目的难度</li>
+                <li><strong>区分度参数(a)</strong>：题目区分高低能力者的能力</li>
+                <li><strong>猜测参数(c)</strong>：猜测正确答案的概率</li>
+            </ul>
+            
+            <h3>Fisher Information</h3>
+            <div class="highlight">
+                <strong>核心公式：</strong>
+                <br><br>
+                题目i对能力θ的信息量 = I_i(θ)
+                <br><br>
+                自适应测试选择下一个题目时，选择当前θ估计下<strong>信息量最大</strong>的题目。
+            </div>
+            
+            <h3>ATLAS算法</h3>
+            <div class="highlight">
+                <strong>Step 1: 建立校准题库</strong>
+                <br>→ 收集并校准大量题目，标注其IRT参数(a, b, c)
+                <br><br>
+                <strong>Step 2: 初始能力估计</strong>
+                <br>→ 从中等难度题目开始
+                <br><br>
+                <strong>Step 3: 迭代自适应</strong>
+                <br>→ 根据当前θ估计，选择Fisher信息最大的题目
+                <br>→ 更新θ估计
+                <br>→ 重复直到收敛或达到题目限制
+                <br><br>
+                <strong>Step 4: 能力报告</strong>
+                <br>→ 输出最终θ估计和置信区间
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 实验与发现</h2>
+            
+            <h3>实验设置</h3>
+            <ul>
+                <li>在5个benchmark上验证：HellaSwag, MMLU, ARC等</li>
+                <li>测试3000+模型</li>
+                <li>对比自适应测试 vs 随机采样 vs 全量评估</li>
+            </ul>
+            
+            <h3>关键结果</h3>
+            <div class="insight">
+                <strong>1. 高效率：大幅减少题目数量</strong>
+                <br>• HellaSwag: 41题匹配5600题效果 (MAE 0.157)
+                <br>• 减少90%题目数量，同时保持测量精度
+                <br>• 其他benchmark类似效率提升
+            </div>
+            
+            <div class="insight">
+                <strong>2. 高精度：准确率重建一致</strong>
+                <br>• 从θ重建的准确率与原始准确率高度一致
+                <br>• 说明θ保留了全局性能结构
+                <br>• 不只是效率提升，精度也可靠
+            </div>
+            
+            <div class="insight">
+                <strong>3. 细粒度区分：排名重新洗牌</strong>
+                <br>• 在3000+模型中，23-31%的模型排名变化>10位
+                <br>• 相同准确率的模型获得不同的θ估计
+                <br>• 这对区分能力接近的模型至关重要
+            </div>
+            
+            <h3>效率 vs 精度权衡</h3>
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px;">题目数量</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">MAE (HellaSwag)</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">效率提升</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">5,600 (全量)</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">0</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">1x</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">100</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">~0.05</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">56x</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">41</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">0.157</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">137x</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🔍 与传统方法的对比</h2>
+            
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px;">方面</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">传统评估</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">ATLAS</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">题目量</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">固定全量</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">自适应(41-100题)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">评估效率</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">低</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">高(90%+减少)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">能力表示</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">准确率(0-1)</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">θ(连续值)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">区分度</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">低(饱和)</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">高(23-31%重新排名)</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">理论基础</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">经验公式</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">IRT心理测量学</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>💡 学习应用</h2>
+            
+            <h3>实践建议</h3>
+            <ul>
+                <li><strong>快速模型筛选</strong>：用ATLAS快速评估大量模型，筛选出候选者后再深度评估</li>
+                <li><strong>持续监控</strong>：在模型迭代过程中，用ATLAS进行频繁的轻量级评估</li>
+                <li><strong>细粒度比较</strong>：对于区分能力接近的模型，用ATLAS获取更精细的θ估计</li>
+                <li><strong>模型选择</strong>：根据具体任务需求，选择θ在相关维度上最强的模型</li>
+            </ul>
+            
+            <h3>开放资源</h3>
+            <div class="highlight">
+                <strong>GitHub</strong>: https://github.com/Peiyu-Georgia-Li/ATLAS.git
+                <br><br>
+                提供：
+                <br>• 校准好的题目库
+                <br>• ATLAS算法实现
+                <br>• 预计算的模型θ估计
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心洞见</h2>
+            <div class="insight">
+                <strong>ATLAS的核心贡献：</strong>
+                <br><br>
+                将心理测量学中成熟的<strong>自适应测试</strong>方法引入LLM评估，解决了传统评估的效率和区分度问题。
+                <br><br>
+                <strong>过去</strong>：评估模型A需要5600题 → 评估模型B需要5600题 → ...
+                <br><br>
+                <strong>现在</strong>：评估模型A需要41题 → 评估模型B需要50题 → ...（自适应）
+                <br><br>
+                更重要的是，θ提供了比准确率<strong>更丰富</strong>的能力表示，使得23-31%的模型排名发生变化，这对区分能力接近的模型至关重要。
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">IRT</span>
+            <span class="tag">自适应测试</span>
+            <span class="tag">能力估计</span>
+            <span class="tag">心理测量学</span>
+            <span class="tag">效率优化</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2511.04689 整理 | 2025-10</p>
+    </footer>
+</body>
+</html>
