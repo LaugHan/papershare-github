@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeCE: 超越单点分数的分解评估</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #f5576c; border-bottom: 2px solid #f5576c; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #f5576c; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #f0fff4; border-left: 4px solid #11998e; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #f5576c; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #fff0f3; color: #f5576c; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DeCE: Beyond Pointwise Scores</h1>
+        <h2 style="font-size: 0.9em; font-weight: normal; margin-top: 10px;">Decomposed Criteria-Based Evaluation of LLM Responses</h2>
+        <div class="meta">
+            <span class="badge">arXiv:2509.16093</span>
+            <span>2025-09</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                在法律、医学等高风险领域评估长篇答案仍然是一项 fundamental challenge。标准指标（如BLEU、ROUGE）无法捕捉语义正确性，而当前基于LLM的评估器往往将答案质量的细微方面简化为单一的无差异分数。
+
+                <br><br>本文提出<strong>DeCE</strong>，一个分解的LLM评估框架，将答案质量分解为：
+                <br>• <strong>Precision（精确度）</strong>：事实准确性和相关性
+                <br>• <strong>Recall（召回率）</strong>：所需概念的覆盖度
+                <br><br>
+                DeCE使用从黄金答案要求中自动提取的实例特定标准，无需预定义的分类法或人工设计的rubric。DeCE是模型无关和领域通用的。
+
+                <br><br>
+                <strong>关键成果：</strong>
+                <br>• 在真实法律QA任务上与专家判断相关性<strong>r=0.78</strong>
+                <br>• 远超传统指标（r=0.12）、单点LLM评分（r=0.35）和现代多维评估器（r=0.48）
+                <br>• 仅11.95%的LLM生成标准需要专家修改，证明了可扩展性
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                <strong>传统评估的局限：</strong>
+                <br>• <strong>BLEU/ROUGE</strong>：基于n-gram匹配，无法理解语义
+                <br>• <strong>LLM-as-Judge</strong>：单点分数，忽略质量的多维性
+                <br>• <strong>现有评估</strong>：将precision和recall混为一谈
+            </div>
+            
+            <h3>Precision vs Recall的洞察</h3>
+            <p>在LLM评估中，precision和recall代表不同的质量维度：</p>
+            <ul>
+                <li><strong>Precision</strong>：模型说的有多少是对的？
+                <br>→ 事实准确性、相关性、避免幻觉</li>
+                <li><strong>Recall</strong>：模型说了多少该说的？
+                <br>→ 概念覆盖度、完整性、信息遗漏</li>
+            </ul>
+            
+            <h3>关键观察</h3>
+            <div class="highlight">
+                <strong>通用模型 vs 专业模型：</strong>
+                <br>• 通用模型倾向于<strong>高recall</strong>（倾向于覆盖更多内容，可能引入错误）
+                <br>• 专业模型倾向于<strong>高precision</strong>（更保守，只说有把握的）
+                <br><br>
+                这两种策略各有优劣，但传统评估无法区分！
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔬 方法设计</h2>
+            
+            <h3>DeCE框架</h3>
+            <p>DeCE的评估流程：</p>
+            
+            <div class="highlight">
+                <strong>Step 1: 从黄金答案提取标准</strong>
+                <br>→ 自动从黄金答案中识别所需的关键概念
+                <br>→ 生成"概念清单"（recall目标）
+                <br><br>
+                <strong>Step 2: Precision评估</strong>
+                <br>→ 检查模型答案中每个陈述的事实准确性
+                <br>→ 计算正确陈述的比例
+                <br><br>
+                <strong>Step 3: Recall评估</strong>
+                <br>→ 检查模型答案覆盖了多少必需概念
+                <br>→ 计算覆盖的概念比例
+                <br><br>
+                <strong>Step 4: 综合评分</strong>
+                <br>→ 报告P-R对，而非单一分数
+                <br>→ 可视化精度-召回权衡
+            </div>
+            
+            <h3>与专家判断的一致性</h3>
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px;">方法</th>
+                    <th style="border: 1px solid #ddd; padding: 12px;">专家相关性</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">BLEU/ROUGE</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">r = 0.12</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">LLM单点评分</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">r = 0.35</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">多维评估器</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">r = 0.48</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold;">DeCE</td>
+                    <td style="border: 1px solid #ddd; padding: 12px; font-weight: bold;">r = 0.78</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>📊 实验与发现</h2>
+            
+            <h3>实验设置</h3>
+            <ul>
+                <li>领域：多辖区法律推理和引用 grounding</li>
+                <li>对比：BLEU, ROUGE, LLM-as-Judge, 多维评估器</li>
+                <li>ground truth：专家人类评估</li>
+            </ul>
+            
+            <h3>关键发现</h3>
+            <div class="insight">
+                <strong>1. Precision-Recall权衡真实存在</strong>
+                <br>• 通用模型（如GPT-4）：P=0.75, R=0.82
+                <br>• 专业模型（如法律微调模型）：P=0.89, R=0.68
+                <br>→ 两种策略产生的P-R trade-off完全不同
+            </div>
+            
+            <div class="insight">
+                <strong>2. 可解释的权衡</strong>
+                <br>• "这个模型precision低recall高" → 说了很多但有些是错的
+                <br>• "这个模型precision高recall低" → 只说有把握的，但可能遗漏重要信息
+                <br>→ 比单一分数提供了多得多的诊断信息
+            </div>
+            
+            <div class="insight">
+                <strong>3. 可扩展性验证</strong>
+                <br>• 仅11.95%的LLM生成标准需要专家修改
+                <br>• 大部分自动提取的概念标准质量已经很高
+                <br>→ 降低了人工标注成本
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 学习应用</h2>
+            
+            <h3>实践建议</h3>
+            <ul>
+                <li><strong>高精度场景</strong>（医疗、法律）：关注Precision，避免错误信息</li>
+                <li><strong>高召回场景</strong>（信息汇总、头脑风暴）：关注Recall，避免遗漏</li>
+                <li><strong>平衡场景</strong>：根据具体需求权衡P-R</li>
+            </ul>
+            
+            <h3>对评估设计的启发</h3>
+            <div class="highlight">
+                <strong>关键洞察：</strong>
+                <br>质量是多维的，单一分数掩盖了有价值的信息。
+                <br><br>
+                DeCE展示了一种有效的分解方式：Precision + Recall
+                <br>→ 未来可以有更多的分解维度
+                <br>→ 但分解本身比分解成什么更重要
+            </div>
+            
+            <h3>与IF-CRITIC的联系</h3>
+            <p>两者都体现了"分解优于聚合"的思想：</p>
+            <ul>
+                <li>IF-CRITIC：将指令遵循分解为约束维度</li>
+                <li>DeCE：将答案质量分解为Precision-Recall</li>
+                <li>General Scales：将benchmark分解为能力维度</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心洞见</h2>
+            <div class="insight">
+                <strong>DeCE的核心贡献：</strong>
+                <br><br>
+                揭示了LLM评估中Precision-Recall权衡的存在，并将这种权衡显式化。
+                <br><br>
+                <strong>过去</strong>："模型X在法律QA上得了7.5分"
+                <br><br>
+                <strong>现在</strong>："模型X的Precision=0.89, Recall=0.68 → Precision高但遗漏信息"
+                <br><br>
+                这种分解提供了：
+                <br>• <strong>可解释性</strong>：知道分数背后的原因
+                <br>• <strong>可操作性</strong>：知道从哪里改进
+                <br>• <strong>可比性</strong>：不同策略的模型可以公平比较
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">分解评估</span>
+            <span class="tag">Precision</span>
+            <span class="tag">Recall</span>
+            <span class="tag">多维评估</span>
+            <span class="tag">可解释性</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2509.16093 整理 | 2025-09</p>
+    </footer>
+</body>
+</html>
