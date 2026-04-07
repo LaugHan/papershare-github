@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Scales: 能力维度解耦评估</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header .meta { opacity: 0.9; font-size: 0.95em; }
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2em; }
+        .card h3 { color: #444; margin: 15px 0 10px; font-size: 1.1em; }
+        .card p, .card li { color: #555; }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 8px; }
+        .badge { display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-right: 8px; }
+        .highlight { background: #f5f7ff; border-left: 4px solid #667eea; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .insight { background: #fff5f7; border-left: 4px solid #f5576c; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .abstract { background: #fafafa; padding: 20px; border-radius: 8px; font-style: italic; color: #666; }
+        .back-link { display: inline-block; margin-top: 20px; color: #667eea; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .tag { display: inline-block; background: #ebf4ff; color: #667eea; padding: 4px 10px; border-radius: 15px; font-size: 0.85em; margin: 2px; }
+        .scale-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .scale-item { background: #f5f7ff; padding: 10px 15px; border-radius: 8px; font-size: 0.9em; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>General Scales Unlock AI Evaluation with Explanatory and Predictive Power</h1>
+        <div class="meta">
+            <span class="badge">arXiv:2503.06378</span>
+            <span>2025-03-09</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📝 摘要</h2>
+            <div class="abstract">
+                确保AI的安全和有效使用，需要理解和预测AI在新任务上的表现——从高级科学挑战到转型的职场活动。迄今为止，基准测试引导了AI的进展，但鉴于跨任务迁移性低，它们对通用AI系统提供的可解释性和预测能力有限。
+
+                <br><br>本文引入<strong>通用评估量表(General Scales)</strong>，能够：
+                <br>• 解释常见AI基准测试真正测量的内容
+                <br>• 提取AI系统的能力画像(ability profiles)
+                <br>• 预测其在分布内和分布外新任务实例上的表现
+
+                <br><br>基于18个新设计的量表 rubric 构建全自动方法，将实例需求映射到不饱和的通用量表。在15个大语言模型和63个任务上验证，揭示了不同基准测试的敏感性和特异性，以及知识、元认知和推理如何受模型规模、CoT和蒸馏影响。令人惊讶的是，使用这些需求水平实现了instance级别的强预测能力，在分布外设置中优于基于embedding或微调的黑盒基线预测器。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 方法动机</h2>
+            
+            <h3>核心问题</h3>
+            <div class="highlight">
+                <strong>Benchmark的局限性：</strong>
+                <br>• 低迁移性：benchmark A上的高分 ≠ benchmark B上的高分
+                <br>• 饱和问题：头部模型在很多benchmark上趋近饱和
+                <br>• 缺乏解释：只知道"模型X在任务Y上得了Z分"，不知道为什么
+                <br>• 无法预测：无法预测模型在新任务上的表现
+            </div>
+            
+            <h3>解决思路</h3>
+            <p>借鉴心理测量学中的<strong>能力量表(Ability Scales)</strong>方法，建立一套通用的评估维度，使得：</p>
+            <ul>
+                <li>每个任务实例都可以被映射到这些通用维度上（需求画像）</li>
+                <li>每个模型也都可以被映射到这些维度上（能力画像）</li>
+                <li>通过比较能力画像和需求画像，可以解释和预测表现</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔬 方法设计</h2>
+            
+            <h3>18个General Scales</h3>
+            <p>论文定义了18个不饱和的通用评估量表，覆盖AI能力的核心维度：</p>
+            <div class="scale-list">
+                <div class="scale-item">MCr: Main Criterion (主标准)</div>
+                <div class="scale-item">MCu: Main Curse (主要诅咒)</div>
+                <div class="scale-item">Syn: Syntax (句法)</div>
+                <div class="scale-item">Sem: Semantics (语义)</div>
+                <div class="scale-item">Log: Logic (逻辑)</div>
+                <div class="scale-item">Mcp: Misconception (误解)</div>
+                <div class="scale-item">Mem: Memory (记忆)</div>
+                <div class="scale-item">Kow: Knowledge (知识)</div>
+                <div class="scale-item">Met: Metacognition (元认知)</div>
+                <div class="scale-item">Rea: Reasoning (推理)</div>
+                <div class="scale-item">Cre: Creativity (创造力)</div>
+                <div class="scale-item">Pla: Planning (规划)</div>
+                <div class="scale-item">Sen: Sensitivity (敏感性)</div>
+                <div class="scale-item">Spo: Specificity (特异性)</div>
+                <div class="scale-item">... 等18个维度</div>
+            </div>
+            
+            <h3>Demand Profile vs Ability Profile</h3>
+            <p><strong>Demand Profile（需求画像）</strong>：描述一个任务实例在18个维度上的难度</p>
+            <p><strong>Ability Profile（能力画像）</strong>：描述一个模型在18个维度上的能力</p>
+            
+            <div class="highlight">
+                <strong>核心洞察：</strong>
+                <br>通过比较模型的Ability Profile与任务实例的Demand Profile，可以：
+                <br>• 解释为什么模型在某任务上失败（某些维度能力不足）
+                <br>• 预测模型在新任务上的表现（基于维度匹配）
+                <br>• 诊断benchmark真正测量的能力（通过敏感性分析）
+            </div>
+            
+            <h3>实例级别的Rubric设计</h3>
+            <p>每个任务实例都配有自动生成的rubric，描述其在每个维度上的需求水平（0-5分）。这使得instance级别的细粒度评估成为可能。</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 实验与发现</h2>
+            
+            <h3>实验设置</h3>
+            <ul>
+                <li><strong>模型</strong>：15个大语言模型</li>
+                <li><strong>任务</strong>：63个任务</li>
+                <li><strong>维度</strong>：18个General Scales</li>
+            </ul>
+            
+            <h3>关键发现</h3>
+            <div class="insight">
+                <strong>1. Benchmark的敏感性差异</strong>
+                <br>不同benchmark对不同能力的敏感性差异很大：
+                <br>• 有的benchmark主要测知识(Kow)
+                <br>• 有的主要测推理(Rea)
+                <br>• 混合型benchmark难以区分能力边界
+            </div>
+            
+            <div class="insight">
+                <strong>2. 模型规模效应</strong>
+                <br>• 模型规模↑ → 知识(Kow)和推理(Rea)↑
+                <br>• 但元认知(Met)提升有限
+                <br>• 不同能力随规模增长的曲线不同
+            </div>
+            
+            <div class="insight">
+                <strong>3. CoT的影响</strong>
+                <br>• CoT主要提升推理(Rea)维度
+                <br>• 对知识(Kow)维度影响有限
+                <br>• 不同任务类型受益程度不同
+            </div>
+            
+            <div class="insight">
+                <strong>4. 蒸馏的影响</strong>
+                <br>• 蒸馏模型在某些维度上有显著损失
+                <br>• 知识蒸馏 vs 能力蒸馏效果不同
+                <br>• 可以精确诊断蒸馏模型的弱点
+            </div>
+            
+            <h3>预测能力验证</h3>
+            <p>在分布外(OOD)设置中：</p>
+            <ul>
+                <li>使用demand levels的预测器 <strong>优于</strong> embedding-based预测器</li>
+                <li>使用demand levels的预测器 <strong>优于</strong> fine-tuning预测器</li>
+                <li>尤其在新任务和新benchmark上优势明显</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔍 对比分析</h2>
+            
+            <table class="table" style="width:100%; border-collapse: collapse; margin: 15px 0;">
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">方面</th>
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">传统Benchmark</th>
+                    <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">General Scales</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">粒度</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">Task级别（聚合分数）</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">Instance级别（18维能力）</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">可解释性</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">低（只知道分数）</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">高（维度分解）</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">预测能力</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">跨任务迁移性低</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">强（尤其是OOD）</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px;">饱和问题</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">严重（高分趋同）</td>
+                    <td style="border: 1px solid #ddd; padding: 12px;">缓解（多维度区分）</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>💡 学习应用</h2>
+            
+            <h3>对评估研究的启发</h3>
+            <ul>
+                <li><strong>从聚合到分解</strong>：不要再只看总分，要分解到能力维度</li>
+                <li><strong>从描述到预测</strong>：评估的终极目标是预测，General Scales实现了这一点</li>
+                <li><strong>从任务到能力</strong>：任务只是能力的载体，能力才是本质</li>
+            </ul>
+            
+            <h3>对模型开发的启发</h3>
+            <ul>
+                <li><strong>诊断弱点</strong>：通过能力画像精确定位模型的薄弱维度</li>
+                <li><strong>指导优化</strong>：针对性提升特定能力维度</li>
+                <li><strong>蒸馏分析</strong>：诊断蒸馏过程损失的维度能力</li>
+            </ul>
+            
+            <h3>实践建议</h3>
+            <div class="highlight">
+                <strong>ADELE平台</strong>：作者提供了在线平台 https://kinds-of-intelligence-cfi.github.io/ADELE
+                <br><br>
+                可以：
+                <br>• 可视化模型的能力画像
+                <br>• 探索不同benchmark的维度敏感性
+                <br>• 预测模型在新任务上的表现
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 核心洞见</h2>
+            <div class="insight">
+                <strong>这篇论文的核心贡献是建立了"能力-需求"双画像框架：</strong>
+                <br><br>
+                <strong>过去</strong>：模型A在benchmark X上得了80分，模型B得了82分 → 差2分
+                <br><br>
+                <strong>现在</strong>：模型A的能力画像是(知识:4, 推理:3, 元认知:2, ...)，任务X的需求画像是(知识:3, 推理:4, 元认知:1, ...) → 可以解释为什么模型A在某个子任务上失败
+                <br><br>
+                这标志着评估从"排名游戏"走向"能力诊断"的范式转变。
+            </div>
+        </div>
+        
+        <a href="/papershare-github/papershare/" class="back-link">← 返回论文列表</a>
+        
+        <div class="tag-cloud" style="margin-top: 30px;">
+            <span class="tag">能力分解</span>
+            <span class="tag">General Scales</span>
+            <span class="tag">能力profile</span>
+            <span class="tag">需求profile</span>
+            <span class="tag">心理测量学</span>
+            <span class="tag">可解释评估</span>
+            <span class="tag">预测能力</span>
+        </div>
+    </div>
+    
+    <footer>
+        <p>基于 arXiv:2503.06378 整理 | 2025-03</p>
+    </footer>
+</body>
+</html>
