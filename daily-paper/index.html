@@ -148,6 +148,79 @@
             </div>
 
             <div class="date-section">
+                <div class="date-header">📅 2026-04-14 (周二)</div>
+                <div class="paper-card">
+<h2>LLM有害内容生成：统一机制 + 可解释权重剪枝 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.09544 | cs.CL | 2026-04-13</div>
+<div class="abstract">
+<strong>核心问题</strong>：LLM的有害内容生成是否有内在一致的机制？<br/><br/>
+<strong>方法</strong>：权重剪枝作为因果探针<br/><br/>
+<strong>发现</strong>：
+<ul>
+<li>有害内容生成依赖约0.0005%参数的紧凑权重集</li>
+<li>跨类别泛化：剪枝一种有害类型→降低所有其他类型</li>
+<li>对齐训练压缩了有害生成权重</li>
+<li>解释emergent misalignment：窄域微调触发宽域有害输出</li>
+</ul>
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：有害内容生成存在统一机制！可以通过精确剪枝而非对抗训练来增强安全。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.09544" target="_blank">论文链接 →</a> <span class="tag">Safety</span> <span class="tag">可解释性</span></div>
+</div>
+<div class="paper-card">
+<h2>MANYFAKE: 假新闻检测的五层策略Taxonomy 🔥🔥</h2>
+<div class="meta">arXiv:2604.09514 | cs.CL | 2026-04-13</div>
+<div class="abstract">
+<strong>问题</strong>：AI生成的假新闻策略多样，现有benchmark无法覆盖。<br/><br/>
+<strong>五层Taxonomy</strong>：
+<ul>
+<li>Level 1: Topics（8类）</li>
+<li>Level 2: Falsity策略（Direct/Expansion/Imitation/Distortion）</li>
+<li>Level 3: Optimization（权威引用/语境增强/风格调整/事实注入）</li>
+<li>Level 4: Iteration（多输出选择/迭代精炼）</li>
+<li>Level 5: Finalization（人工编辑）</li>
+</ul>
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：假新闻生成是一个结构化多阶段过程，需要多维度评测框架。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.09514" target="_blank">论文链接 →</a> <span class="tag">假新闻</span> <span class="tag">Taxonomy</span></div>
+</div>
+<div class="paper-card">
+<h2>Case-Grounded Evidence Verification: 证据敏感监督框架 🔥🔥</h2>
+<div class="meta">arXiv:2604.09537 | cs.CL | 2026-04-10</div>
+<div class="abstract">
+<strong>问题</strong>：证据 grounding 监督太弱，模型不真正依赖证据做决策。<br/><br/>
+<strong>框架</strong>：
+<ul>
+<li>Case- grounded evidence verification</li>
+<li>生成显式支持样本 + 受控非支持样本（反事实/主题相关）</li>
+<li>无需人工标注证据</li>
+</ul>
+<strong>应用</strong>：放射学领域<br/>
+<strong>发现</strong>：证据grouhding的瓶颈不是模型能力，而是缺乏编码证据因果角色的监督
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：需要"因果性"监督而非简单的证据-答案配对。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.09537" target="_blank">论文链接 →</a> <span class="tag">Evidence</span> <span class="tag">RAG</span></div>
+</div>
+<div class="paper-card">
+<h2>RecaLLM: 解决"走神"问题的显式上下文检索 🔥</h2>
+<div class="meta">arXiv:2604.09494 | cs.CL | 2026-04-13</div>
+<div class="abstract">
+<strong>问题</strong>：LLM在长推理中会出现"走神"（Lost-in-Thought）现象。<br/><br/>
+<strong>方法</strong>：显式上下文检索机制
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：在推理过程中主动检索相关上下文，减少注意力漂移。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.09494" target="_blank">论文链接 →</a> <span class="tag">Reasoning</span> <span class="tag">Retrieval</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-12 (周日)</div>
                 <div class="paper-card">
 <h2>📋 本日调研简报</h2>
