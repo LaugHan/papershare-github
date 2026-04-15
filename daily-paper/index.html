@@ -148,6 +148,94 @@
             </div>
 
             <div class="date-section">
+                <div class="date-header">📅 2026-04-15 (周三)</div>
+                <div class="paper-card">
+<h2>General365: 通用推理Benchmark (K-12知识, 26模型最高62.8%) 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.11778 | cs.CL | 2026-04-14</div>
+<div class="abstract">
+<strong>问题</strong>：LLM在数学/物理达到专家级，但通用推理能力？<br/><br/>
+<strong>General365 Benchmark</strong>：
+<ul>
+<li>365种子问题 + 1095变体，覆盖8个挑战类别</li>
+<li>知识限制在K-12级别，解耦推理与专业知识</li>
+<li>26个顶级LLM评估：最高仅62.8%准确率</li>
+</ul>
+<strong>发现</strong>：当前LLM推理能力高度领域依赖，通用场景仍有很大改进空间
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：专门领域（如数学）和通用推理是两回事！需要新的评测范式。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.11778" target="_blank">论文链接 →</a> <span class="tag">Benchmark</span> <span class="tag">推理</span></div>
+</div>
+<div class="paper-card">
+<h2>C-ReD: 中文AI生成文本检测Benchmark 🔥🔥</h2>
+<div class="meta">arXiv:2604.11796 | cs.CL | 2026-04-14</div>
+<div class="abstract">
+<strong>场景</strong>：新闻、问答、影评、作文、学术写作、繁体新闻<br/><br/>
+<strong>生成模型</strong>：9个LLM（GPT-3.5/4o、Gemini、Claude、Deepseek、Qwen、Doubao）<br/><br/>
+<strong>特点</strong>：来自真实世界提示词，黑盒API生成
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：需要针对中文场景的AI检测基准，覆盖多种文体。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.11796" target="_blank">论文链接 →</a> <span class="tag">AI检测</span> <span class="tag">中文</span></div>
+</div>
+<div class="paper-card">
+<h2>RPA-Check: 角色扮演Agent多阶段评估框架 🔥🔥</h2>
+<div class="meta">arXiv:2604.11655 | cs.CL | 2026-04-14</div>
+<div class="abstract">
+<strong>问题</strong>：动态角色扮演场景下的LLM Agent评估困难<br/><br/>
+<strong>框架</strong>：
+<ul>
+<li>多阶段自动化评估</li>
+<li>Behavioral Role Fidelity维度</li>
+<li>法庭式对话场景</li>
+</ul>
+<strong>评估维度</strong>：角色一致性、论证深度、事实一致性、上下文相关性
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：角色扮演Agent需要专门的多维度评估框架。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.11655" target="_blank">论文链接 →</a> <span class="tag">Agent</span> <span class="tag">评估</span></div>
+</div>
+<div class="paper-card">
+<h2>TST: 三位分节Tokenizer改进数值推理 🔥🔥</h2>
+<div class="meta">arXiv:2604.11582 | cs.CL | 2026-04-14</div>
+<div class="abstract">
+<strong>问题</strong>：子词tokenization破坏数字结构（"9.11 > 9.9"失败）<br/><br/>
+<strong>Triadic Suffix Tokenization (TST)</strong>：
+<ul>
+<li>将数字按三位分节（千、百万、十亿...）</li>
+<li>每个分节标注显式量级标记</li>
+<li>小数部分：十分位、千分位、百万分位...</li>
+</ul>
+<strong>两种变体</strong>：词汇表方式（最多1万token）或后缀标记方式
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：Tokenizer级别改进数值感知的创新方向。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.11582" target="_blank">论文链接 →</a> <span class="tag">Tokenizer</span> <span class="tag">数值推理</span></div>
+</div>
+<div class="paper-card">
+<h2>QA-Guided推理：书籍角色描述生成 🔥</h2>
+<div class="meta">arXiv:2604.11435 | cs.CL | 2026-04-13</div>
+<div class="abstract">
+<strong>问题</strong>：从长篇小说生成准确的角色描述<br/><br/>
+<strong>发现</strong>：启用内置推理反而降低性能！<br/><br/>
+<strong>方法</strong>：解耦推理与生成
+<ul>
+<li>推理模型：生成结构化QA推理轨迹</li>
+<li>生成模型：基于QA轨迹生成最终描述</li>
+</ul>
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：不是所有任务都需要CoT！某些任务显式推理反而干扰。
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.11435" target="_blank">论文链接 →</a> <span class="tag">Reasoning</span> <span class="tag">Long-context</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-14 (周二)</div>
                 <div class="paper-card">
 <h2>LLM有害内容生成：统一机制 + 可解释权重剪枝 🔥🔥🔥</h2>
