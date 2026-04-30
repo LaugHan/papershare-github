@@ -103,6 +103,42 @@
         <div class="container">
         <a href="/papershare-github/" class="back-home">← 返回首页</a>
             <div class="date-section">
+                <div class="date-header">📅 2026-04-20 (周一)</div>
+                <div class="paper-card">
+<h2>EmojiGrader: 表情符号能否改善LLM评估？🔥</h2>
+<div class="meta">arXiv:2604.15203 | cs.CL | 2026-04-17</div>
+<div class="abstract">
+<strong>问题</strong>：LLM评估中是否可以使用emoji来提供更细粒度的反馈？<br/><br/>
+<strong>研究</strong>：探索emoji在评估LLM输出质量中的作用<br/>
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：视觉化反馈可能改变评估体验
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.15203" target="_blank">论文链接 →</a> <span class="tag">Evaluation</span> <span class="tag">Emoji</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
+                <div class="date-header">📅 2026-04-19 (周日)</div>
+                <div class="paper-card">
+<h2>Segment-Level Coherence: 鲁棒有害意图探测 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.14865 | cs.CL | 2026-04-17</div>
+<div class="abstract">
+<strong>问题</strong>：传统探测方法依赖单token尖峰信号，容易被对抗干扰<br/><br/>
+<strong>创新方法</strong>：<br/>
+&nbsp;&nbsp;• 流式探测目标：多证据token聚合支持预测<br/>
+&nbsp;&nbsp;• 段级一致性：非孤立单token线索<br/>
+&nbsp;&nbsp;• Attention/MLP激活探测 > 残差流特征<br/><br/>
+<strong>惊人发现</strong>：即使对抗微调启用新密码，有害意图仍可检测（AUROC > 98.85%）
+</div>
+<div class="insight">
+💡 <strong>核心洞见</strong>：基于聚合信号比单token线索更鲁棒！
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.14865" target="_blank">论文链接 →</a> <span class="tag">Safety</span> <span class="tag">Probing</span> <span class="tag">Alignment</span></div>
+</div>
+            </div>
+
+            <div class="date-section">
                 <div class="date-header">📅 2026-04-18 (周六)</div>
                 <div class="paper-card">
 <h2>PICCO Framework: LLM Prompting的统一Taxonomy和参考架构 🔥🔥🔥</h2>
@@ -1557,7 +1593,83 @@
 <div class="link"><a href="https://arxiv.org/abs/2604.07518" target="_blank">论文链接 →</a> <span class="tag">VLM</span> <span class="tag">强化学习</span></div>
 </div>
             </div>
-        </div>
+            </div>
+            <div class="date-section">
+                <div class="date-header">📅 2026-04-30 (周四)</div>
+                <div class="paper-card">
+<h2>Beyond Scores: Diagnostic LLM Evaluation via Fine-Grained Abilities 🔥🔥🔥</h2>
+<div class="meta">arXiv:2604.12191 | cs.AI | 2026-04-14</div>
+<div class="abstract">
+<strong>核心</strong>：将benchmark性能分解为细粒度能力维度<br/>
+<strong>方法</strong>：Q-matrix + 认知诊断模型(CDM)，LLM将题目映射到能力维度<br/>
+<strong>意义</strong>：从"总分"走向"诊断式评测"，可与IRT框架融合
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与心理测量学诊断框架（CDM）结合，是LLM评测形式化的关键进展。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2604.12191" target="_blank">论文链接 →</a> <span class="tag method">诊断评测</span> <span class="tag">能力分解</span> <span class="tag">CDM</span></div>
+</div>
+<div class="paper-card">
+<h2>RLCR: Teaching LMs to Say "I'm Not Sure" 🔥🔥🔥</h2>
+<div class="meta">arXiv:2507.16806 | cs.LG | 2026-04-22 (MIT CSAIL)</div>
+<div class="abstract">
+<strong>方法</strong>：在RL训练中加入Brier Score校准奖励，模型输出答案+置信度<br/>
+<strong>效果</strong>：校准误差降低90%（0.37→0.03），精度不变或提升<br/>
+<strong>发现</strong>：标准RL训练会主动恶化校准，RLCR逆转该效应
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：内生校准 > post-hoc校准。已被ICLR 2026接收。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2507.16806" target="_blank">论文链接 →</a> <span class="tag method">置信度校准</span> <span class="tag">RL</span></div>
+</div>
+<div class="paper-card">
+<h2>ORCA: Online Reasoning Calibration 🔥🔥</h2>
+<div class="meta">arXiv:2604.01170 | cs.LG | 2026-04-01</div>
+<div class="abstract">
+<strong>方法</strong>：Conformal Prediction + Test-Time Training 在线校准推理<br/>
+<strong>创新</strong>：元学习更新校准模块，在线自适应
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与RLCR互补（online vs 训练时），适合动态评估场景。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2604.01170" target="_blank">论文链接 →</a> <span class="tag method">校准</span> <span class="tag">在线学习</span></div>
+</div>
+<div class="paper-card">
+<h2>RLAAR: 多轮对话中的校准弃权 🔥</h2>
+<div class="meta">arXiv:2510.18731 | cs.CL | 2026-04-23 (ACL 2026)</div>
+<div class="abstract">
+<strong>问题</strong>：LLM在多轮对话中信息不足时急于回答（"Lost-in-Conversation"）<br/>
+<strong>方案</strong>：Curriculum RL + 准确性&弃权双重奖励<br/>
+<strong>效果</strong>：校准弃权率33.5%→73.4%，性能衰减62.6%→75.1%
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：将"知道何时不说"作为评估维度，与你的校准研究方向直接相关。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2510.18731" target="_blank">论文链接 →</a> <span class="tag">多轮对话</span> <span class="tag">弃权</span></div>
+</div>
+<div class="paper-card">
+<h2>PaperMind: Agentic论文推理评测</h2>
+<div class="meta">arXiv:2604.21304 | cs.IR | 2026-04-23</div>
+<div class="abstract">
+<strong>任务</strong>：4维度评估论文推理——多模态定位、实验解释、跨源推理、批判评估<br/>
+<strong>领域</strong>：7学科（农、生、化、CS、医、物、经）<br/>
+<strong>亮点</strong>：诊断式评测，而非孤立任务评测
+</div>
+<div class="link"><a href="https://arxiv.org/abs/2604.21304" target="_blank">论文链接 →</a> <span class="tag">Agent评测</span> <span class="tag">科学推理</span></div>
+</div>
+<div class="paper-card">
+<h2>Dataset-Level Metrics Attenuate Non-Determinism</h2>
+<div class="meta">arXiv:2604.13413 | cs.LG | 2026-04-15</div>
+<div class="abstract">
+<strong>核心</strong>：数据集级指标掩盖了LLM的非确定性，需细粒度评估<br/>
+<strong>发现</strong>：固定配置下的数据集级指标无法揭示run-to-run变化
+</div>
+<div class="insight">
+                    💡 <strong>核心洞见</strong>：与你的"评测可靠性"问题直接相关——指标设计需要更细粒度。
+                </div>
+<div class="link"><a href="https://arxiv.org/abs/2604.13413" target="_blank">论文链接 →</a> <span class="tag method">评估方法论</span> <span class="tag">非确定性</span></div>
+</div>
+            </div>
     <footer>Daily Paper © 2026 | 每日自动调研 arXiv</footer>
 </body>
 </html>
